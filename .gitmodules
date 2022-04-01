@@ -1,3 +1,6 @@
 [submodule "deps/je2be"]
 	path = deps/je2be
 	url = https://github.com/kbinani/je2be.git
+[submodule "deps/ios-cmake"]
+	path = deps/ios-cmake
+	url = https://github.com/leetal/ios-cmake.git
