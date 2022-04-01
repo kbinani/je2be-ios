@@ -6,7 +6,8 @@ set(LEVELDB_TCMALLOC OFF)
 add_subdirectory(deps/je2be EXCLUDE_FROM_ALL)
 
 set(je2be_ios_files
-  src/AppDelegate.swift)
+  src/AppDelegate.swift
+  src/ModeSelectViewController.swift)
 
 add_executable(je2be-ios MACOSX_BUNDLE ${je2be_ios_files})
 set_target_properties(je2be-ios PROPERTIES
@@ -19,6 +20,7 @@ set_target_properties(je2be-ios PROPERTIES
 target_link_libraries(je2be-ios PRIVATE je2be)
 set_property(TARGET je2be-ios PROPERTY XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++20")
 set_property(TARGET je2be-ios PROPERTY XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "13.0")
+set_property(TARGET je2be-ios PROPERTY XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2")
 
 set_property(TARGET leveldb PROPERTY XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "13.0")
 set_property(TARGET minizip PROPERTY XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "13.0")

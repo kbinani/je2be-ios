@@ -2,9 +2,15 @@ import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder {
-
+    var window: UIWindow?
 }
 
 extension AppDelegate: UIApplicationDelegate {
-
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
+        let window = UIWindow(frame: UIScreen.main.bounds)
+        self.window = window
+        window.rootViewController = ModeSelectViewController()
+        window.makeKeyAndVisible()
+        return true
+    }
 }
