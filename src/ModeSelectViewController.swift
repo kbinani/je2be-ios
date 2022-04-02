@@ -45,7 +45,19 @@ class ModeSelectViewController: UIViewController {
 }
 
 extension ModeSelectViewController: ChooseJavaInputViewDelegate {
-    func chooseJavaInputViewDidChoosen(url: URL) {
-        //TODO:
+    func chooseJavaInputViewDidChoosen(sender: ChooseJavaInputViewController, url: URL) {
+        sender.dismiss(animated: true) { [weak self] in
+            guard let self = self else {
+                return
+            }
+            let converter = ConvertJavaToBedrock()
+            self.presentProgressWith(input: url, converter: converter)
+        }
+    }
+    
+    private func presentProgressWith(input: URL, converter: Converter) {
+        let vc = ProgressViewController(input: input, converter: converter)
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: true, completion: nil)
     }
 }

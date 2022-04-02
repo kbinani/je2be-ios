@@ -10,10 +10,17 @@ set(je2be_ios_files
   src/ModeSelectViewController.swift
   src/ChooseJavaInputViewController.swift
   src/Localization.swift
+  src/Converter.h
+  src/ConvertJavaToBedrock.mm
+  src/ConvertJavaToBedrock.h
+  src/ProgressViewController.swift
+  src/BridgingHeader.h
+  src/AtomicBool.swift
 )
 set(je2be_ios_resources
   src/ModeSelectViewController.xib
   src/ChooseJavaInputViewController.xib
+  src/ProgressViewController.xib
 )
 
 add_executable(je2be-ios MACOSX_BUNDLE ${je2be_ios_files} ${je2be_ios_resources})
@@ -25,6 +32,7 @@ set_target_properties(je2be-ios PROPERTIES
   MACOSX_BUNDLE_BUNDLE_VERSION "0.1"
   MACOSX_BUNDLE_SHORT_VERSION_STRING "0.1"
   XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET 15.0
+  XCODE_ATTRIBUTE_SWIFT_OBJC_BRIDGING_HEADER "src/BridgingHeader.h"
 )
 target_link_libraries(je2be-ios PRIVATE je2be)
 set_property(TARGET je2be-ios PROPERTY XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++20")

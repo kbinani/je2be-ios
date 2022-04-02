@@ -2,7 +2,7 @@ import UIKit
 import UniformTypeIdentifiers
 
 protocol ChooseJavaInputViewDelegate: AnyObject {
-    func chooseJavaInputViewDidChoosen(url: URL)
+    func chooseJavaInputViewDidChoosen(sender: ChooseJavaInputViewController, url: URL)
 }
 
 class ChooseJavaInputViewController: UIViewController {
@@ -29,7 +29,6 @@ class ChooseJavaInputViewController: UIViewController {
 
 extension ChooseJavaInputViewController: UIDocumentPickerDelegate {
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
-        self.delegate?.chooseJavaInputViewDidChoosen(url: url)
-        self.dismiss(animated: true, completion: nil)
+        self.delegate?.chooseJavaInputViewDidChoosen(sender: self, url: url)
     }
 }
