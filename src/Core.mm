@@ -15,6 +15,13 @@ static NSURL* CreateTempDir() {
     return [[NSURL alloc] initFileURLWithPath:path];
 }
 
+static NSURL* CreateTempFile(NSString * _Nonnull extWithDot) {
+    NSFileManager* manager = [NSFileManager defaultManager];
+    NSUUID *uuid = [[NSUUID alloc] init];
+    NSString* path = [manager.temporaryDirectory.path stringByAppendingPathComponent:[[uuid UUIDString] stringByAppendingString:extWithDot]];
+    return [[NSURL alloc] initFileURLWithPath:path];
+}
+
 static std::filesystem::path PathFromNSURL(NSURL * _Nonnull url) {
     return std::filesystem::path([[url path] cStringUsingEncoding:NSUTF8StringEncoding]);
 }
@@ -153,9 +160,25 @@ void JavaToBedrock(id<Converter> converter, NSURL* input, __weak id<ConverterDel
     defer {
         je2be::Fs::DeleteAll(fsOutput);
     };
+    fs::path fsActualInput = fsInput;
+    std::error_code ec;
+    for (auto it : fs::recursive_directory_iterator(fsInput, ec)) {
+        auto p = it.path();
+        if (!fs::is_regular_file(p)) {
+            continue;
+        }
+        auto fileName = p.filename().string();
+        if (fileName == "level.dat") {
+            fsActualInput = p.parent_path();
+            break;
+        }
+    }
+    if (ec) {
+        return;
+    }
     
     je2be::tobe::Options options;
-    je2be::tobe::Converter c(fsInput, fsOutput, options);
+    je2be::tobe::Converter c(fsActualInput, fsOutput, options);
     
     struct Progress : public je2be::tobe::Progress {
         id<Converter> fConverter;
@@ -185,4 +208,49 @@ void JavaToBedrock(id<Converter> converter, NSURL* input, __weak id<ConverterDel
     if (!st->fErrors.empty()) {
         return;
     }
+
+    int totalFiles = 0;
+    for (auto it : fs::recursive_directory_iterator(fsOutput, ec)) {
+        if (fs::is_regular_file(it.path())) {
+            totalFiles++;
+        }
+    }
+    if (ec) {
+        return;
+    }
+    if (![delegate converterDidUpdateProgress:converter step:3 done:0 total:totalFiles]) {
+        return;
+    }
+    
+    NSURL *zipOut = CreateTempFile(@".mcworld");
+    je2be::ZipFile zipOutFile(PathFromNSURL(zipOut));
+    int totalZippedFiles = 0;
+    for (auto it : fs::recursive_directory_iterator(fsOutput, ec)) {
+        auto path = it.path();
+        if (!fs::is_regular_file(path)) {
+            continue;
+        }
+        std::error_code ec1;
+        fs::path rel = fs::relative(path, fsOutput, ec1);
+        if (ec1) {
+            return;
+        }
+        std::vector<uint8_t> buffer;
+        auto stream = std::make_shared<mcfile::stream::FileInputStream>(path);
+        mcfile::stream::InputStream::ReadUntilEos(*stream, buffer);
+        if (!zipOutFile.store(buffer, rel.string())) {
+            return;
+        }
+        totalZippedFiles++;
+        if (![delegate converterDidUpdateProgress:converter step:3 done:totalZippedFiles total:totalFiles]) {
+            return;
+        }
+    }
+    if (ec) {
+        return;
+    }
+    if (!zipOutFile.close()) {
+        return;
+    }
+    output = zipOut;
 }

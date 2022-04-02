@@ -68,8 +68,20 @@ extension ProgressViewController: ConverterDelegate {
 
     func converterDidFinishConversion(_ output: URL?) {
         DispatchQueue.main.async { [weak self] in
-            //TODO:
-            self?.dismiss(animated: true, completion: nil)
+            guard let self = self else {
+                return
+            }
+            if let output = output {
+                self.stepDescriptionLabel.text = gettext("Completed")
+                let vc = UIActivityViewController(activityItems: [output as Any], applicationActivities: nil)
+                vc.modalPresentationStyle = .popover
+                vc.popoverPresentationController?.sourceView = self.stepDescriptionLabel
+                vc.completionWithItemsHandler = { [weak self] (activityType, completed, returnedItems, activityError) in
+                    try? FileManager.default.removeItem(at: output)
+                    self?.dismiss(animated: true, completion: nil)
+                }
+                self.present(vc, animated: true, completion: nil)
+            }
         }
     }
 }
