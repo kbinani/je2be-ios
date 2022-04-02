@@ -5,6 +5,8 @@
 {
     
 }
-- (void)convert:(NSURL*)input delegate:(id<ConverterDelegate>)delegate;
+- (NSString * _Nullable)descriptionForStep:(int)step;
+- (int)numProgressSteps;
+- (void)startConvertingFile:(NSURL * _Nonnull)input delegate:(id<ConverterDelegate>)delegate;
 
 @end

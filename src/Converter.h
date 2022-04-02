@@ -3,11 +3,13 @@
 @class Converter;
 
 @protocol ConverterDelegate
-- (BOOL)converterDidUpdateProgress:(id _Null_unspecified)converter done:(double)done total:(double)total;
+- (BOOL)converterDidUpdateProgress:(id _Nonnull)converter step:(int)step done:(double)done total:(double)total;
 - (void)converterDidFinishConversion:(NSURL* _Nullable)output;
 @end
 
 
 @protocol Converter
-- (void)convert:(NSURL* _Null_unspecified)input delegate:(id<ConverterDelegate> _Null_unspecified)delegate;
+- (void)startConvertingFile:(NSURL* _Nonnull)input delegate:(__weak id<ConverterDelegate> _Nullable)delegate;
+- (int)numProgressSteps;
+- (NSString* _Nullable)descriptionForStep:(int)step;
 @end

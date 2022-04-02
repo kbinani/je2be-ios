@@ -2,12 +2,14 @@ import UIKit
 
 class ProgressViewController: UIViewController {
     
-    @IBOutlet weak var progress: UIProgressView!
     @IBOutlet weak var cancelButton: UIButton!
+    @IBOutlet weak var stepDescriptionLabel: UILabel!
+    @IBOutlet weak var stackView: UIStackView!
     
     private let input: URL
     private let converter: Converter
     private let cancelRequested = AtomicBool(initial: false)
+    private var progressSteps: [UIProgressView] = []
     
     init(input: URL, converter: Converter) {
         self.input = input
@@ -22,11 +24,23 @@ class ProgressViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.progress.progress = 0
+        let numSteps = self.converter.numProgressSteps()
+        for _ in 0 ..< numSteps {
+            self.progressSteps.append(UIProgressView(progressViewStyle: .default))
+        }
+        for progress in self.progressSteps {
+            progress.progress = 0
+            self.stackView.addArrangedSubview(progress)
+        }
 
         self.cancelButton.addTarget(self, action: #selector(cancelButtonDidTouchUpInside(sender:)), for: .touchUpInside)
         
-        self.converter.convert(self.input, delegate: self)
+        DispatchQueue.global().async { [weak self] in
+            guard let input = self?.input, let converter = self?.converter else {
+                return
+            }
+            converter.startConvertingFile(input, delegate: self)
+        }
     }
     
     @objc func cancelButtonDidTouchUpInside(sender: AnyObject) {
@@ -36,16 +50,26 @@ class ProgressViewController: UIViewController {
 }
 
 extension ProgressViewController: ConverterDelegate {
-    func converterDidUpdateProgress(_ converter: Any!, done: Double, total: Double) -> Bool {
+    func converterDidUpdateProgress(_ converter: Any, step: Int32, done: Double, total: Double) -> Bool {
         DispatchQueue.main.async { [weak self] in
-            self?.progress.progress = Float(done / total)
+            print(done, total)
+            guard let self = self, 0 <= step, step < self.progressSteps.count, let converter = converter as? Converter else {
+                return
+            }
+            let s = Int(step)
+            for i in 0 ..< s {
+                self.progressSteps[i].progress = 1
+            }
+            self.progressSteps[s].progress = Float(done / total)
+            self.stepDescriptionLabel.text = (converter.description(forStep: step) ?? "Conversion") + ":"
         }
-        return cancelRequested.test()
+        return !cancelRequested.test()
     }
-    
+
     func converterDidFinishConversion(_ output: URL?) {
-        //TODO:
-        print(output)
-        self.dismiss(animated: true, completion: nil)
+        DispatchQueue.main.async { [weak self] in
+            //TODO:
+            self?.dismiss(animated: true, completion: nil)
+        }
     }
 }

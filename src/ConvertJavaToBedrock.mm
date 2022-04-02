@@ -1,20 +1,27 @@
-
 #import "ConvertJavaToBedrock.h"
+#import "Core.h"
 
 @implementation ConvertJavaToBedrock
 
-- (void)convert:(NSURL*)input delegate:(id<ConverterDelegate>)delegate {
-    dispatch_queue_main_t main = dispatch_get_main_queue();
-    //TODO:
+- (NSString * _Nullable)descriptionForStep:(int)step {
+    switch (step) {
+        case 0:
+            return @"Unzip";
+        case 1:
+            return @"Conversion";
+        case 2:
+            return @"LevelDB Compaction";
+        default:
+            return nil;
+    }
+}
 
-    __weak id<ConverterDelegate> weakDelegate = delegate;
-    dispatch_async(main, ^{
-        id<ConverterDelegate> ref = weakDelegate;
-        if (!ref) {
-            return;
-        }
-        [ref converterDidFinishConversion:nil];
-    });
+- (int)numProgressSteps {
+    return 2;
+}
+
+- (void)startConvertingFile:(NSURL * _Nonnull)input delegate:(id<ConverterDelegate>)delegate {
+    JavaToBedrock(self, input, delegate);
 }
 
 @end

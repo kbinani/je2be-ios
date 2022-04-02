@@ -14,6 +14,8 @@ set(je2be_ios_files
   src/ProgressViewController.swift
   src/BridgingHeader.h
   src/AtomicBool.swift
+  src/Core.h
+  src/Core.mm
 )
 set(je2be_ios_resources
   src/ModeSelectViewController.xib

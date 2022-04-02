@@ -5,13 +5,15 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ProgressViewController" customModule="je2be_ios" customModuleProvider="target">
             <connections>
                 <outlet property="cancelButton" destination="4bd-PZ-Opm" id="brZ-sp-RCo"/>
-                <outlet property="progress" destination="7bi-uw-KML" id="sH1-ae-Dex"/>
+                <outlet property="stackView" destination="in5-D6-JqO" id="u4v-Jk-SO0"/>
+                <outlet property="stepDescriptionLabel" destination="GnC-lP-J8Q" id="O3Q-Yk-zhx"/>
                 <outlet property="view" destination="iN0-l3-epB" id="Dxf-vP-SrQ"/>
             </connections>
         </placeholder>
@@ -20,11 +22,19 @@
             <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="7bi-uw-KML">
-                    <rect key="frame" x="102.5" y="104" width="819" height="4"/>
-                </progressView>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="in5-D6-JqO">
+                    <rect key="frame" x="102.5" y="104" width="819" height="20.5"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GnC-lP-J8Q">
+                            <rect key="frame" x="0.0" y="0.0" width="819" height="20.5"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                </stackView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4bd-PZ-Opm">
-                    <rect key="frame" x="392" y="138" width="240" height="44"/>
+                    <rect key="frame" x="392" y="154.5" width="240" height="44"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="Dty-wF-Dma"/>
                         <constraint firstAttribute="width" constant="240" id="vGG-VS-ltL"/>
@@ -40,11 +50,11 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" red="0.1960784314" green="0.24313725489999999" blue="0.2666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="7bi-uw-KML" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="7B8-K2-Je7"/>
-                <constraint firstItem="4bd-PZ-Opm" firstAttribute="top" secondItem="7bi-uw-KML" secondAttribute="bottom" constant="30" id="eQS-4T-XM9"/>
+                <constraint firstItem="in5-D6-JqO" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="80" id="0LT-gC-eIJ"/>
+                <constraint firstItem="4bd-PZ-Opm" firstAttribute="top" secondItem="in5-D6-JqO" secondAttribute="bottom" constant="30" id="8lQ-DF-qjH"/>
+                <constraint firstItem="in5-D6-JqO" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="GIu-Cj-9j5"/>
                 <constraint firstItem="4bd-PZ-Opm" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="gbI-Xu-DTy"/>
-                <constraint firstItem="7bi-uw-KML" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="80" id="h0j-Nm-PNf"/>
-                <constraint firstItem="7bi-uw-KML" firstAttribute="width" secondItem="vUN-kp-3ea" secondAttribute="width" multiplier="0.8" id="obC-y6-DN3"/>
+                <constraint firstItem="in5-D6-JqO" firstAttribute="width" secondItem="vUN-kp-3ea" secondAttribute="width" multiplier="0.8" id="nQS-ao-eT7"/>
             </constraints>
             <point key="canvasLocation" x="139" y="128"/>
         </view>
