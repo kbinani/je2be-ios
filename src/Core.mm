@@ -15,6 +15,10 @@ static NSURL* CreateTempDir() {
     return [[NSURL alloc] initFileURLWithPath:path];
 }
 
+static std::filesystem::path PathFromNSURL(NSURL * _Nonnull url) {
+    return std::filesystem::path([[url path] cStringUsingEncoding:NSUTF8StringEncoding]);
+}
+
 static bool Unzip(NSURL *input, NSURL *directory, id<Converter> converter, int step, id<ConverterDelegate> delegate) {
     namespace fs = std::filesystem;
 
@@ -124,19 +128,61 @@ void JavaToBedrock(id<Converter> converter, NSURL* input, __weak id<ConverterDel
         return;
     }
     
-    NSURL* temp = CreateTempDir();
+    NSURL* tempInput = CreateTempDir();
+    if (!tempInput) {
+        return;
+    }
+    fs::path fsInput = PathFromNSURL(tempInput);
     NSURL* output = nullptr;
     defer {
         [d converterDidFinishConversion:output];
-        je2be::Fs::DeleteAll(fs::path([temp.path cStringUsingEncoding:NSUTF8StringEncoding]));
+        je2be::Fs::DeleteAll(fsInput);
     };
     if (![input startAccessingSecurityScopedResource]) {
         return;
     }
-    if (!temp) {
+    if (!Unzip(input, tempInput, converter, 0, delegate)) {
         return;
     }
-    if (!Unzip(input, temp, converter, 0, delegate)) {
+    
+    NSURL* tempOutput = CreateTempDir();
+    if (!tempOutput) {
+        return;
+    }
+    fs::path fsOutput = PathFromNSURL(tempOutput);
+    defer {
+        je2be::Fs::DeleteAll(fsOutput);
+    };
+    
+    je2be::tobe::Options options;
+    je2be::tobe::Converter c(fsInput, fsOutput, options);
+    
+    struct Progress : public je2be::tobe::Progress {
+        id<Converter> fConverter;
+        id<ConverterDelegate> fDelegate;
+        Progress(id<Converter> converter, id<ConverterDelegate> delegate) : fConverter(converter), fDelegate(delegate) {
+        }
+        bool report(Phase phase, double progress, double total) override {
+            int step = 1;
+            switch (phase) {
+                case Phase::LevelDbCompaction:
+                    step = 2;
+                    break;
+                case Phase::Convert:
+                default:
+                    step = 1;
+                    break;
+            }
+            bool ok = [fDelegate converterDidUpdateProgress:fConverter step:step done:progress total:total];
+            return ok;
+        }
+    } progress(converter, delegate);
+    
+    auto st = c.run(std::thread::hardware_concurrency(), &progress);
+    if (!st) {
+        return;
+    }
+    if (!st->fErrors.empty()) {
         return;
     }
 }

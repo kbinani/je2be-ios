@@ -11,13 +11,15 @@
             return @"Conversion";
         case 2:
             return @"LevelDB Compaction";
+        case 3:
+            return @"Zip";
         default:
             return nil;
     }
 }
 
 - (int)numProgressSteps {
-    return 2;
+    return 4;
 }
 
 - (void)startConvertingFile:(NSURL * _Nonnull)input delegate:(id<ConverterDelegate>)delegate {

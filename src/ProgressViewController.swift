@@ -33,6 +33,7 @@ class ProgressViewController: UIViewController {
             self.stackView.addArrangedSubview(progress)
         }
 
+        self.cancelButton.setTitle(gettext("Cancel"), for: .normal)
         self.cancelButton.addTarget(self, action: #selector(cancelButtonDidTouchUpInside(sender:)), for: .touchUpInside)
         
         DispatchQueue.global().async { [weak self] in
@@ -52,7 +53,6 @@ class ProgressViewController: UIViewController {
 extension ProgressViewController: ConverterDelegate {
     func converterDidUpdateProgress(_ converter: Any, step: Int32, done: Double, total: Double) -> Bool {
         DispatchQueue.main.async { [weak self] in
-            print(done, total)
             guard let self = self, 0 <= step, step < self.progressSteps.count, let converter = converter as? Converter else {
                 return
             }
