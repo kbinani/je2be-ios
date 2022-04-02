@@ -8,7 +8,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ModeSelectViewController" customModule="je2be_ios">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ModeSelectViewController" customModule="je2be_ios" customModuleProvider="target">
             <connections>
                 <outlet property="bedrockToJavaButton" destination="ZKW-zQ-lUw" id="7M2-oe-RjA"/>
                 <outlet property="javaToBedrockButton" destination="chg-fi-uSs" id="yHW-dg-wIX"/>
@@ -30,36 +30,36 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="YOo-DG-U2H">
-                    <rect key="frame" x="392" y="154.5" width="240" height="188"/>
+                    <rect key="frame" x="392" y="154.5" width="240" height="236"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="chg-fi-uSs">
-                            <rect key="frame" x="0.0" y="0.0" width="240" height="32"/>
+                            <rect key="frame" x="0.0" y="0.0" width="240" height="44"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="32" id="gym-MM-E63"/>
+                                <constraint firstAttribute="height" constant="44" id="gym-MM-E63"/>
                             </constraints>
                             <state key="normal" title="Button"/>
                             <buttonConfiguration key="configuration" style="filled" title="Button"/>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZKW-zQ-lUw">
-                            <rect key="frame" x="0.0" y="52" width="240" height="32"/>
+                            <rect key="frame" x="0.0" y="64" width="240" height="44"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="32" id="JN2-Di-9zL"/>
+                                <constraint firstAttribute="height" constant="44" id="JN2-Di-9zL"/>
                             </constraints>
                             <state key="normal" title="Button"/>
                             <buttonConfiguration key="configuration" style="filled" title="Button"/>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yyS-zs-LSL">
-                            <rect key="frame" x="0.0" y="104" width="240" height="32"/>
+                            <rect key="frame" x="0.0" y="128" width="240" height="44"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="32" id="asb-0H-XIX"/>
+                                <constraint firstAttribute="height" constant="44" id="asb-0H-XIX"/>
                             </constraints>
                             <state key="normal" title="Button"/>
                             <buttonConfiguration key="configuration" style="filled" title="Button"/>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nua-Mq-7At">
-                            <rect key="frame" x="0.0" y="156" width="240" height="32"/>
+                            <rect key="frame" x="0.0" y="192" width="240" height="44"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="32" id="WQE-FN-DMD"/>
+                                <constraint firstAttribute="height" constant="44" id="WQE-FN-DMD"/>
                             </constraints>
                             <state key="normal" title="Button"/>
                             <buttonConfiguration key="configuration" style="filled" title="Button"/>

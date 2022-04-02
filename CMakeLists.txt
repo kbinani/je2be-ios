@@ -8,15 +8,18 @@ add_subdirectory(deps/je2be EXCLUDE_FROM_ALL)
 set(je2be_ios_files
   src/AppDelegate.swift
   src/ModeSelectViewController.swift
+  src/ChooseJavaInputViewController.swift
+  src/Localization.swift
 )
 set(je2be_ios_resources
   src/ModeSelectViewController.xib
+  src/ChooseJavaInputViewController.xib
 )
 
 add_executable(je2be-ios MACOSX_BUNDLE ${je2be_ios_files} ${je2be_ios_resources})
 set_target_properties(je2be-ios PROPERTIES
   BUNDLE True
-  RESOURCE ${je2be_ios_resources}
+  RESOURCE "${je2be_ios_resources}"
   MACOSX_BUNDLE_GUI_IDENTIFIER com.github.kbinani.je2be-ios
   MACOSX_BUNDLE_BUNDLE_NAME je2be-ios
   MACOSX_BUNDLE_BUNDLE_VERSION "0.1"
