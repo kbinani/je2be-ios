@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 project(je2be-ios LANGUAGES C CXX Swift)
 
-set(LEVELDB_TCMALLOC OFF)
-
 add_subdirectory(deps/je2be EXCLUDE_FROM_ALL)
 
 set(je2be_ios_files
