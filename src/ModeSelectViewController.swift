@@ -27,6 +27,7 @@ class ModeSelectViewController: UIViewController {
     
     @objc func javaToBedrockButtonDidTouchUpInside(_ sender: AnyObject) {
         let vc = ChooseJavaInputViewController()
+        vc.delegate = self
         self.present(vc, animated: true, completion: nil)
     }
     
@@ -40,5 +41,11 @@ class ModeSelectViewController: UIViewController {
     
     @objc func xbox360ToJavaButtonDidTouchUpInside(_ sender: AnyObject) {
         
+    }
+}
+
+extension ModeSelectViewController: ChooseJavaInputViewDelegate {
+    func chooseJavaInputViewDidChoosen(url: URL) {
+        //TODO:
     }
 }
