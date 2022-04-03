@@ -22,3 +22,6 @@ ${PLISTBUDDY} -c "Add :UIRequiresFullScreen bool YES" "$INFO_PLIST_PATH"
 
 ${PLISTBUDDY} -c "Delete :UILaunchStoryboardName" "$INFO_PLIST_PATH" || true
 ${PLISTBUDDY} -c "Add :UILaunchStoryboardName string LaunchScreen" "$INFO_PLIST_PATH"
+
+${PLISTBUDDY} -c "Delete :CFBundleDisplayName" "$INFO_PLIST_PATH" || true
+${PLISTBUDDY} -c "Add :CFBundleDisplayName string je2be" "$INFO_PLIST_PATH"
