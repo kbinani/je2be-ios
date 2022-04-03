@@ -1,3 +1,3 @@
 func gettext(_ s: String) -> String {
-    return s
+    return NSLocalizedString(s, comment: "")
 }
