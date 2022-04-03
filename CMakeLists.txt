@@ -22,6 +22,7 @@ set(je2be_ios_resources
   src/ModeSelectViewController.xib
   src/ChooseJavaInputViewController.xib
   src/ProgressViewController.xib
+  src/LaunchScreen.storyboard
 )
 
 add_executable(je2be-ios MACOSX_BUNDLE ${je2be_ios_files} ${je2be_ios_resources})
