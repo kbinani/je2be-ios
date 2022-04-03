@@ -73,7 +73,10 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" red="0.1960784314" green="0.24313725489999999" blue="0.2666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="ZVr-na-qzZ" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="80" id="2QE-3P-DI2"/>
+                <constraint firstItem="ZVr-na-qzZ" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="80" id="2QE-3P-DI2">
+                    <variation key="heightClass=compact" constant="40"/>
+                    <variation key="widthClass=compact" constant="40"/>
+                </constraint>
                 <constraint firstItem="ZVr-na-qzZ" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="Vdm-kP-Cvi"/>
                 <constraint firstItem="YOo-DG-U2H" firstAttribute="top" secondItem="ZVr-na-qzZ" secondAttribute="bottom" constant="30" id="aFx-ZO-i1v"/>
                 <constraint firstItem="YOo-DG-U2H" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="fqg-tX-TQa"/>
