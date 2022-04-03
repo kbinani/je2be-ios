@@ -1,5 +1,9 @@
 import UIKit
 
+protocol ProgressViewDelegate: AnyObject {
+    func progressViewWillDisappear()
+}
+
 class ProgressViewController: UIViewController {
     
     @IBOutlet weak var cancelButton: UIButton!
@@ -7,6 +11,8 @@ class ProgressViewController: UIViewController {
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var exportButton: UIButton!
     @IBOutlet weak var closeButton: UIButton!
+
+    weak var delegate: ProgressViewDelegate?
     
     private let input: URL
     private let converter: Converter
@@ -60,6 +66,11 @@ class ProgressViewController: UIViewController {
             }
             converter.startConvertingFile(input, delegate: self)
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.delegate?.progressViewWillDisappear()
     }
     
     @objc func cancelButtonDidTouchUpInside(sender: AnyObject) {
