@@ -49,11 +49,11 @@ class ModeSelectViewController: UIViewController {
     
     @objc func bedrockToJavaButtonDidTouchUpInside(_ sender: AnyObject) {
         disableButtons()
-        var contentTypes: [UTType] = [UTType(filenameExtension: "mcworld")]
-            .filter { type in type != nil }
-            .map { type in type! }
-        if contentTypes.isEmpty {
-            contentTypes.append(UTType.data)
+        let contentTypes: [UTType]
+        if let mcworld = UTType(filenameExtension: "mcworld") {
+            contentTypes = [mcworld]
+        } else {
+            contentTypes = [UTType.data]
         }
         let vc = ChooseInputViewController(type: .bedrockToJava,
                                            message: gettext("Choose an mcworld file"),
