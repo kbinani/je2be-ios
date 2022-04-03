@@ -113,45 +113,11 @@ void JavaToBedrock(id<Converter> converter, NSURL* input, __weak id<ConverterDel
         return;
     }
     
-    int totalFiles = 0;
-    for (auto it : fs::recursive_directory_iterator(fsOutput, ec)) {
-        if (fs::is_regular_file(it.path())) {
-            totalFiles++;
-        }
-    }
-    if (ec) {
-        return;
-    }
-    if (![delegate converterDidUpdateProgress:converter step:3 done:0 total:totalFiles]) {
-        return;
-    }
-    
+    auto zipProgress = [d, converter](int done, int total) {
+        return [d converterDidUpdateProgress:converter step:3 done:done total:total];
+    };
     NSURL *zipOut = CreateTempFile(@".mcworld");
-    je2be::ZipFile zipOutFile(PathFromNSURL(zipOut));
-    int totalZippedFiles = 0;
-    for (auto it : fs::recursive_directory_iterator(fsOutput, ec)) {
-        auto path = it.path();
-        if (!fs::is_regular_file(path)) {
-            continue;
-        }
-        std::error_code ec1;
-        fs::path rel = fs::relative(path, fsOutput, ec1);
-        if (ec1) {
-            return;
-        }
-        auto stream = std::make_shared<mcfile::stream::FileInputStream>(path);
-        if (!zipOutFile.store(*stream, rel.string())) {
-            return;
-        }
-        totalZippedFiles++;
-        if (![delegate converterDidUpdateProgress:converter step:3 done:totalZippedFiles total:totalFiles]) {
-            return;
-        }
-    }
-    if (ec) {
-        return;
-    }
-    if (!zipOutFile.close()) {
+    if (!je2be::ZipFile::Zip(fsOutput, PathFromNSURL(zipOut), zipProgress)) {
         return;
     }
     output = zipOut;
