@@ -46,9 +46,6 @@ void JavaToBedrock(id<Converter> converter, NSURL* input, __weak id<ConverterDel
         [d converterDidFinishConversion:output];
         je2be::Fs::DeleteAll(fsTempInput);
     };
-    if (![input startAccessingSecurityScopedResource]) {
-        return;
-    }
     auto unzipProgress = [d, converter](uint64_t done, uint64_t total) {
         return [d converterDidUpdateProgress:converter step:0 done:done total:total];
     };

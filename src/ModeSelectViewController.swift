@@ -1,4 +1,5 @@
 import UIKit
+import UniformTypeIdentifiers
 
 class ModeSelectViewController: UIViewController {
     
@@ -32,17 +33,33 @@ class ModeSelectViewController: UIViewController {
         self.xbox360ToJavaButton.addTarget(self,
                                            action: #selector(xbox360ToJavaButtonDidTouchUpInside(_:)),
                                            for: .touchUpInside)
+        
+        self.xbox360ToBedrockButton.isHidden = true
+        self.xbox360ToJavaButton.isHidden = true
     }
     
     @objc func javaToBedrockButtonDidTouchUpInside(_ sender: AnyObject) {
         disableButtons()
-        let vc = ChooseJavaInputViewController()
+        let vc = ChooseInputViewController(type: .javaToBedrock,
+                                           message: gettext("Choose a zip file of Java Edition world data"),
+                                           contentTypes: [UTType.zip])
         vc.delegate = self
         self.present(vc, animated: true, completion: nil)
     }
     
     @objc func bedrockToJavaButtonDidTouchUpInside(_ sender: AnyObject) {
-        
+        disableButtons()
+        var contentTypes: [UTType] = [UTType(filenameExtension: "mcworld")]
+            .filter { type in type != nil }
+            .map { type in type! }
+        if contentTypes.isEmpty {
+            contentTypes.append(UTType.data)
+        }
+        let vc = ChooseInputViewController(type: .bedrockToJava,
+                                           message: gettext("Choose an mcworld file"),
+                                           contentTypes: contentTypes)
+        vc.delegate = self
+        self.present(vc, animated: true, completion: nil)
     }
     
     @objc func xbox360ToBedrockButtonDidTouchUpInside(_ sender: AnyObject) {
@@ -68,18 +85,24 @@ class ModeSelectViewController: UIViewController {
     }
 }
 
-extension ModeSelectViewController: ChooseJavaInputViewDelegate {
-    func chooseJavaInputViewDidChoosen(sender: ChooseJavaInputViewController, url: URL) {
+extension ModeSelectViewController: ChooseInputViewDelegate {
+    func chooseInputViewDidChoosen(sender: ChooseInputViewController, type: ConversionType, url: URL) {
         sender.dismiss(animated: true) { [weak self] in
             guard let self = self else {
                 return
             }
-            let converter = ConvertJavaToBedrock()
+            let converter: Converter
+            switch type {
+            case .javaToBedrock:
+                converter = ConvertJavaToBedrock()
+            default:
+                return
+            }
             self.presentProgressWith(input: url, converter: converter)
         }
     }
     
-    func chooseJavaInputViewDidCancel() {
+    func chooseInputViewDidCancel() {
         enableButtons()
     }
     

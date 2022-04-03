@@ -6,7 +6,7 @@ add_subdirectory(deps/je2be EXCLUDE_FROM_ALL)
 set(je2be_ios_files
   src/AppDelegate.swift
   src/ModeSelectViewController.swift
-  src/ChooseJavaInputViewController.swift
+  src/ChooseInputViewController.swift
   src/Localization.swift
   src/Converter.h
   src/ConvertJavaToBedrock.mm
@@ -17,10 +17,11 @@ set(je2be_ios_files
   src/Core.h
   src/Core.mm
   src/ProgressBar.swift
+  src/ConversionType.swift
 )
 set(je2be_ios_resources
   src/ModeSelectViewController.xib
-  src/ChooseJavaInputViewController.xib
+  src/ChooseInputViewController.xib
   src/ProgressViewController.xib
   src/LaunchScreen.storyboard
 )

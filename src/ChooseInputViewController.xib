@@ -8,7 +8,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ChooseJavaInputViewController" customModule="je2be_ios" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ChooseInputViewController" customModule="je2be_ios" customModuleProvider="target">
             <connections>
                 <outlet property="button" destination="3kV-OQ-l7X" id="SwW-UD-8qL"/>
                 <outlet property="label" destination="xSe-rS-OHs" id="GCm-Tj-xnh"/>

@@ -64,6 +64,10 @@ class ProgressViewController: UIViewController {
             guard let input = self?.input, let converter = self?.converter else {
                 return
             }
+            guard input.startAccessingSecurityScopedResource() else {
+                //TODO:
+                return
+            }
             converter.startConvertingFile(input, delegate: self)
         }
     }
@@ -89,6 +93,8 @@ class ProgressViewController: UIViewController {
     }
     
     @objc func closeButtonDidTouchUpInside(sender: AnyObject) {
+        self.input.stopAccessingSecurityScopedResource()
+
         self.dismiss(animated: true, completion: nil)
     }
 }
