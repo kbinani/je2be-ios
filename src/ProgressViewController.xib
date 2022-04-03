@@ -12,6 +12,8 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ProgressViewController" customModule="je2be_ios" customModuleProvider="target">
             <connections>
                 <outlet property="cancelButton" destination="4bd-PZ-Opm" id="brZ-sp-RCo"/>
+                <outlet property="closeButton" destination="w7F-gX-gxp" id="y2y-F0-daU"/>
+                <outlet property="exportButton" destination="ftl-zQ-9ph" id="HPr-Ye-Zsx"/>
                 <outlet property="stackView" destination="in5-D6-JqO" id="u4v-Jk-SO0"/>
                 <outlet property="stepDescriptionLabel" destination="GnC-lP-J8Q" id="O3Q-Yk-zhx"/>
                 <outlet property="view" destination="iN0-l3-epB" id="Dxf-vP-SrQ"/>
@@ -22,7 +24,7 @@
             <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="in5-D6-JqO">
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="in5-D6-JqO" userLabel="ProgressStackView">
                     <rect key="frame" x="102.5" y="104" width="819" height="20.5"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GnC-lP-J8Q">
@@ -33,28 +35,51 @@
                         </label>
                     </subviews>
                 </stackView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4bd-PZ-Opm">
-                    <rect key="frame" x="392" y="154.5" width="240" height="44"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="44" id="Dty-wF-Dma"/>
-                        <constraint firstAttribute="width" constant="240" id="vGG-VS-ltL"/>
-                    </constraints>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Rwp-9C-r08" userLabel="ButtonStackView">
+                    <rect key="frame" x="392" y="154.5" width="240" height="88"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4bd-PZ-Opm" userLabel="CancelButton">
+                            <rect key="frame" x="0.0" y="0.0" width="240" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="44" id="Dty-wF-Dma"/>
+                                <constraint firstAttribute="width" constant="240" id="vGG-VS-ltL"/>
+                            </constraints>
+                            <state key="normal" title="Button"/>
+                            <buttonConfiguration key="configuration" style="filled" title="Button">
+                                <backgroundConfiguration key="background">
+                                    <color key="backgroundColor" systemColor="systemRedColor"/>
+                                </backgroundConfiguration>
+                            </buttonConfiguration>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ftl-zQ-9ph" userLabel="ExportButton">
+                            <rect key="frame" x="0.0" y="44" width="240" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="240" id="ByT-C9-4pq"/>
+                                <constraint firstAttribute="height" constant="44" id="VIL-YE-z9U"/>
+                            </constraints>
+                            <state key="normal" title="Button"/>
+                            <buttonConfiguration key="configuration" style="filled" title="Button">
+                                <backgroundConfiguration key="background"/>
+                            </buttonConfiguration>
+                        </button>
+                    </subviews>
+                </stackView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w7F-gX-gxp" userLabel="CloseButton">
+                    <rect key="frame" x="20" y="44" width="67" height="31"/>
                     <state key="normal" title="Button"/>
-                    <buttonConfiguration key="configuration" style="filled" title="Button">
-                        <backgroundConfiguration key="background">
-                            <color key="backgroundColor" systemColor="systemRedColor"/>
-                        </backgroundConfiguration>
-                    </buttonConfiguration>
+                    <buttonConfiguration key="configuration" style="plain" title="Button"/>
                 </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" red="0.1960784314" green="0.24313725489999999" blue="0.2666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="in5-D6-JqO" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="80" id="0LT-gC-eIJ"/>
-                <constraint firstItem="4bd-PZ-Opm" firstAttribute="top" secondItem="in5-D6-JqO" secondAttribute="bottom" constant="30" id="8lQ-DF-qjH"/>
+                <constraint firstItem="Rwp-9C-r08" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="4Lp-Mr-CA9"/>
                 <constraint firstItem="in5-D6-JqO" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="GIu-Cj-9j5"/>
-                <constraint firstItem="4bd-PZ-Opm" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="gbI-Xu-DTy"/>
+                <constraint firstItem="w7F-gX-gxp" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="M9x-ao-RpS"/>
                 <constraint firstItem="in5-D6-JqO" firstAttribute="width" secondItem="vUN-kp-3ea" secondAttribute="width" multiplier="0.8" id="nQS-ao-eT7"/>
+                <constraint firstItem="w7F-gX-gxp" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="20" id="pYp-as-7DR"/>
+                <constraint firstItem="Rwp-9C-r08" firstAttribute="top" secondItem="in5-D6-JqO" secondAttribute="bottom" constant="30" id="whD-eO-h7C"/>
             </constraints>
             <point key="canvasLocation" x="139" y="128"/>
         </view>
