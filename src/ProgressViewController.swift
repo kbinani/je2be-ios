@@ -11,7 +11,7 @@ class ProgressViewController: UIViewController {
     private let input: URL
     private let converter: Converter
     private let cancelRequested = AtomicBool(initial: false)
-    private var progressSteps: [UIProgressView] = []
+    private var progressSteps: [ProgressBar] = []
     private var output: URL?
     
     init(input: URL, converter: Converter) {
@@ -34,12 +34,13 @@ class ProgressViewController: UIViewController {
         super.viewDidLoad()
         
         let numSteps = self.converter.numProgressSteps()
-        for _ in 0 ..< numSteps {
-            self.progressSteps.append(UIProgressView(progressViewStyle: .default))
-        }
-        for progress in self.progressSteps {
-            progress.progress = 0
-            self.stackView.addArrangedSubview(progress)
+        for step in 0 ..< numSteps {
+            let bar = ProgressBar(progressViewStyle: .default)
+            bar.progress = 0
+            bar.title = converter.description(forStep: step)
+            bar.titleColor = .gray
+            self.progressSteps.append(bar)
+            self.stackView.addArrangedSubview(bar)
         }
         
         self.cancelButton.setTitle(gettext("Cancel"), for: .normal)
