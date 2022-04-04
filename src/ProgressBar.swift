@@ -1,10 +1,12 @@
+import UIKit
 
 class ProgressBar: UIView {
+
     private weak var label: UILabel!
     private weak var progressView: UIProgressView!
-    private let progressViewStyle: UIProgressViewStyle
+    private let progressViewStyle: UIProgressView.Style
     
-    init(progressViewStyle: UIProgressViewStyle) {
+    init(progressViewStyle: UIProgressView.Style) {
         self.progressViewStyle = progressViewStyle
         super.init(frame: .zero)
         commonInit()
@@ -55,6 +57,6 @@ class ProgressBar: UIView {
     }
     
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: UIViewNoIntrinsicMetric, height: 44)
+        return CGSize(width: UIView.noIntrinsicMetric, height: 44)
     }
 }

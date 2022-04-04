@@ -1,9 +1,9 @@
 #import <Foundation/Foundation.h>
 
-@class Converter;
+@protocol Converter;
 
 @protocol ConverterDelegate
-- (BOOL)converterDidUpdateProgress:(id _Nonnull)converter step:(int)step done:(double)done total:(double)total;
+- (BOOL)converterDidUpdateProgress:(id<Converter> _Nonnull)converter step:(int)step done:(double)done total:(double)total;
 - (void)converterDidFinishConversion:(NSURL* _Nullable)output;
 @end
 

@@ -1,8 +1,10 @@
 import UIKit
 
 protocol ProgressViewDelegate: AnyObject {
+
     func progressViewWillDisappear()
 }
+
 
 class ProgressViewController: UIViewController {
     
@@ -99,10 +101,12 @@ class ProgressViewController: UIViewController {
     }
 }
 
+
 extension ProgressViewController: ConverterDelegate {
-    func converterDidUpdateProgress(_ converter: Any, step: Int32, done: Double, total: Double) -> Bool {
+
+    func converterDidUpdateProgress(_ converter: Converter, step: Int32, done: Double, total: Double) -> Bool {
         DispatchQueue.main.async { [weak self] in
-            guard let self = self, 0 <= step, step < self.progressSteps.count, let converter = converter as? Converter else {
+            guard let self = self, 0 <= step, step < self.progressSteps.count else {
                 return
             }
             let s = Int(step)
