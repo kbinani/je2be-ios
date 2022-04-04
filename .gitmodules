@@ -4,6 +4,3 @@
 [submodule "deps/ios-cmake"]
 	path = deps/ios-cmake
 	url = https://github.com/leetal/ios-cmake.git
-[submodule "deps/bugsnag-cocoa"]
-	path = deps/bugsnag-cocoa
-	url = https://github.com/bugsnag/bugsnag-cocoa
