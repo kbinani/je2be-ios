@@ -1,0 +1,8 @@
+platform :ios, '14.0'
+
+workspace 'je2be-ios'
+project 'je2be-ios'
+
+target 'je2be-ios' do
+  pod 'Bugsnag'
+end
