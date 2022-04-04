@@ -7,6 +7,8 @@ class AppDelegate: UIResponder {
 
 extension AppDelegate: UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        Bugsnag.start()
+
         let window = UIWindow(frame: UIScreen.main.bounds)
         self.window = window
         window.rootViewController = ModeSelectViewController()
