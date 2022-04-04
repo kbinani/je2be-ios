@@ -9,8 +9,7 @@ set(je2be_ios_files
   src/ChooseInputViewController.swift
   src/Localization.swift
   src/Converter.h
-  src/ConvertJavaToBedrock.mm
-  src/ConvertJavaToBedrock.h
+  src/ConvertJavaToBedrock.swift
   src/ProgressViewController.swift
   src/BridgingHeader.h
   src/AtomicBool.swift

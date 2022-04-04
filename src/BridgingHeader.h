@@ -1,2 +1,2 @@
 #import "Converter.h"
-#import "ConvertJavaToBedrock.h"
+#import "Core.h"
