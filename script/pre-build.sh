@@ -25,3 +25,7 @@ ${PLISTBUDDY} -c "Add :UILaunchStoryboardName string LaunchScreen" "$INFO_PLIST_
 
 ${PLISTBUDDY} -c "Delete :CFBundleDisplayName" "$INFO_PLIST_PATH" || true
 ${PLISTBUDDY} -c "Add :CFBundleDisplayName string je2be" "$INFO_PLIST_PATH"
+
+${PLISTBUDDY} -c "Delete :bugsnag" "$INFO_PLIST_PATH" || true
+${PLISTBUDDY} -c "Add :bugsnag dict" "$INFO_PLIST_PATH"
+${PLISTBUDDY} -c "Add :bugsnag:apiKey string 44c5703205a25aab4b0673ce6d281bfb" "$INFO_PLIST_PATH"
