@@ -37,6 +37,7 @@ set_target_properties(je2be-ios PROPERTIES
   XCODE_ATTRIBUTE_SWIFT_OBJC_BRIDGING_HEADER "src/BridgingHeader.h"
   XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon"
   XCODE_ATTRIBUTE_SWIFT_VERSION "5.0"
+  XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)"
 )
 target_link_libraries(je2be-ios PRIVATE je2be)
 target_sources(je2be-ios PRIVATE assets.xcassets)
