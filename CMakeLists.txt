@@ -3,6 +3,8 @@ project(je2be-ios LANGUAGES C CXX Swift)
 
 add_subdirectory(deps/je2be EXCLUDE_FROM_ALL)
 
+set_target_properties(minizip PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
+
 set(je2be_ios_files
   src/AppDelegate.swift
   src/ModeSelectViewController.swift
