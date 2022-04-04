@@ -4,5 +4,6 @@ workspace 'je2be-ios'
 project 'je2be-ios'
 
 target 'je2be-ios' do
+  use_frameworks!
   pod 'Bugsnag'
 end
