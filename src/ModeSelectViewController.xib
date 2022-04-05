@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="ipad12_9rounded" orientation="landscape" layout="fullscreen" appearance="light"/>
+    <device id="ipad12_9rounded" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ModeSelectViewController" customModule="je2be_ios" customModuleProvider="target">
             <connections>
                 <outlet property="bedrockToJavaButton" destination="ZKW-zQ-lUw" id="7M2-oe-RjA"/>
+                <outlet property="drawer" destination="vao-CG-dE8" id="6Oi-A8-uuR"/>
+                <outlet property="drawerTouchDetector" destination="YQu-5d-bHx" id="YbZ-kL-cQ3"/>
                 <outlet property="javaToBedrockButton" destination="chg-fi-uSs" id="yHW-dg-wIX"/>
                 <outlet property="label" destination="ZVr-na-qzZ" id="gDu-qu-7PN"/>
+                <outlet property="menuButton" destination="4bJ-fH-K2q" id="dnF-ZH-DMp"/>
                 <outlet property="view" destination="iN0-l3-epB" id="nUt-FD-tut"/>
                 <outlet property="xbox360ToBedrockButton" destination="yyS-zs-LSL" id="MSU-wS-twM"/>
                 <outlet property="xbox360ToJavaButton" destination="nua-Mq-7At" id="144-GL-gXa"/>
@@ -20,17 +24,24 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="1366" height="1024"/>
+            <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4bJ-fH-K2q" userLabel="MenuButton">
+                    <rect key="frame" x="20" y="44" width="47" height="31"/>
+                    <state key="normal" title="Button"/>
+                    <buttonConfiguration key="configuration" style="plain" image="line.3.horizontal" catalog="system">
+                        <color key="baseForegroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </buttonConfiguration>
+                </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZVr-na-qzZ">
-                    <rect key="frame" x="662.5" y="104" width="41.5" height="20.5"/>
+                    <rect key="frame" x="491.5" y="104" width="41.5" height="20.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="YOo-DG-U2H">
-                    <rect key="frame" x="563" y="154.5" width="240" height="236"/>
+                    <rect key="frame" x="392" y="154.5" width="240" height="236"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="chg-fi-uSs">
                             <rect key="frame" x="0.0" y="0.0" width="240" height="44"/>
@@ -69,6 +80,22 @@
                         <constraint firstAttribute="width" priority="999" constant="240" id="AhM-Al-zQL"/>
                     </constraints>
                 </stackView>
+                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YQu-5d-bHx" userLabel="DrawerTouchDetector">
+                    <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <gestureRecognizers/>
+                    <connections>
+                        <outletCollection property="gestureRecognizers" destination="bO1-xU-9an" appends="YES" id="nuA-T4-2tK"/>
+                        <outletCollection property="gestureRecognizers" destination="kLe-Gs-ZQj" appends="YES" id="zP0-dE-Llr"/>
+                    </connections>
+                </view>
+                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vao-CG-dE8" userLabel="Drawer">
+                    <rect key="frame" x="0.0" y="0.0" width="400" height="1366"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="width" priority="999" constant="400" id="RwO-aP-jgF"/>
+                    </constraints>
+                </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" red="0.1960784314" green="0.24313725489999999" blue="0.2666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -77,11 +104,37 @@
                     <variation key="heightClass=compact" constant="40"/>
                     <variation key="widthClass=compact" constant="40"/>
                 </constraint>
+                <constraint firstItem="4bJ-fH-K2q" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="32A-tK-JIz"/>
+                <constraint firstItem="YQu-5d-bHx" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="HqA-TV-mpj"/>
+                <constraint firstItem="YQu-5d-bHx" firstAttribute="trailing" secondItem="iN0-l3-epB" secondAttribute="trailing" id="O8l-Kr-TRd"/>
                 <constraint firstItem="ZVr-na-qzZ" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="Vdm-kP-Cvi"/>
+                <constraint firstItem="vao-CG-dE8" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="WXT-xE-3uf"/>
                 <constraint firstItem="YOo-DG-U2H" firstAttribute="top" secondItem="ZVr-na-qzZ" secondAttribute="bottom" constant="30" id="aFx-ZO-i1v"/>
+                <constraint firstItem="vao-CG-dE8" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="cKk-Oa-q3z"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="vao-CG-dE8" secondAttribute="trailing" constant="60" id="drU-Ee-dW7"/>
+                <constraint firstItem="YQu-5d-bHx" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="eRH-Nf-Z9P"/>
                 <constraint firstItem="YOo-DG-U2H" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="fqg-tX-TQa"/>
+                <constraint firstAttribute="bottom" secondItem="YQu-5d-bHx" secondAttribute="bottom" id="mcF-mf-ugt"/>
+                <constraint firstItem="4bJ-fH-K2q" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="20" id="oWi-v6-ZdU"/>
+                <constraint firstAttribute="bottom" secondItem="vao-CG-dE8" secondAttribute="bottom" id="zX0-cu-zjf"/>
             </constraints>
             <point key="canvasLocation" x="138.8671875" y="127.81844802342606"/>
         </view>
+        <tapGestureRecognizer id="bO1-xU-9an">
+            <connections>
+                <action selector="drawerTouchDetectorDidTap:" destination="-1" id="y9e-4K-tD4"/>
+            </connections>
+        </tapGestureRecognizer>
+        <panGestureRecognizer minimumNumberOfTouches="1" id="kLe-Gs-ZQj">
+            <connections>
+                <action selector="drawerTouchDetectorDidPan:" destination="-1" id="WHk-T3-6Va"/>
+            </connections>
+        </panGestureRecognizer>
     </objects>
+    <resources>
+        <image name="line.3.horizontal" catalog="system" width="128" height="64"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>

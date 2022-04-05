@@ -8,11 +8,17 @@ class ModeSelectViewController: UIViewController {
     @IBOutlet weak var bedrockToJavaButton: UIButton!
     @IBOutlet weak var xbox360ToBedrockButton: UIButton!
     @IBOutlet weak var xbox360ToJavaButton: UIButton!
+    @IBOutlet weak var drawer: UIView!
+    @IBOutlet weak var drawerTouchDetector: UIView!
+    @IBOutlet weak var menuButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.label.text = gettext("Select conversion mode")
+        
+        self.menuButton.setTitle("", for: .normal)
+        self.menuButton.addTarget(self, action: #selector(menuButtonDidTouchUpInside(_:)), for: .touchUpInside)
         
         self.javaToBedrockButton.setTitle(gettext("Java to Bedrock"), for: .normal)
         self.javaToBedrockButton.addTarget(self,
@@ -82,6 +88,41 @@ class ModeSelectViewController: UIViewController {
         self.bedrockToJavaButton.isEnabled = true
         self.xbox360ToJavaButton.isEnabled = true
         self.xbox360ToBedrockButton.isEnabled = true
+    }
+    
+    @IBAction func drawerTouchDetectorDidTap(_ sender: Any) {
+        closeDrawer()
+    }
+    
+    @IBAction func drawerTouchDetectorDidPan(_ sender: Any) {
+        closeDrawer()
+    }
+    
+    @IBAction func menuButtonDidTouchUpInside(_ sender: UIButton) {
+        openDrawer()
+    }
+    
+    private func openDrawer() {
+        self.drawer.frame = .init(x: -self.drawer.bounds.width, y: 0, width: self.drawer.bounds.width, height: self.label.bounds.height)
+        self.drawerTouchDetector.alpha = 0
+        self.drawerTouchDetector.isHidden = false
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut) {
+            self.drawer.frame = .init(origin: .zero, size: self.drawer.bounds.size)
+            self.drawerTouchDetector.alpha = 1
+        }
+        self.drawer.isHidden = false
+    }
+    
+    private func closeDrawer() {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut) {
+            self.drawer.frame = .init(x: -self.drawer.bounds.width, y: 0, width: self.drawer.bounds.width, height: self.drawer.bounds.height)
+            self.drawerTouchDetector.alpha = 0
+        } completion: { done in
+            if done {
+                self.drawer.isHidden = true
+                self.drawerTouchDetector.isHidden = true
+            }
+        }
     }
 }
 
