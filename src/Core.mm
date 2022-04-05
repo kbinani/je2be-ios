@@ -28,7 +28,7 @@ static std::filesystem::path PathFromNSURL(NSURL * _Nonnull url) {
 }
 
 
-extern "C" void JavaToBedrock(id<Converter> converter, NSURL* input, __weak id<ConverterDelegate> delegate) {
+void UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, __weak id<ConverterDelegate> delegate) {
     namespace fs = std::filesystem;
 
     id<ConverterDelegate> d = delegate;
@@ -119,4 +119,12 @@ extern "C" void JavaToBedrock(id<Converter> converter, NSURL* input, __weak id<C
         return;
     }
     output = zipOut;
+}
+
+
+extern "C" void JavaToBedrock(id<Converter> converter, NSURL* input, __weak id<ConverterDelegate> delegate) {
+    try {
+        UnsafeJavaToBedrock(converter, input, delegate);
+    } catch (...) {
+    }
 }
