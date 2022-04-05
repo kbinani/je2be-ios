@@ -17,6 +17,7 @@
                 <outlet property="javaToBedrockButton" destination="chg-fi-uSs" id="yHW-dg-wIX"/>
                 <outlet property="label" destination="ZVr-na-qzZ" id="gDu-qu-7PN"/>
                 <outlet property="menuButton" destination="4bJ-fH-K2q" id="dnF-ZH-DMp"/>
+                <outlet property="screenEdgePanGestureRecognizer" destination="Eh5-Wk-jsg" id="XLa-Kt-5Jz"/>
                 <outlet property="view" destination="iN0-l3-epB" id="nUt-FD-tut"/>
                 <outlet property="xbox360ToBedrockButton" destination="yyS-zs-LSL" id="MSU-wS-twM"/>
                 <outlet property="xbox360ToJavaButton" destination="nua-Mq-7At" id="144-GL-gXa"/>
@@ -99,6 +100,7 @@
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" red="0.1960784314" green="0.24313725489999999" blue="0.2666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <gestureRecognizers/>
             <constraints>
                 <constraint firstItem="ZVr-na-qzZ" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="80" id="2QE-3P-DI2">
                     <variation key="heightClass=compact" constant="40"/>
@@ -118,6 +120,9 @@
                 <constraint firstItem="4bJ-fH-K2q" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="20" id="oWi-v6-ZdU"/>
                 <constraint firstAttribute="bottom" secondItem="vao-CG-dE8" secondAttribute="bottom" id="zX0-cu-zjf"/>
             </constraints>
+            <connections>
+                <outletCollection property="gestureRecognizers" destination="Eh5-Wk-jsg" appends="YES" id="9M6-iT-iiu"/>
+            </connections>
             <point key="canvasLocation" x="138.8671875" y="127.81844802342606"/>
         </view>
         <tapGestureRecognizer id="bO1-xU-9an">
@@ -130,6 +135,12 @@
                 <action selector="drawerTouchDetectorDidPan:" destination="-1" id="WHk-T3-6Va"/>
             </connections>
         </panGestureRecognizer>
+        <screenEdgePanGestureRecognizer minimumNumberOfTouches="1" id="Eh5-Wk-jsg">
+            <rectEdge key="edges" left="YES"/>
+            <connections>
+                <action selector="screenEdgeDidPan:" destination="-1" id="pMt-og-C3z"/>
+            </connections>
+        </screenEdgePanGestureRecognizer>
     </objects>
     <resources>
         <image name="line.3.horizontal" catalog="system" width="128" height="64"/>

@@ -11,6 +11,7 @@ class ModeSelectViewController: UIViewController {
     @IBOutlet weak var drawer: UIView!
     @IBOutlet weak var drawerTouchDetector: UIView!
     @IBOutlet weak var menuButton: UIButton!
+    @IBOutlet weak var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -101,11 +102,16 @@ class ModeSelectViewController: UIViewController {
     @IBAction func menuButtonDidTouchUpInside(_ sender: UIButton) {
         openDrawer()
     }
+
+    @IBAction func screenEdgeDidPan(_ sender: Any) {
+        openDrawer()
+    }
     
     private func openDrawer() {
         self.drawer.frame = .init(x: -self.drawer.bounds.width, y: 0, width: self.drawer.bounds.width, height: self.label.bounds.height)
         self.drawerTouchDetector.alpha = 0
         self.drawerTouchDetector.isHidden = false
+        self.screenEdgePanGestureRecognizer.isEnabled = false
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut) {
             self.drawer.frame = .init(origin: .zero, size: self.drawer.bounds.size)
             self.drawerTouchDetector.alpha = 1
@@ -121,6 +127,7 @@ class ModeSelectViewController: UIViewController {
             if done {
                 self.drawer.isHidden = true
                 self.drawerTouchDetector.isHidden = true
+                self.screenEdgePanGestureRecognizer.isEnabled = true
             }
         }
     }
