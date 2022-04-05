@@ -11,7 +11,13 @@ class ModeSelectViewController: UIViewController {
     @IBOutlet weak var drawer: UIView!
     @IBOutlet weak var drawerTouchDetector: UIView!
     @IBOutlet weak var menuButton: UIButton!
+    @IBOutlet weak var tapGestureRecognizer: UITapGestureRecognizer!
+    @IBOutlet weak var panGestureRecognizer: UIPanGestureRecognizer!
     @IBOutlet weak var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer!
+    @IBOutlet weak var drawerCloseButon: UIButton!
+    @IBOutlet weak var licensesButton: UIButton!
+    
+    private var isDrawerShown = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +26,12 @@ class ModeSelectViewController: UIViewController {
         
         self.menuButton.setTitle("", for: .normal)
         self.menuButton.addTarget(self, action: #selector(menuButtonDidTouchUpInside(_:)), for: .touchUpInside)
+        
+        self.drawerCloseButon.addTarget(self, action: #selector(drawerCloseButtonDidTouchUpInside(_:)), for: .touchUpInside)
+        self.drawerCloseButon.setTitle(gettext("Back"), for: .normal)
+        
+        self.licensesButton.addTarget(self, action: #selector(licensesButtonDidTouchUpInside(_:)), for: .touchUpInside)
+        self.licensesButton.setTitle(gettext("Licenses"), for: .normal)
         
         self.javaToBedrockButton.setTitle(gettext("Java to Bedrock"), for: .normal)
         self.javaToBedrockButton.addTarget(self,
@@ -95,11 +107,11 @@ class ModeSelectViewController: UIViewController {
         closeDrawer()
     }
     
-    @IBAction func drawerTouchDetectorDidPan(_ sender: Any) {
+    @IBAction func drawerTouchDetectorDidPan(_ sender: UIPanGestureRecognizer) {
         closeDrawer()
     }
     
-    @IBAction func menuButtonDidTouchUpInside(_ sender: UIButton) {
+    @objc private func menuButtonDidTouchUpInside(_ sender: UIButton) {
         openDrawer()
     }
 
@@ -107,29 +119,49 @@ class ModeSelectViewController: UIViewController {
         openDrawer()
     }
     
+    @IBAction func drawerCloseButtonDidTouchUpInside(_ sender: UIButton) {
+        closeDrawer()
+    }
+    
     private func openDrawer() {
-        self.drawer.frame = .init(x: -self.drawer.bounds.width, y: 0, width: self.drawer.bounds.width, height: self.label.bounds.height)
+        guard !isDrawerShown else {
+            return
+        }
+        isDrawerShown = true
+
+        self.drawer.transform = .init(translationX: -self.drawer.bounds.width, y: 0)
         self.drawerTouchDetector.alpha = 0
         self.drawerTouchDetector.isHidden = false
         self.screenEdgePanGestureRecognizer.isEnabled = false
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut) {
-            self.drawer.frame = .init(origin: .zero, size: self.drawer.bounds.size)
+        UIView.animate(withDuration: 0.2, delay: 0, options: [.curveEaseOut, .beginFromCurrentState]) {
+            self.drawer.transform = .identity
             self.drawerTouchDetector.alpha = 1
         }
         self.drawer.isHidden = false
     }
     
     private func closeDrawer() {
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut) {
-            self.drawer.frame = .init(x: -self.drawer.bounds.width, y: 0, width: self.drawer.bounds.width, height: self.drawer.bounds.height)
+        guard isDrawerShown else {
+            return
+        }
+        isDrawerShown = false
+
+        self.drawer.transform = .identity
+        UIView.animate(withDuration: 0.2, delay: 0, options: [.curveEaseOut, .beginFromCurrentState]) {
+            self.drawer.transform = .init(translationX: -self.drawer.bounds.width, y: 0)
             self.drawerTouchDetector.alpha = 0
         } completion: { done in
             if done {
                 self.drawer.isHidden = true
+                self.drawer.transform = .identity
                 self.drawerTouchDetector.isHidden = true
                 self.screenEdgePanGestureRecognizer.isEnabled = true
             }
         }
+    }
+    
+    @objc private func licensesButtonDidTouchUpInside(_ sender: UIButton) {
+
     }
 }
 
