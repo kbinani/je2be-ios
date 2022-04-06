@@ -10,13 +10,13 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ModeSelectViewController" customModule="je2be_ios" customModuleProvider="target">
             <connections>
+                <outlet property="aboutButton" destination="d7D-yF-5Z9" id="4gY-8I-Jbq"/>
                 <outlet property="bedrockToJavaButton" destination="ZKW-zQ-lUw" id="7M2-oe-RjA"/>
                 <outlet property="drawer" destination="vao-CG-dE8" id="6Oi-A8-uuR"/>
                 <outlet property="drawerCloseButon" destination="WVd-cz-Sry" id="XXt-g3-Uad"/>
                 <outlet property="drawerTouchDetector" destination="YQu-5d-bHx" id="YbZ-kL-cQ3"/>
                 <outlet property="javaToBedrockButton" destination="chg-fi-uSs" id="yHW-dg-wIX"/>
                 <outlet property="label" destination="ZVr-na-qzZ" id="gDu-qu-7PN"/>
-                <outlet property="licenseButton" destination="d7D-yF-5Z9" id="x3D-0h-pEv"/>
                 <outlet property="menuButton" destination="4bJ-fH-K2q" id="dnF-ZH-DMp"/>
                 <outlet property="panGestureRecognizer" destination="kLe-Gs-ZQj" id="0Xz-WJ-XqT"/>
                 <outlet property="screenEdgePanGestureRecognizer" destination="Eh5-Wk-jsg" id="XLa-Kt-5Jz"/>
@@ -110,7 +110,7 @@
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="aEP-7a-uaL" userLabel="DrawerStackView">
                             <rect key="frame" x="20" y="115" width="360" height="31"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d7D-yF-5Z9" userLabel="LicenseButton">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d7D-yF-5Z9" userLabel="AboutButton">
                                     <rect key="frame" x="0.0" y="0.0" width="360" height="31"/>
                                     <state key="normal" title="Button"/>
                                     <buttonConfiguration key="configuration" style="plain" title="Button">

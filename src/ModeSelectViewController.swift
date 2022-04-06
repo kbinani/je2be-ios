@@ -16,7 +16,7 @@ class ModeSelectViewController: UIViewController {
     @IBOutlet weak var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer!
     @IBOutlet weak var drawerCloseButon: UIButton!
     @IBOutlet weak var versionLabel: UILabel!
-    @IBOutlet weak var licenseButton: UIButton!
+    @IBOutlet weak var aboutButton: UIButton!
     
     private var isDrawerShown = false
     
@@ -31,8 +31,8 @@ class ModeSelectViewController: UIViewController {
         self.drawerCloseButon.addTarget(self, action: #selector(drawerCloseButtonDidTouchUpInside(_:)), for: .touchUpInside)
         self.drawerCloseButon.setTitle(gettext("Back"), for: .normal)
         
-        self.licenseButton.setTitle(gettext("License"), for: .normal)
-        self.licenseButton.addTarget(self, action: #selector(licenseButtonDidTouchUpInside(_:)), for: .touchUpInside)
+        self.aboutButton.setTitle(gettext("About"), for: .normal)
+        self.aboutButton.addTarget(self, action: #selector(aboutButtonDidTouchUpInside(_:)), for: .touchUpInside)
         
         self.versionLabel.text = "je2be-ios " + ((Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "(local)")
         
@@ -163,8 +163,8 @@ class ModeSelectViewController: UIViewController {
         }
     }
     
-    @objc private func licenseButtonDidTouchUpInside(_ sender: UIButton) {
-        let vc = LicenseViewController()
+    @objc private func aboutButtonDidTouchUpInside(_ sender: UIButton) {
+        let vc = AboutViewController()
         self.present(vc, animated: true)
     }
 }

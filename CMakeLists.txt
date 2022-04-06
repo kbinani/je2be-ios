@@ -19,14 +19,14 @@ set(je2be_ios_files
   src/Core.mm
   src/ProgressBar.swift
   src/ConversionType.swift
-  src/LicenseViewController.swift
+  src/AboutViewController.swift
   src/ConvertBedrockToJava.swift
 )
 set(je2be_ios_resources
   src/ModeSelectViewController.xib
   src/ChooseInputViewController.xib
   src/ProgressViewController.xib
-  src/LicenseViewController.xib
+  src/AboutViewController.xib
   src/LaunchScreen.storyboard
   resource/Settings.bundle
 )
