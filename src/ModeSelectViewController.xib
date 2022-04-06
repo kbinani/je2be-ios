@@ -16,11 +16,12 @@
                 <outlet property="drawerTouchDetector" destination="YQu-5d-bHx" id="YbZ-kL-cQ3"/>
                 <outlet property="javaToBedrockButton" destination="chg-fi-uSs" id="yHW-dg-wIX"/>
                 <outlet property="label" destination="ZVr-na-qzZ" id="gDu-qu-7PN"/>
-                <outlet property="licensesButton" destination="kEr-OI-HAO" id="WXP-Yb-kAb"/>
+                <outlet property="licenseButton" destination="d7D-yF-5Z9" id="x3D-0h-pEv"/>
                 <outlet property="menuButton" destination="4bJ-fH-K2q" id="dnF-ZH-DMp"/>
                 <outlet property="panGestureRecognizer" destination="kLe-Gs-ZQj" id="0Xz-WJ-XqT"/>
                 <outlet property="screenEdgePanGestureRecognizer" destination="Eh5-Wk-jsg" id="XLa-Kt-5Jz"/>
                 <outlet property="tapGestureRecognizer" destination="bO1-xU-9an" id="eUW-lu-Eh5"/>
+                <outlet property="versionLabel" destination="HM7-gj-Gyk" id="Fq8-jg-Fry"/>
                 <outlet property="view" destination="iN0-l3-epB" id="nUt-FD-tut"/>
                 <outlet property="xbox360ToBedrockButton" destination="yyS-zs-LSL" id="MSU-wS-twM"/>
                 <outlet property="xbox360ToJavaButton" destination="nua-Mq-7At" id="144-GL-gXa"/>
@@ -106,14 +107,11 @@
                                 <color key="baseForegroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </buttonConfiguration>
                         </button>
-                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="pfD-TQ-zmV">
-                            <rect key="frame" x="20" y="105" width="360" height="31"/>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="aEP-7a-uaL" userLabel="DrawerStackView">
+                            <rect key="frame" x="20" y="115" width="360" height="31"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kEr-OI-HAO" userLabel="LicensesButton">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d7D-yF-5Z9" userLabel="LicenseButton">
                                     <rect key="frame" x="0.0" y="0.0" width="360" height="31"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" priority="999" constant="31" id="lwk-5y-IK7"/>
-                                    </constraints>
                                     <state key="normal" title="Button"/>
                                     <buttonConfiguration key="configuration" style="plain" title="Button">
                                         <color key="baseForegroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -121,14 +119,22 @@
                                 </button>
                             </subviews>
                         </stackView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HM7-gj-Gyk" userLabel="VersionLabel">
+                            <rect key="frame" x="344.5" y="1329" width="35.5" height="17"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <color key="backgroundColor" red="0.1960784314" green="0.24313725489999999" blue="0.2666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
-                        <constraint firstItem="pfD-TQ-zmV" firstAttribute="leading" secondItem="vao-CG-dE8" secondAttribute="leading" constant="20" id="JG8-Ls-5Wg"/>
+                        <constraint firstAttribute="trailing" secondItem="aEP-7a-uaL" secondAttribute="trailing" constant="20" id="Jv3-kP-63X"/>
                         <constraint firstItem="WVd-cz-Sry" firstAttribute="leading" secondItem="vao-CG-dE8" secondAttribute="leading" constant="20" id="ONh-nt-lVu"/>
                         <constraint firstAttribute="width" priority="999" constant="400" id="RwO-aP-jgF"/>
-                        <constraint firstAttribute="trailing" secondItem="pfD-TQ-zmV" secondAttribute="trailing" constant="20" id="YYv-Oa-8fd"/>
-                        <constraint firstItem="pfD-TQ-zmV" firstAttribute="top" secondItem="WVd-cz-Sry" secondAttribute="bottom" constant="30" id="cGu-dR-17U"/>
+                        <constraint firstItem="aEP-7a-uaL" firstAttribute="leading" secondItem="vao-CG-dE8" secondAttribute="leading" constant="20" id="ZWs-gB-tPX"/>
+                        <constraint firstAttribute="trailing" secondItem="HM7-gj-Gyk" secondAttribute="trailing" constant="20" id="Zec-zY-Ic9"/>
+                        <constraint firstAttribute="bottom" secondItem="HM7-gj-Gyk" secondAttribute="bottom" constant="20" id="gMb-A2-hKe"/>
+                        <constraint firstItem="aEP-7a-uaL" firstAttribute="top" secondItem="WVd-cz-Sry" secondAttribute="bottom" constant="40" id="l5H-P1-5Yu"/>
                     </constraints>
                 </view>
             </subviews>

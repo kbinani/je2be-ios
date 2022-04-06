@@ -15,7 +15,8 @@ class ModeSelectViewController: UIViewController {
     @IBOutlet weak var panGestureRecognizer: UIPanGestureRecognizer!
     @IBOutlet weak var screenEdgePanGestureRecognizer: UIScreenEdgePanGestureRecognizer!
     @IBOutlet weak var drawerCloseButon: UIButton!
-    @IBOutlet weak var licensesButton: UIButton!
+    @IBOutlet weak var versionLabel: UILabel!
+    @IBOutlet weak var licenseButton: UIButton!
     
     private var isDrawerShown = false
     
@@ -30,8 +31,10 @@ class ModeSelectViewController: UIViewController {
         self.drawerCloseButon.addTarget(self, action: #selector(drawerCloseButtonDidTouchUpInside(_:)), for: .touchUpInside)
         self.drawerCloseButon.setTitle(gettext("Back"), for: .normal)
         
-        self.licensesButton.addTarget(self, action: #selector(licensesButtonDidTouchUpInside(_:)), for: .touchUpInside)
-        self.licensesButton.setTitle(gettext("Licenses"), for: .normal)
+        self.licenseButton.setTitle(gettext("License"), for: .normal)
+        self.licenseButton.addTarget(self, action: #selector(licenseButtonDidTouchUpInside(_:)), for: .touchUpInside)
+        
+        self.versionLabel.text = "je2be-ios " + ((Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "(local)")
         
         self.javaToBedrockButton.setTitle(gettext("Java to Bedrock"), for: .normal)
         self.javaToBedrockButton.addTarget(self,
@@ -160,7 +163,7 @@ class ModeSelectViewController: UIViewController {
         }
     }
     
-    @objc private func licensesButtonDidTouchUpInside(_ sender: UIButton) {
+    @objc private func licenseButtonDidTouchUpInside(_ sender: UIButton) {
 
     }
 }
