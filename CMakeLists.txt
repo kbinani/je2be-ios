@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
-project(je2be-ios LANGUAGES C CXX Swift)
+project(je2be-ios LANGUAGES C CXX Swift VERSION 0.1)
+
+set(je2be_iphoneos_deployment_target "15.0")
 
 add_subdirectory(deps/je2be EXCLUDE_FROM_ALL)
 
@@ -27,18 +29,18 @@ set(je2be_ios_resources
   src/AboutViewController.xib
   src/LaunchScreen.storyboard
   resource/Settings.bundle
+  assets.xcassets
 )
 
-set(je2be_iphoneos_deployment_target "15.0")
 add_executable(je2be-ios MACOSX_BUNDLE ${je2be_ios_files} ${je2be_ios_resources})
 set_target_properties(je2be-ios PROPERTIES
   BUNDLE True
   RESOURCE "${je2be_ios_resources}"
   MACOSX_BUNDLE_GUI_IDENTIFIER com.github.kbinani.je2be-ios
   MACOSX_BUNDLE_BUNDLE_NAME je2be-ios
-  MACOSX_BUNDLE_BUNDLE_VERSION "0.1"
-  MACOSX_BUNDLE_SHORT_VERSION_STRING "0.1"
-  XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET ${je2be_iphoneos_deployment_target}
+  MACOSX_BUNDLE_BUNDLE_VERSION "${CMAKE_PROJECT_VERSION}"
+  MACOSX_BUNDLE_SHORT_VERSION_STRING "${CMAKE_PROJECT_VERSION}"
+  XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "${je2be_iphoneos_deployment_target}"
   XCODE_ATTRIBUTE_SWIFT_OBJC_BRIDGING_HEADER "src/BridgingHeader.h"
   XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon"
   XCODE_ATTRIBUTE_SWIFT_VERSION "5.0"
@@ -48,7 +50,6 @@ set_target_properties(je2be-ios PROPERTIES
   XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2"
 )
 target_link_libraries(je2be-ios PRIVATE je2be)
-target_sources(je2be-ios PRIVATE assets.xcassets)
 add_custom_command(TARGET je2be-ios PRE_BUILD COMMAND bash ../script/pre-build.sh)
 
 set_source_files_properties(assets.xcassets PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
