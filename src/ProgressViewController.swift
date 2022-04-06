@@ -114,6 +114,14 @@ extension ProgressViewController: ConverterDelegate {
                 self.progressSteps[i].progress = 1
             }
             self.progressSteps[s].progress = Float(done / total)
+            let percentage = String(format: "%.1f", done / total * 100.0)
+            if let description = converter.description(forStep: step) {
+                if let displayUnit = converter.displayUnit(forStep: step) {
+                    self.progressSteps[s].title = "\(description): \(Int(done)) \(displayUnit), \(percentage)% done"
+                } else {
+                    self.progressSteps[s].title = "\(description): \(percentage)% done"
+                }
+            }
             self.stepDescriptionLabel.text = "Current Task: " + (converter.description(forStep: step) ?? "Convert")
         }
         return !cancelRequested.test()

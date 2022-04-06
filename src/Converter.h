@@ -12,4 +12,5 @@
 - (void)startConvertingFile:(NSURL* _Nonnull)input delegate:(__weak id<ConverterDelegate> _Nullable)delegate;
 - (int)numProgressSteps;
 - (NSString* _Nullable)descriptionForStep:(int)step;
+- (NSString* _Nullable)displayUnitForStep:(int)step;
 @end

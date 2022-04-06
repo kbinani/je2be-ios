@@ -21,4 +21,17 @@ class ConvertBedrockToJava: Converter {
             return nil
         }
     }
+
+    func displayUnit(forStep step: Int32) -> String? {
+        switch step {
+        case 0:
+            return "files"
+        case 1:
+            return "chunks"
+        case 2:
+            return "files"
+        default:
+            return nil
+        }
+    }
 }

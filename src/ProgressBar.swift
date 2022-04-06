@@ -20,6 +20,7 @@ class ProgressBar: UIView {
         let label = UILabel(frame: self.bounds)
         self.label = label
         label.baselineAdjustment = .alignCenters
+        label.font = .monospacedSystemFont(ofSize: label.font.pointSize, weight: .regular)
         self.addSubview(label)
         
         let progressView = UIProgressView(frame: self.bounds)
