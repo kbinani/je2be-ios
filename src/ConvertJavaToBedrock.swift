@@ -5,7 +5,7 @@ class ConvertJavaToBedrock: Converter {
         case 0:
             return "Unzip"
         case 1:
-            return "Conversion"
+            return "Convert"
         case 2:
             return "LevelDB Compaction"
         case 3:

@@ -20,6 +20,7 @@ set(je2be_ios_files
   src/ProgressBar.swift
   src/ConversionType.swift
   src/LicenseViewController.swift
+  src/ConvertBedrockToJava.swift
 )
 set(je2be_ios_resources
   src/ModeSelectViewController.xib

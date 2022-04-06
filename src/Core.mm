@@ -16,12 +16,14 @@ static NSURL* _Nullable CreateTempDir() {
     return [[NSURL alloc] initFileURLWithPath:path];
 }
 
+
 static NSURL* _Nonnull CreateTempFile(NSString * _Nonnull extWithDot) {
     NSFileManager* manager = [NSFileManager defaultManager];
     NSUUID *uuid = [[NSUUID alloc] init];
     NSString* path = [manager.temporaryDirectory.path stringByAppendingPathComponent:[[uuid UUIDString] stringByAppendingString:extWithDot]];
     return [[NSURL alloc] initFileURLWithPath:path];
 }
+
 
 static std::filesystem::path PathFromNSURL(NSURL * _Nonnull url) {
     return std::filesystem::path([[url path] cStringUsingEncoding:NSUTF8StringEncoding]);
@@ -122,9 +124,25 @@ void UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, __weak id<Conver
 }
 
 
-extern "C" void JavaToBedrock(id<Converter> converter, NSURL* input, __weak id<ConverterDelegate> delegate) {
+void UnsafeBedrockToJava(id<Converter> converter, NSURL* input, __weak id<ConverterDelegate> delegate) {
+}
+
+
+extern "C" {
+
+void JavaToBedrock(id<Converter> converter, NSURL* input, __weak id<ConverterDelegate> delegate) {
     try {
         UnsafeJavaToBedrock(converter, input, delegate);
     } catch (...) {
     }
 }
+
+
+void BedrockToJava(id<Converter> converter, NSURL* input, __weak id<ConverterDelegate> delegate) {
+    try {
+        UnsafeBedrockToJava(converter, input, delegate);
+    } catch (...) {
+    }
+}
+
+} // extern "C"

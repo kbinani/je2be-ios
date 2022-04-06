@@ -114,7 +114,7 @@ extension ProgressViewController: ConverterDelegate {
                 self.progressSteps[i].progress = 1
             }
             self.progressSteps[s].progress = Float(done / total)
-            self.stepDescriptionLabel.text = (converter.description(forStep: step) ?? "Conversion") + ":"
+            self.stepDescriptionLabel.text = "Current Task: " + (converter.description(forStep: step) ?? "Convert")
         }
         return !cancelRequested.test()
     }
