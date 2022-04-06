@@ -28,6 +28,7 @@ set(je2be_ios_resources
   resource/Settings.bundle
 )
 
+set(je2be_iphoneos_deployment_target "15.0")
 add_executable(je2be-ios MACOSX_BUNDLE ${je2be_ios_files} ${je2be_ios_resources})
 set_target_properties(je2be-ios PROPERTIES
   BUNDLE True
@@ -36,7 +37,7 @@ set_target_properties(je2be-ios PROPERTIES
   MACOSX_BUNDLE_BUNDLE_NAME je2be-ios
   MACOSX_BUNDLE_BUNDLE_VERSION "0.1"
   MACOSX_BUNDLE_SHORT_VERSION_STRING "0.1"
-  XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET 15.0
+  XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET ${je2be_iphoneos_deployment_target}
   XCODE_ATTRIBUTE_SWIFT_OBJC_BRIDGING_HEADER "src/BridgingHeader.h"
   XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon"
   XCODE_ATTRIBUTE_SWIFT_VERSION "5.0"
@@ -46,13 +47,15 @@ target_link_libraries(je2be-ios PRIVATE je2be)
 target_sources(je2be-ios PRIVATE assets.xcassets)
 set_source_files_properties(assets.xcassets PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 set_property(TARGET je2be-ios PROPERTY XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++20")
-set_property(TARGET je2be-ios PROPERTY XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "15.0")
+set_property(TARGET je2be-ios PROPERTY XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "${je2be_iphoneos_deployment_target}")
 set_property(TARGET je2be-ios PROPERTY XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2")
 
-set_property(TARGET leveldb PROPERTY XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "15.0")
-set_property(TARGET minizip PROPERTY XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "15.0")
+set_property(TARGET leveldb PROPERTY XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "${je2be_iphoneos_deployment_target}")
+set_property(TARGET minizip PROPERTY XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "${je2be_iphoneos_deployment_target}")
 
 add_custom_command(TARGET je2be-ios PRE_BUILD COMMAND bash ../script/pre-build.sh)
 
 list(APPEND all_files ${je2be_ios_files} ${je2be_ios_resources})
 source_group(TREE ${CMAKE_CURRENT_LIST_DIR} FILES ${all_files})
+
+configure_file(build/Podfile.in Podfile)

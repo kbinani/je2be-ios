@@ -2,7 +2,7 @@ require 'plist'
 require 'fileutils'
 require 'open-uri'
 
-platform :ios, '14.0'
+platform :ios, '${je2be_iphoneos_deployment_target}'
 
 workspace 'je2be-ios'
 project 'je2be-ios'
@@ -84,7 +84,7 @@ post_install do |installer|
   add_licenses(installer)
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |configuration|
-      configuration.build_settings["IPHONEOS_DEPLOYMENT_TARGET"] = "15.0"
+      configuration.build_settings["IPHONEOS_DEPLOYMENT_TARGET"] = "${je2be_iphoneos_deployment_target}"
     end
   end
 end
