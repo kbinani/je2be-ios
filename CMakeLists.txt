@@ -3,8 +3,6 @@ project(je2be-ios LANGUAGES C CXX Swift)
 
 add_subdirectory(deps/je2be EXCLUDE_FROM_ALL)
 
-set_target_properties(minizip PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
-
 set(je2be_ios_files
   src/AppDelegate.swift
   src/MainViewController.swift
@@ -45,18 +43,20 @@ set_target_properties(je2be-ios PROPERTIES
   XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon"
   XCODE_ATTRIBUTE_SWIFT_VERSION "5.0"
   XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)"
+  XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++20"
+  XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "${je2be_iphoneos_deployment_target}"
+  XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2"
 )
 target_link_libraries(je2be-ios PRIVATE je2be)
 target_sources(je2be-ios PRIVATE assets.xcassets)
+add_custom_command(TARGET je2be-ios PRE_BUILD COMMAND bash ../script/pre-build.sh)
+
 set_source_files_properties(assets.xcassets PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-set_property(TARGET je2be-ios PROPERTY XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++20")
-set_property(TARGET je2be-ios PROPERTY XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "${je2be_iphoneos_deployment_target}")
-set_property(TARGET je2be-ios PROPERTY XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2")
 
 set_property(TARGET leveldb PROPERTY XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "${je2be_iphoneos_deployment_target}")
-set_property(TARGET minizip PROPERTY XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "${je2be_iphoneos_deployment_target}")
 
-add_custom_command(TARGET je2be-ios PRE_BUILD COMMAND bash ../script/pre-build.sh)
+set_property(TARGET minizip PROPERTY XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "${je2be_iphoneos_deployment_target}")
+set_target_properties(minizip PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
 
 list(APPEND all_files ${je2be_ios_files} ${je2be_ios_resources})
 source_group(TREE ${CMAKE_CURRENT_LIST_DIR} FILES ${all_files})
