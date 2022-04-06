@@ -164,7 +164,8 @@ class ModeSelectViewController: UIViewController {
     }
     
     @objc private func licenseButtonDidTouchUpInside(_ sender: UIButton) {
-
+        let vc = LicenseViewController()
+        self.present(vc, animated: true)
     }
 }
 
