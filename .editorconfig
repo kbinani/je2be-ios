@@ -24,3 +24,8 @@ indent_style = tab
 [*.yml]
 indent_size = 2
 indent_style = space
+trim_trailing_whitespace = false
+
+[*.rb]
+indent_size = 2
+indent_style = space

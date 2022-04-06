@@ -1,15 +1,85 @@
+require 'plist'
+require 'fileutils'
+require 'open-uri'
+
 platform :ios, '14.0'
 
 workspace 'je2be-ios'
 project 'je2be-ios'
 
-pod 'LicensePlist'
-
 target 'je2be-ios' do
   pod 'Bugsnag'
 end
 
+def add_license(name, body)
+  d = {
+    File: "LicensePlist/#{name}",
+    Title: name,
+    Type: "PSChildPaneSpecifier",
+  }
+
+  body = {
+    PreferenceSpecifiers: [
+      {
+        FooterText: body,
+        Type: "PSGroupSpecifier"
+      }
+    ]
+  }
+  File.write("../resource/Settings.bundle/LicensePlist/#{name}.plist", body.to_plist)
+
+  return d
+end
+
+def add_license_from_file(name, file)
+  return add_license(name, File.read(file))
+end
+
+def add_license_from_url(name, url, prefix = "")
+  URI.open(url, 'rb') do |res|
+    return add_license(name, prefix + res.read)
+  end
+end
+
+def add_licenses(installer)
+  FileUtils.rm_rf("../resource/Settings.bundle/LicensePlist")
+  FileUtils.rm_rf("../resource/Settings.bundle/LicensePlist.plist")
+  FileUtils.mkdir_p("../resource/Settings.bundle/LicensePlist")
+
+  specifiers = [
+    {
+      Title: "Licenses",
+      Type: "PSGroupSpecifier"
+    },
+  ]
+
+  pods = installer.pods_project.targets.filter { |t| !t.name.start_with?("Pods-") }
+  pods.each do |pod|
+    name = pod.name
+    specifiers.append(add_license_from_file(name, "Pods/#{name}/LICENSE.txt"))
+  end
+
+  repos = {
+    "LevelDB" => "../deps/je2be/deps/leveldb/LICENSE",
+    "xxhash" => "../deps/je2be/deps/xxhash/LICENSE",
+    "JSON for Modern C++" => "../deps/je2be/deps/json/LICENSE.MIT",
+    "zlib-ng" => "../deps/je2be/deps/libminecraft-file/deps/zlib-ng/LICENSE.md",
+    "minizip-ng" => "../deps/je2be/deps/minizip-ng/LICENSE",
+  }
+  repos.each do |name, file|
+    d = add_license_from_file(name, file)
+    specifiers.append(d)
+  end
+  specifiers.append(add_license_from_url("hwm.task", "https://www.boost.org/LICENSE_1_0.txt", "Copyright hotwatermorning 2013 - 2015.\nDistributed under the Boost Software License, Version 1.0.\n\n"))
+  specifiers.append(add_license_from_url("Velocity", "https://raw.githubusercontent.com/Gualdimar/Velocity/master/COPYING"))
+  specifiers.append(add_license_from_url("libmspack", "https://raw.githubusercontent.com/kyz/libmspack/master/libmspack/COPYING.LIB"))
+  specifiers.append(add_license_from_file("je2be", "../deps/je2be/LICENSE"))
+  specifiers.append(add_license_from_file("libminecraft-file", "../deps/je2be/deps/libminecraft-file/LICENSE"))
+
+  data = {PreferenceSpecifiers: specifiers}
+  File.write("../resource/Settings.bundle/LicensePlist.plist", data.to_plist)
+end
+
 post_install do |installer|
-  system('Pods/LicensePlist/license-plist --suppress-opening-directory --force --output-path ../resource/Settings.bundle/ --config-path license_plist.yml')
-  system('rm -f ../resource/Settings.bundle/*.latest_result.txt')
+  add_licenses(installer)
 end
