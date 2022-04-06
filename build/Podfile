@@ -3,6 +3,13 @@ platform :ios, '14.0'
 workspace 'je2be-ios'
 project 'je2be-ios'
 
+pod 'LicensePlist'
+
 target 'je2be-ios' do
   pod 'Bugsnag'
+end
+
+post_install do |installer|
+  system('Pods/LicensePlist/license-plist --suppress-opening-directory --force --output-path ../resource/Settings.bundle/ --config-path license_plist.yml')
+  system('rm -f ../resource/Settings.bundle/*.latest_result.txt')
 end

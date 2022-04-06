@@ -1,16 +1,20 @@
 PODS:
   - Bugsnag (6.15.1)
+  - LicensePlist (3.21.1)
 
 DEPENDENCIES:
   - Bugsnag
+  - LicensePlist
 
 SPEC REPOS:
   trunk:
     - Bugsnag
+    - LicensePlist
 
 SPEC CHECKSUMS:
   Bugsnag: f04e4b065339139ce36547dbf5f15b06742a2ba0
+  LicensePlist: 79a442a64dab82abf1705a56e0c346c05c948a4d
 
-PODFILE CHECKSUM: b5eefaa267f4723cdc98777b1a1e4c99a82772a3
+PODFILE CHECKSUM: 45c5995a7b446a07a1fc69acdebb70dedb68764c
 
 COCOAPODS: 1.11.3
