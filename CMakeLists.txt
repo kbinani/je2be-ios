@@ -7,7 +7,7 @@ set_target_properties(minizip PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRE
 
 set(je2be_ios_files
   src/AppDelegate.swift
-  src/ModeSelectViewController.swift
+  src/MainViewController.swift
   src/ChooseInputViewController.swift
   src/Localization.swift
   src/Converter.h
@@ -23,7 +23,7 @@ set(je2be_ios_files
   src/ConvertBedrockToJava.swift
 )
 set(je2be_ios_resources
-  src/ModeSelectViewController.xib
+  src/MainViewController.xib
   src/ChooseInputViewController.xib
   src/ProgressViewController.xib
   src/AboutViewController.xib

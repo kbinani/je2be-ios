@@ -8,7 +8,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ModeSelectViewController" customModule="je2be_ios" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MainViewController" customModule="je2be_ios" customModuleProvider="target">
             <connections>
                 <outlet property="aboutButton" destination="d7D-yF-5Z9" id="4gY-8I-Jbq"/>
                 <outlet property="bedrockToJavaButton" destination="ZKW-zQ-lUw" id="7M2-oe-RjA"/>

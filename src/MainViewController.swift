@@ -1,7 +1,7 @@
 import UIKit
 import UniformTypeIdentifiers
 
-class ModeSelectViewController: UIViewController {
+class MainViewController: UIViewController {
     
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var javaToBedrockButton: UIButton!
@@ -169,7 +169,7 @@ class ModeSelectViewController: UIViewController {
     }
 }
 
-extension ModeSelectViewController: ChooseInputViewDelegate {
+extension MainViewController: ChooseInputViewDelegate {
     func chooseInputViewDidChoosen(sender: ChooseInputViewController, type: ConversionType, url: URL) {
         sender.dismiss(animated: true) { [weak self] in
             guard let self = self else {
@@ -198,7 +198,7 @@ extension ModeSelectViewController: ChooseInputViewDelegate {
     }
 }
 
-extension ModeSelectViewController: ProgressViewDelegate {
+extension MainViewController: ProgressViewDelegate {
     func progressViewWillDisappear() {
         enableButtons()
     }

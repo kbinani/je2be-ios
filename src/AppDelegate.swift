@@ -11,7 +11,7 @@ extension AppDelegate: UIApplicationDelegate {
 
         let window = UIWindow(frame: UIScreen.main.bounds)
         self.window = window
-        window.rootViewController = ModeSelectViewController()
+        window.rootViewController = MainViewController()
         window.makeKeyAndVisible()
         return true
     }
