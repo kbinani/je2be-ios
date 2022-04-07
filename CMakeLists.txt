@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(je2be-ios LANGUAGES C CXX Swift VERSION 0.1)
 
 set(je2be_iphoneos_deployment_target "15.0")
+set(je2be_product_bundle_identifier "com.github.kbinani.je2be-ios")
 
 add_subdirectory(deps/je2be EXCLUDE_FROM_ALL)
 
@@ -36,10 +37,11 @@ add_executable(je2be-ios MACOSX_BUNDLE ${je2be_ios_files} ${je2be_ios_resources}
 set_target_properties(je2be-ios PROPERTIES
   BUNDLE True
   RESOURCE "${je2be_ios_resources}"
-  MACOSX_BUNDLE_GUI_IDENTIFIER com.github.kbinani.je2be-ios
+  MACOSX_BUNDLE_GUI_IDENTIFIER "${je2be_product_bundle_identifier}"
   MACOSX_BUNDLE_BUNDLE_NAME je2be-ios
   MACOSX_BUNDLE_BUNDLE_VERSION "${CMAKE_PROJECT_VERSION}"
   MACOSX_BUNDLE_SHORT_VERSION_STRING "${CMAKE_PROJECT_VERSION}"
+  XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "${je2be_product_bundle_identifier}"
   XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "${je2be_iphoneos_deployment_target}"
   XCODE_ATTRIBUTE_SWIFT_OBJC_BRIDGING_HEADER "src/BridgingHeader.h"
   XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon"
