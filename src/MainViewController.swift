@@ -164,7 +164,7 @@ class MainViewController: UIViewController {
     }
     
     @objc private func aboutButtonDidTouchUpInside(_ sender: UIButton) {
-        let vc = AboutViewController()
+        let vc = UIViewController(nibName: "AboutViewController", bundle: nil)
         self.present(vc, animated: true)
     }
 }

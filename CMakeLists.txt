@@ -20,7 +20,6 @@ set(je2be_ios_files
   src/Core.mm
   src/ProgressBar.swift
   src/ConversionType.swift
-  src/AboutViewController.swift
   src/ConvertBedrockToJava.swift
 )
 set(je2be_ios_resources
