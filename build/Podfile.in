@@ -15,7 +15,7 @@ end
 
 def add_license(name, body)
   d = {
-    File: "LicensePlist/#{name}",
+    File: "OpenSourceLicenses/#{name}",
     Title: name,
     Type: "PSChildPaneSpecifier",
   }
@@ -28,7 +28,7 @@ def add_license(name, body)
       }
     ]
   }
-  File.write("../resource/Settings.bundle/LicensePlist/#{name}.plist", body.to_plist)
+  File.write("../resource/Settings.bundle/OpenSourceLicenses/#{name}.plist", body.to_plist)
 
   return d
 end
@@ -44,9 +44,8 @@ def add_license_from_url(name, url, prefix = "")
 end
 
 def add_licenses(installer)
-  FileUtils.rm_rf("../resource/Settings.bundle/LicensePlist")
-  FileUtils.rm_rf("../resource/Settings.bundle/LicensePlist.plist")
-  FileUtils.mkdir_p("../resource/Settings.bundle/LicensePlist")
+  system("git clean -xdf", :chdir => "../resource/Settings.bundle")
+  FileUtils.mkdir_p("../resource/Settings.bundle/OpenSourceLicenses")
 
   specifiers = [
     {
@@ -80,7 +79,7 @@ def add_licenses(installer)
   specifiers.append(add_license_from_file("libminecraft-file", "../deps/je2be/deps/libminecraft-file/LICENSE"))
 
   data = {PreferenceSpecifiers: specifiers}
-  File.write("../resource/Settings.bundle/LicensePlist.plist", data.to_plist)
+  File.write("../resource/Settings.bundle/OpenSourceLicenses.plist", data.to_plist)
 end
 
 post_install do |installer|
