@@ -30,7 +30,7 @@ set(je2be_ios_resources
   src/AboutViewController.xib
   src/LaunchScreen.storyboard
   resource/Settings.bundle
-  assets.xcassets
+  resource/assets.xcassets
 )
 
 add_executable(je2be-ios MACOSX_BUNDLE ${je2be_ios_files} ${je2be_ios_resources})
@@ -56,7 +56,7 @@ set_target_properties(je2be-ios PROPERTIES
 target_link_libraries(je2be-ios PRIVATE je2be)
 add_custom_command(TARGET je2be-ios PRE_BUILD COMMAND bash ../script/pre-build.sh)
 
-set_source_files_properties(assets.xcassets PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+set_source_files_properties(resource/assets.xcassets PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
 set_property(TARGET leveldb PROPERTY XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "${je2be_iphoneos_deployment_target}")
 
