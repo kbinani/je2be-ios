@@ -32,11 +32,6 @@ static std::filesystem::path PathFromNSURL(NSURL * _Nonnull url) {
 
 void UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, __weak id<ConverterDelegate> delegate) {
     namespace fs = std::filesystem;
-
-    id<ConverterDelegate> d = delegate;
-    if (!d) {
-        return;
-    }
     
     fs::path fsInput = PathFromNSURL(input);
     NSURL* tempInput = CreateTempDir();
@@ -46,11 +41,19 @@ void UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, __weak id<Conver
     fs::path fsTempInput = PathFromNSURL(tempInput);
     NSURL* output = nullptr;
     defer {
-        [d converterDidFinishConversion:output];
+        id<ConverterDelegate> d = delegate;
+        if (d) {
+            [d converterDidFinishConversion:output];
+        }
         je2be::Fs::DeleteAll(fsTempInput);
     };
-    auto unzipProgress = [d, converter](uint64_t done, uint64_t total) {
-        return [d converterDidUpdateProgress:converter step:0 done:done total:total];
+    auto unzipProgress = [delegate, converter](uint64_t done, uint64_t total) {
+        id<ConverterDelegate> d = delegate;
+        if (d) {
+            return [d converterDidUpdateProgress:converter step:0 done:done total:total];
+        } else {
+            return false;
+        }
     };
     if (!je2be::ZipFile::Unzip(fsInput, fsTempInput, unzipProgress)) {
         return;
@@ -86,8 +89,8 @@ void UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, __weak id<Conver
     
     struct Progress : public je2be::tobe::Progress {
         id<Converter> fConverter;
-        id<ConverterDelegate> fDelegate;
-        Progress(id<Converter> converter, id<ConverterDelegate> delegate) : fConverter(converter), fDelegate(delegate) {
+        __weak id<ConverterDelegate> fDelegate;
+        Progress(id<Converter> converter, __weak id<ConverterDelegate> delegate) : fConverter(converter), fDelegate(delegate) {
         }
         bool report(Phase phase, double progress, double total) override {
             int step = 1;
@@ -100,8 +103,12 @@ void UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, __weak id<Conver
                     step = 1;
                     break;
             }
-            bool ok = [fDelegate converterDidUpdateProgress:fConverter step:step done:progress total:total];
-            return ok;
+            id<ConverterDelegate> d = fDelegate;
+            if (d) {
+                return [d converterDidUpdateProgress:fConverter step:step done:progress total:total];
+            } else {
+                return false;
+            }
         }
     } progress(converter, delegate);
     
@@ -113,8 +120,13 @@ void UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, __weak id<Conver
         return;
     }
     
-    auto zipProgress = [d, converter](int done, int total) {
-        return [d converterDidUpdateProgress:converter step:3 done:done total:total];
+    auto zipProgress = [delegate, converter](int done, int total) {
+        id<ConverterDelegate> d = delegate;
+        if (d) {
+            return [d converterDidUpdateProgress:converter step:3 done:done total:total];
+        } else {
+            return false;
+        }
     };
     NSURL *zipOut = CreateTempFile(@".mcworld");
     if (!je2be::ZipFile::Zip(fsOutput, PathFromNSURL(zipOut), zipProgress)) {
