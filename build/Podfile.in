@@ -82,8 +82,35 @@ def add_licenses(installer)
   File.write("../resource/Settings.bundle/OpenSourceLicenses.plist", data.to_plist)
 end
 
+def update_info_plist
+  file = 'CMakeFiles/je2be-ios.dir/Info.plist'
+  o = Plist.parse_xml(file)
+  o["UISupportedInterfaceOrientations"] = [
+    "UIInterfaceOrientationPortrait",
+    "UIInterfaceOrientationPortraitUpsideDown",
+    "UIInterfaceOrientationLandscapeLeft",
+    "UIInterfaceOrientationLandscapeRight",
+  ]
+  o["UISupportedInterfaceOrientations~ipad"] = [
+    "UIInterfaceOrientationPortrait",
+    "UIInterfaceOrientationPortraitUpsideDown",
+    "UIInterfaceOrientationLandscapeLeft",
+    "UIInterfaceOrientationLandscapeRight",
+  ]
+  o["UIRequiresFullScreen"] = true
+  o["UILaunchStoryboardName"] = "LaunchScreen"
+  o["CFBundleDisplayName"] = "je2be"
+
+  o["bugsnag"] = {
+    "apiKey" => "44c5703205a25aab4b0673ce6d281bfb"
+  }
+
+  File.write(file, o.to_plist)
+end
+
 post_install do |installer|
   add_licenses(installer)
+  update_info_plist()
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |configuration|
       configuration.build_settings["IPHONEOS_DEPLOYMENT_TARGET"] = "${je2be_iphoneos_deployment_target}"
