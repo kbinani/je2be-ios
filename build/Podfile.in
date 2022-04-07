@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require 'plist'
 require 'fileutils'
 require 'open-uri'
@@ -65,6 +67,7 @@ def add_licenses(installer)
     "JSON for Modern C++" => "../deps/je2be/deps/json/LICENSE.MIT",
     "zlib-ng" => "../deps/je2be/deps/libminecraft-file/deps/zlib-ng/LICENSE.md",
     "minizip-ng" => "../deps/je2be/deps/minizip-ng/LICENSE",
+    "ios-cmake" => "../deps/ios-cmake/LICENSE.md",
   }
   repos.each do |name, file|
     d = add_license_from_file(name, file)
