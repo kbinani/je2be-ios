@@ -1,8 +1,8 @@
 
 class ConvertBedrockToJava: Converter {
 
-    func startConvertingFile(_ input: URL, delegate: ConverterDelegate?) {
-        BedrockToJava(self, input, delegate)
+    func startConvertingFile(_ input: URL, usingTempDirectory tempDirectory: URL, delegate: ConverterDelegate?) {
+        BedrockToJava(self, input, tempDirectory, delegate)
     }
     
     func numProgressSteps() -> Int32 {

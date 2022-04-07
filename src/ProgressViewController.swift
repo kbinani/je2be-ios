@@ -17,13 +17,15 @@ class ProgressViewController: UIViewController {
     weak var delegate: ProgressViewDelegate?
     
     private let input: URL
+    private let tempDirectory: URL
     private let converter: Converter
     private let cancelRequested = AtomicBool(initial: false)
     private var progressSteps: [ProgressBar] = []
     private var output: URL?
     
-    init(input: URL, converter: Converter) {
+    init(input: URL, tempDirectory: URL, converter: Converter) {
         self.input = input
+        self.tempDirectory = tempDirectory
         self.converter = converter
         super.init(nibName: "ProgressViewController", bundle: nil)
     }
@@ -63,14 +65,14 @@ class ProgressViewController: UIViewController {
         self.closeButton.isEnabled = false
         
         DispatchQueue.global().async { [weak self] in
-            guard let input = self?.input, let converter = self?.converter else {
+            guard let input = self?.input, let tempDirectory = self?.tempDirectory, let converter = self?.converter else {
                 return
             }
             guard input.startAccessingSecurityScopedResource() else {
                 //TODO:
                 return
             }
-            converter.startConvertingFile(input, delegate: self)
+            converter.startConvertingFile(input, usingTempDirectory: tempDirectory, delegate: self)
         }
     }
     

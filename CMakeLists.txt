@@ -21,6 +21,7 @@ set(je2be_ios_files
   src/ProgressBar.swift
   src/ConversionType.swift
   src/ConvertBedrockToJava.swift
+  src/TemporaryDirectory.swift
 )
 set(je2be_ios_resources
   src/MainViewController.xib

@@ -19,8 +19,8 @@ class ConvertJavaToBedrock: Converter {
         return 4
     }
     
-    func startConvertingFile(_ input: URL, delegate: ConverterDelegate?) {
-        JavaToBedrock(self, input, delegate)
+    func startConvertingFile(_ input: URL, usingTempDirectory tempDirectory: URL, delegate: ConverterDelegate?) {
+        JavaToBedrock(self, input, tempDirectory, delegate)
     }
     
     func displayUnit(forStep step: Int32) -> String? {

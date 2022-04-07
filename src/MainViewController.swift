@@ -19,6 +19,7 @@ class MainViewController: UIViewController {
     @IBOutlet weak var aboutButton: UIButton!
     
     private var isDrawerShown = false
+    private var tempDirectory: TemporaryDirectory?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -179,8 +180,8 @@ extension MainViewController: ChooseInputViewDelegate {
             switch type {
             case .javaToBedrock:
                 converter = ConvertJavaToBedrock()
-            default:
-                return
+            case .bedrockToJava:
+                converter = ConvertBedrockToJava()
             }
             self.presentProgressWith(input: url, converter: converter)
         }
@@ -191,7 +192,11 @@ extension MainViewController: ChooseInputViewDelegate {
     }
     
     private func presentProgressWith(input: URL, converter: Converter) {
-        let vc = ProgressViewController(input: input, converter: converter)
+        guard let temp = TemporaryDirectory() else {
+            return
+        }
+        let vc = ProgressViewController(input: input, tempDirectory: temp.path, converter: converter)
+        self.tempDirectory = temp
         vc.modalPresentationStyle = .fullScreen
         vc.delegate = self
         self.present(vc, animated: true, completion: nil)
