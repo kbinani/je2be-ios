@@ -54,6 +54,7 @@ set_target_properties(je2be-ios PROPERTIES
   XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "${je2be_iphoneos_deployment_target}"
   XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2"
   XCODE_ATTRIBUTE_ENABLE_BITCODE "YES"
+  XCODE_ATTRIBUTE_SWIFT_PRECOMPILE_BRIDGING_HEADER "NO"
 )
 target_link_libraries(je2be-ios PRIVATE je2be)
 add_custom_command(TARGET je2be-ios PRE_BUILD COMMAND bash ../script/pre-build.sh)
