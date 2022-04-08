@@ -2,28 +2,6 @@
 #import "Converter.h"
 #include <je2be.hpp>
 
-static NSURL* _Nullable CreateTempDir() {
-    NSFileManager* manager = [NSFileManager defaultManager];
-    NSUUID *uuid = [[NSUUID alloc] init];
-    NSString* path = [manager.temporaryDirectory.path stringByAppendingPathComponent:[uuid UUIDString]];
-    BOOL ok = [manager createDirectoryAtPath:path
-                 withIntermediateDirectories:FALSE
-                                  attributes:nil
-                                       error:nil];
-    if (!ok) {
-        return nil;
-    }
-    return [[NSURL alloc] initFileURLWithPath:path];
-}
-
-
-static NSURL* _Nonnull CreateTempFile(NSString * _Nonnull extWithDot) {
-    NSFileManager* manager = [NSFileManager defaultManager];
-    NSUUID *uuid = [[NSUUID alloc] init];
-    NSString* path = [manager.temporaryDirectory.path stringByAppendingPathComponent:[[uuid UUIDString] stringByAppendingString:extWithDot]];
-    return [[NSURL alloc] initFileURLWithPath:path];
-}
-
 
 static std::filesystem::path PathFromNSURL(NSURL * _Nonnull url) {
     return std::filesystem::path([[url path] cStringUsingEncoding:NSUTF8StringEncoding]);
