@@ -5,16 +5,16 @@ default_platform :ios
 platform :ios do
   lane :down_and_upload_dsyms do |opt|
     team_id = opt[:team_id]
-    build_number = opt[:build_number]
+    version = opt[:version]
     username = opt[:username]
 
-    if team_id.nil? || build_number.nil? || username.nil?
-      UI.user_error! "team_id, build_number, username not set: bundle exec fastlane down_and_upload_dsyms version:1, team_id:ABCD username:foo@example.com"
+    if team_id.nil? || version.nil? || username.nil?
+      UI.user_error! "team_id, version, username not set: bundle exec fastlane down_and_upload_dsyms version:1, team_id:ABCD username:foo@example.com"
     end
 
     download_dsyms(
       app_identifier: "com.github.kbinani.je2be-ios",
-      build_number: build_number,
+      version: version,
       username: username,
       team_id: team_id,
     )
