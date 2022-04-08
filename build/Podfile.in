@@ -102,7 +102,7 @@ def update_info_plist
   o["CFBundleDisplayName"] = "je2be"
 
   o["bugsnag"] = {
-    "apiKey" => "44c5703205a25aab4b0673ce6d281bfb"
+    "apiKey" => "${je2be_bugsnag_api_key}"
   }
 
   File.write(file, o.to_plist)

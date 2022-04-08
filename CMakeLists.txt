@@ -3,6 +3,7 @@ project(je2be-ios LANGUAGES C CXX Swift VERSION 0.1)
 
 set(je2be_iphoneos_deployment_target "15.0")
 set(je2be_product_bundle_identifier "com.github.kbinani.je2be-ios")
+set(je2be_bugsnag_api_key "44c5703205a25aab4b0673ce6d281bfb")
 
 add_subdirectory(deps/je2be EXCLUDE_FROM_ALL)
 
@@ -74,3 +75,4 @@ list(APPEND all_files ${je2be_ios_files} ${je2be_ios_resources})
 source_group(TREE ${CMAKE_CURRENT_LIST_DIR} FILES ${all_files})
 
 configure_file(build/Podfile.in Podfile)
+configure_file(fastlane/Fastfile.in ../fastlane/Fastfile)
