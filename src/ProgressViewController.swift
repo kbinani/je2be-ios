@@ -83,7 +83,20 @@ class ProgressViewController: UIViewController {
     
     @objc func cancelButtonDidTouchUpInside(sender: AnyObject) {
         self.cancelButton.isEnabled = false
-        self.cancelRequested.getAndSet(value: true)
+        let vc = UIAlertController(title: nil, message: gettext("Do you really want to cancel?"), preferredStyle: .alert)
+        vc.addAction(.init(title: gettext("Yes"), style: .destructive, handler: { [weak self] (action) in
+            guard let self = self else {
+                return
+            }
+            self.cancelRequested.getAndSet(value: true)
+        }))
+        vc.addAction(.init(title: gettext("No"), style: .cancel, handler: { [weak self] (action) in
+            guard let self = self else {
+                return
+            }
+            self.cancelButton.isEnabled = true
+        }))
+        self.present(vc, animated: true)
     }
     
     @objc func exportButtonDidTouchUpInside(sender: AnyObject) {
