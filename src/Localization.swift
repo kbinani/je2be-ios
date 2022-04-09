@@ -3,7 +3,7 @@ func gettext(_ s: String) -> String {
     switch language {
     case "ja-JP":
         switch s {
-        case "About": return "About"
+        case "About je2be": return "je2be について"
         case "Back": return "戻る"
         case "Bedrock to Java": return "統合版 から Java版に"
         case "Can't access file": return "ファイルにアクセスできません"

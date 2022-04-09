@@ -32,7 +32,7 @@ class MainViewController: UIViewController {
         self.drawerCloseButon.addTarget(self, action: #selector(drawerCloseButtonDidTouchUpInside(_:)), for: .touchUpInside)
         self.drawerCloseButon.setTitle(gettext("Back"), for: .normal)
         
-        self.aboutButton.setTitle(gettext("About"), for: .normal)
+        self.aboutButton.setTitle(gettext("About je2be"), for: .normal)
         self.aboutButton.addTarget(self, action: #selector(aboutButtonDidTouchUpInside(_:)), for: .touchUpInside)
         
         self.versionLabel.text = "je2be for iOS " + ((Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "(local)")
