@@ -61,6 +61,10 @@ class MainViewController: UIViewController {
         self.xbox360ToJavaButton.isHidden = true
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     @objc func javaToBedrockButtonDidTouchUpInside(_ sender: AnyObject) {
         disableButtons()
         let vc = ChooseInputViewController(type: .javaToBedrock,

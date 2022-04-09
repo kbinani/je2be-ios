@@ -100,6 +100,8 @@ def update_info_plist
   o["UIRequiresFullScreen"] = true
   o["UILaunchStoryboardName"] = "LaunchScreen"
   o["CFBundleDisplayName"] = "je2be"
+  o["UIStatusBarStyle"] = "UIStatusBarStyleLightContent"
+  o["UIViewControllerBasedStatusBarAppearance"] = true
 
   o["bugsnag"] = {
     "apiKey" => "${je2be_bugsnag_api_key}"
