@@ -13,7 +13,7 @@ platform :ios do
     end
 
     download_dsyms(
-      app_identifier: "com.github.kbinani.je2be-ios",
+      app_identifier: "${je2be_product_bundle_identifier}",
       version: version,
       username: username,
       team_id: team_id,
