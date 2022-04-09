@@ -35,7 +35,7 @@ class MainViewController: UIViewController {
         self.aboutButton.setTitle(gettext("About"), for: .normal)
         self.aboutButton.addTarget(self, action: #selector(aboutButtonDidTouchUpInside(_:)), for: .touchUpInside)
         
-        self.versionLabel.text = "je2be-ios " + ((Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "(local)")
+        self.versionLabel.text = "je2be for iOS " + ((Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "(local)")
         
         self.javaToBedrockButton.setTitle(gettext("Java to Bedrock"), for: .normal)
         self.javaToBedrockButton.addTarget(self,
