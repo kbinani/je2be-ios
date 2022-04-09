@@ -110,9 +110,21 @@ def update_info_plist
   File.write(file, o.to_plist)
 end
 
+def update_settings_bundle
+  file = '../resource/Settings.bundle/Root.plist'
+  o = Plist.parse_xml(file)
+  o["PreferenceSpecifiers"].each do |spec|
+    if spec["Key"] == "version"
+      spec["DefaultValue"] = "${CMAKE_PROJECT_VERSION}"
+    end
+  end
+  File.write(file, o.to_plist)
+end
+
 post_install do |installer|
   add_licenses(installer)
   update_info_plist()
+  update_settings_bundle()
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |configuration|
       configuration.build_settings["IPHONEOS_DEPLOYMENT_TARGET"] = "${je2be_iphoneos_deployment_target}"
