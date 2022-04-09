@@ -23,6 +23,7 @@ set(je2be_ios_files
   src/ConversionType.swift
   src/ConvertBedrockToJava.swift
   src/TemporaryDirectory.swift
+  src/SecurityScopedResource.swift
 )
 set(je2be_ios_resources
   src/MainViewController.xib

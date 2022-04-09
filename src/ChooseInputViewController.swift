@@ -2,7 +2,7 @@ import UIKit
 import UniformTypeIdentifiers
 
 protocol ChooseInputViewDelegate: AnyObject {
-    func chooseInputViewDidChoosen(sender: ChooseInputViewController, type: ConversionType, url: URL)
+    func chooseInputViewDidChoosen(sender: ChooseInputViewController, type: ConversionType, result: SecurityScopedResource)
     func chooseInputViewDidCancel()
 }
 
@@ -54,7 +54,13 @@ class ChooseInputViewController: UIViewController {
 
 extension ChooseInputViewController: UIDocumentPickerDelegate {
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
-        self.documentPicked = true
-        self.delegate?.chooseInputViewDidChoosen(sender: self, type: self.type, url: url)
+        if let result = SecurityScopedResource(url: url) {
+            self.documentPicked = true
+            self.delegate?.chooseInputViewDidChoosen(sender: self, type: self.type, result: result)
+        } else {
+            let vc = UIAlertController(title: gettext("Error"), message: gettext("Can't access file"), preferredStyle: .alert)
+            vc.addAction(.init(title: "OK", style: .default))
+            self.present(vc, animated: true)
+        }
     }
 }

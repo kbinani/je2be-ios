@@ -16,14 +16,14 @@ class ProgressViewController: UIViewController {
 
     weak var delegate: ProgressViewDelegate?
     
-    private let input: URL
+    private let input: SecurityScopedResource
     private let tempDirectory: URL
     private let converter: Converter
     private let cancelRequested = AtomicBool(initial: false)
     private var progressSteps: [ProgressBar] = []
     private var output: URL?
     
-    init(input: URL, tempDirectory: URL, converter: Converter) {
+    init(input: SecurityScopedResource, tempDirectory: URL, converter: Converter) {
         self.input = input
         self.tempDirectory = tempDirectory
         self.converter = converter
@@ -68,11 +68,7 @@ class ProgressViewController: UIViewController {
             guard let input = self?.input, let tempDirectory = self?.tempDirectory, let converter = self?.converter else {
                 return
             }
-            guard input.startAccessingSecurityScopedResource() else {
-                //TODO:
-                return
-            }
-            converter.startConvertingFile(input, usingTempDirectory: tempDirectory, delegate: self)
+            converter.startConvertingFile(input.url, usingTempDirectory: tempDirectory, delegate: self)
         }
     }
     
@@ -110,8 +106,6 @@ class ProgressViewController: UIViewController {
     }
     
     @objc func closeButtonDidTouchUpInside(sender: AnyObject) {
-        self.input.stopAccessingSecurityScopedResource()
-
         self.dismiss(animated: true, completion: nil)
     }
 }

@@ -171,7 +171,7 @@ class MainViewController: UIViewController {
 }
 
 extension MainViewController: ChooseInputViewDelegate {
-    func chooseInputViewDidChoosen(sender: ChooseInputViewController, type: ConversionType, url: URL) {
+    func chooseInputViewDidChoosen(sender: ChooseInputViewController, type: ConversionType, result: SecurityScopedResource) {
         sender.dismiss(animated: true) { [weak self] in
             guard let self = self else {
                 return
@@ -183,7 +183,7 @@ extension MainViewController: ChooseInputViewDelegate {
             case .bedrockToJava:
                 converter = ConvertBedrockToJava()
             }
-            self.presentProgressWith(input: url, converter: converter)
+            self.presentProgressWith(input: result, converter: converter)
         }
     }
     
@@ -191,7 +191,7 @@ extension MainViewController: ChooseInputViewDelegate {
         enableButtons()
     }
     
-    private func presentProgressWith(input: URL, converter: Converter) {
+    private func presentProgressWith(input: SecurityScopedResource, converter: Converter) {
         guard let temp = TemporaryDirectory() else {
             return
         }
