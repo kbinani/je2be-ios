@@ -25,6 +25,7 @@ set(je2be_ios_files
   src/TemporaryDirectory.swift
   src/SecurityScopedResource.swift
   localization/ja-JP.lang
+  src/ErrorCode.swift
 )
 set(je2be_ios_resources
   src/MainViewController.xib

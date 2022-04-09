@@ -6,7 +6,8 @@
 "Choose an mcworld file" = "mcworld ファイルを選択してください";
 "Completed" = "完了";
 "Export" = "書き出し";
-"Failed" = "失敗";
+"Failed" = "変換に失敗しました";
+"Cancelled" = "キャンセルされました";
 "Java to Bedrock" = "Java版 から 統合版に";
 "Select conversion mode" = "変換モードを選んでください";
 "Select" = "ファイルを選ぶ";

@@ -136,7 +136,7 @@ extension ProgressViewController: ConverterDelegate {
         return !cancelRequested.test()
     }
     
-    func converterDidFinishConversion(_ output: URL?) {
+    func converterDidFinishConversion(_ output: URL?, error: Error?) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else {
                 return
@@ -144,7 +144,13 @@ extension ProgressViewController: ConverterDelegate {
             
             self.closeButton.isEnabled = true
             
-            if let output = output {
+            if let error = error as? NSError, error.domain == kJe2beErrorDomain {
+                self.cancelButton.isHidden = true
+                self.exportButton.isHidden = true
+                
+                let code = Je2beErrorCode(Int32(error.code))
+                self.stepDescriptionLabel.text = code.description
+            } else if let output = output {
                 self.output = output
                 self.cancelButton.isHidden = true
                 self.exportButton.isHidden = false
