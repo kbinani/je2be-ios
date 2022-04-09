@@ -1,8 +1,13 @@
 (
 
+set -ue
+
 CMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM=(put your team id here)
 
 cd "$(dirname "$0")"
+
+bash ../script/localization.sh
+
 cmake .. -G Xcode \
     -DCMAKE_TOOLCHAIN_FILE=../deps/ios-cmake/ios.toolchain.cmake \
     -DENABLE_BITCODE=FALSE \

@@ -24,6 +24,7 @@ set(je2be_ios_files
   src/ConvertBedrockToJava.swift
   src/TemporaryDirectory.swift
   src/SecurityScopedResource.swift
+  localization/ja-JP.lang
 )
 set(je2be_ios_resources
   src/MainViewController.xib
