@@ -28,6 +28,12 @@ extension NSError {
             }
         case kJe2beErrorCodeUnknown:
             messages.append(gettext("Unknown error"))
+        case kJe2beErrorCodeUnzipZipError:
+            messages.append(gettext("Unzip error"))
+            messages.append(gettext("The zip file is corrupt"))
+        case kJe2beErrorCodeUnzipMcfileError:
+            messages.append(gettext("Unzip error"))
+            messages.append(gettext("The mcfile file is corrupt"))
         default:
             break
         }

@@ -23,3 +23,6 @@
 "Uncaught c++ exception" = "c++ の例外が発生しました";
 "Uncaught general exception" = "例外が発生しました";
 "Unknown error" = "不明なエラー";
+"Unzip error" = "zip の解凍エラー";
+"The mcfile file is corrupt" = "mcfile ファイルが破損しています";
+"The zip file is corrupt" = "zip ファイルが破損しています";
