@@ -23,6 +23,7 @@ class ProgressViewController: UIViewController {
     private let cancelRequested = AtomicBool(initial: false)
     private var progressSteps: [ProgressBar] = []
     private var output: URL?
+    private var errorMessages: [String]? = nil
     
     init(input: SecurityScopedResource, tempDirectory: URL, converter: Converter) {
         self.input = input
@@ -65,6 +66,8 @@ class ProgressViewController: UIViewController {
         self.closeButton.addTarget(self, action: #selector(closeButtonDidTouchUpInside(sender:)), for: .touchUpInside)
         self.closeButton.isEnabled = false
         
+        self.errorInfoButton.addTarget(self, action: #selector(errorInfoButtonDidTouchUpInside(_:)), for: .touchUpInside)
+        
         DispatchQueue.global().async { [weak self] in
             guard let input = self?.input, let tempDirectory = self?.tempDirectory, let converter = self?.converter else {
                 return
@@ -82,7 +85,7 @@ class ProgressViewController: UIViewController {
         return .lightContent
     }
     
-    @objc func cancelButtonDidTouchUpInside(sender: AnyObject) {
+    @objc private func cancelButtonDidTouchUpInside(sender: AnyObject) {
         self.cancelButton.isEnabled = false
         let vc = UIAlertController(title: nil, message: gettext("Do you really want to cancel?"), preferredStyle: .alert)
         vc.addAction(.init(title: gettext("Yes"), style: .destructive, handler: { [weak self] (action) in
@@ -100,7 +103,7 @@ class ProgressViewController: UIViewController {
         self.present(vc, animated: true)
     }
     
-    @objc func exportButtonDidTouchUpInside(sender: AnyObject) {
+    @objc private func exportButtonDidTouchUpInside(sender: AnyObject) {
         guard let output = self.output else {
             return
         }
@@ -110,8 +113,22 @@ class ProgressViewController: UIViewController {
         self.present(vc, animated: true, completion: nil)
     }
     
-    @objc func closeButtonDidTouchUpInside(sender: AnyObject) {
+    @objc private func closeButtonDidTouchUpInside(sender: AnyObject) {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc private func errorInfoButtonDidTouchUpInside(_ sneder: UIButton) {
+        guard let messages = self.errorMessages else {
+            return
+        }
+        presentErrorView(messages: messages)
+    }
+    
+    private func presentErrorView(messages: [String]) {
+        let vc = ErrorViewController(messages: messages)
+        vc.modalPresentationStyle = .popover
+        vc.popoverPresentationController?.sourceView = self.errorInfoButton
+        self.present(vc, animated: true)
     }
 }
 
@@ -152,10 +169,18 @@ extension ProgressViewController: ConverterDelegate {
             if let error = error as? NSError, error.domain == kJe2beErrorDomain {
                 self.cancelButton.isHidden = true
                 self.exportButton.isHidden = true
-                self.errorInfoButton.isHidden = false
                 
                 let code = Je2beErrorCode(Int32(error.code))
-                self.stepDescriptionLabel.text = code.description
+                if code == kJe2beErrorCodeCancelled {
+                    self.stepDescriptionLabel.text = gettext("Cancelled")
+                } else if let messages = error.je2beLocalizedMessages {
+                    self.errorInfoButton.isHidden = false
+                    self.stepDescriptionLabel.text = gettext("Error")
+                    self.errorMessages = messages
+                    self.presentErrorView(messages: messages)
+                } else {
+                    self.stepDescriptionLabel.text = gettext("Error")
+                }
             } else if let output = output {
                 self.output = output
                 self.cancelButton.isHidden = true

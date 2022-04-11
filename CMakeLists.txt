@@ -26,6 +26,7 @@ set(je2be_ios_files
   src/SecurityScopedResource.swift
   localization/ja-JP.lang
   src/ErrorCode.swift
+  src/ErrorViewController.swift
 )
 set(je2be_ios_resources
   src/MainViewController.xib
@@ -35,6 +36,7 @@ set(je2be_ios_resources
   src/LaunchScreen.storyboard
   resource/Settings.bundle
   resource/assets.xcassets
+  src/ErrorViewController.xib
 )
 
 add_executable(je2be-ios MACOSX_BUNDLE ${je2be_ios_files} ${je2be_ios_resources})

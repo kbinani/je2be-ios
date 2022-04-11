@@ -13,6 +13,7 @@ func gettext(_ s: String) -> String {
         case "Choose an mcworld file": return "mcworld ファイルを選択してください"
         case "Completed": return "完了"
         case "Do you really want to cancel?": return "本当に処理を中断しますか?"
+        case "Error": return "エラー"
         case "Export": return "書き出し"
         case "Failed": return "変換に失敗しました"
         case "Java to Bedrock": return "Java版 から 統合版に"

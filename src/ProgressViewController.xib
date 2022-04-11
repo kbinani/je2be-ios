@@ -29,7 +29,7 @@
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GnC-lP-J8Q">
                             <rect key="frame" x="0.0" y="0.0" width="41.5" height="20.5"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
                             <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
@@ -39,7 +39,7 @@
                                 <constraint firstAttribute="height" constant="31" id="kGq-7m-KDS"/>
                             </constraints>
                             <state key="normal" title="Button"/>
-                            <buttonConfiguration key="configuration" style="plain" image="exclamationmark.bubble.fill" catalog="system">
+                            <buttonConfiguration key="configuration" style="plain" image="exclamationmark.triangle.fill" catalog="system">
                                 <color key="baseForegroundColor" systemColor="systemYellowColor"/>
                             </buttonConfiguration>
                         </button>
@@ -108,7 +108,7 @@
         </view>
     </objects>
     <resources>
-        <image name="exclamationmark.bubble.fill" catalog="system" width="128" height="110"/>
+        <image name="exclamationmark.triangle.fill" catalog="system" width="128" height="112"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
