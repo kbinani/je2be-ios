@@ -77,6 +77,10 @@ class ProgressViewController: UIViewController {
         self.delegate?.progressViewWillDisappear()
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     @objc func cancelButtonDidTouchUpInside(sender: AnyObject) {
         self.cancelButton.isEnabled = false
         let vc = UIAlertController(title: nil, message: gettext("Do you really want to cancel?"), preferredStyle: .alert)
