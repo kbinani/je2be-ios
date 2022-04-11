@@ -13,6 +13,7 @@ class ProgressViewController: UIViewController {
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var exportButton: UIButton!
     @IBOutlet weak var closeButton: UIButton!
+    @IBOutlet weak var errorInfoButton: UIButton!
 
     weak var delegate: ProgressViewDelegate?
     
@@ -151,6 +152,7 @@ extension ProgressViewController: ConverterDelegate {
             if let error = error as? NSError, error.domain == kJe2beErrorDomain {
                 self.cancelButton.isHidden = true
                 self.exportButton.isHidden = true
+                self.errorInfoButton.isHidden = false
                 
                 let code = Je2beErrorCode(Int32(error.code))
                 self.stepDescriptionLabel.text = code.description
@@ -158,7 +160,8 @@ extension ProgressViewController: ConverterDelegate {
                 self.output = output
                 self.cancelButton.isHidden = true
                 self.exportButton.isHidden = false
-                
+                self.errorInfoButton.isHidden = true
+
                 self.stepDescriptionLabel.text = gettext("Completed")
 
                 let vc = UIActivityViewController(activityItems: [output as Any], applicationActivities: nil)
@@ -168,7 +171,8 @@ extension ProgressViewController: ConverterDelegate {
             } else {
                 self.cancelButton.isHidden = true
                 self.exportButton.isHidden = true
-                
+                self.errorInfoButton.isHidden = true
+
                 self.stepDescriptionLabel.text = gettext("Failed")
             }
         }

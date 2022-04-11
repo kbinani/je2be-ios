@@ -12,6 +12,7 @@
             <connections>
                 <outlet property="cancelButton" destination="4bd-PZ-Opm" id="brZ-sp-RCo"/>
                 <outlet property="closeButton" destination="w7F-gX-gxp" id="y2y-F0-daU"/>
+                <outlet property="errorInfoButton" destination="EJb-vH-VSv" id="hbZ-rH-Xjw"/>
                 <outlet property="exportButton" destination="ftl-zQ-9ph" id="HPr-Ye-Zsx"/>
                 <outlet property="stackView" destination="in5-D6-JqO" id="u4v-Jk-SO0"/>
                 <outlet property="stepDescriptionLabel" destination="GnC-lP-J8Q" id="O3Q-Yk-zhx"/>
@@ -23,15 +24,34 @@
             <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="in5-D6-JqO" userLabel="ProgressStackView">
-                    <rect key="frame" x="102.5" y="104" width="819" height="20.5"/>
+                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="hKP-Vb-ZGc">
+                    <rect key="frame" x="491.5" y="104" width="41.5" height="20.5"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GnC-lP-J8Q">
-                            <rect key="frame" x="0.0" y="0.0" width="819" height="20.5"/>
+                            <rect key="frame" x="0.0" y="0.0" width="41.5" height="20.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EJb-vH-VSv">
+                            <rect key="frame" x="0.0" y="-5" width="0.0" height="31"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="31" id="kGq-7m-KDS"/>
+                            </constraints>
+                            <state key="normal" title="Button"/>
+                            <buttonConfiguration key="configuration" style="plain" image="exclamationmark.bubble.fill" catalog="system">
+                                <color key="baseForegroundColor" systemColor="systemYellowColor"/>
+                            </buttonConfiguration>
+                        </button>
+                    </subviews>
+                </stackView>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="in5-D6-JqO" userLabel="ProgressStackView">
+                    <rect key="frame" x="102.5" y="124.5" width="819" height="0.0"/>
+                    <subviews>
+                        <view hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UiK-xL-eea">
+                            <rect key="frame" x="0.0" y="0.0" width="240" height="0.0"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        </view>
                     </subviews>
                 </stackView>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Rwp-9C-r08" userLabel="ButtonStackView">
@@ -74,11 +94,13 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" red="0.1960784314" green="0.24313725489999999" blue="0.2666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="in5-D6-JqO" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="80" id="0LT-gC-eIJ"/>
                 <constraint firstItem="Rwp-9C-r08" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="4Lp-Mr-CA9"/>
+                <constraint firstItem="hKP-Vb-ZGc" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="Dlk-Bi-UZo"/>
                 <constraint firstItem="in5-D6-JqO" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="GIu-Cj-9j5"/>
                 <constraint firstItem="w7F-gX-gxp" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="M9x-ao-RpS"/>
-                <constraint firstItem="in5-D6-JqO" firstAttribute="width" secondItem="vUN-kp-3ea" secondAttribute="width" multiplier="0.8" id="nQS-ao-eT7"/>
+                <constraint firstItem="hKP-Vb-ZGc" firstAttribute="bottom" secondItem="in5-D6-JqO" secondAttribute="top" id="bQZ-ZD-Pzg"/>
+                <constraint firstItem="in5-D6-JqO" firstAttribute="width" secondItem="vUN-kp-3ea" secondAttribute="width" multiplier="0.8" priority="999" id="nQS-ao-eT7"/>
+                <constraint firstItem="hKP-Vb-ZGc" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="80" id="pLV-aU-4vW"/>
                 <constraint firstItem="w7F-gX-gxp" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="20" id="pYp-as-7DR"/>
                 <constraint firstItem="Rwp-9C-r08" firstAttribute="top" secondItem="in5-D6-JqO" secondAttribute="bottom" constant="30" id="whD-eO-h7C"/>
             </constraints>
@@ -86,8 +108,15 @@
         </view>
     </objects>
     <resources>
+        <image name="exclamationmark.bubble.fill" catalog="system" width="128" height="110"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemYellowColor">
+            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
