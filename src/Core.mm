@@ -14,41 +14,48 @@ static NSURL *_Nonnull NSURLFromPath(std::filesystem::path const& path) {
 }
 
 
-static NSError * _Nonnull Error(NSInteger code) {
-    return [[NSError alloc] initWithDomain:kJe2beErrorDomain code:code userInfo:nil];
+static NSError * _Nonnull Error(NSInteger code, std::string const& fileName, int lineNumber) {
+    NSString * file = [NSString stringWithUTF8String:fileName.c_str()];
+    NSNumber * line = [[NSNumber alloc] initWithInt:lineNumber];
+    return [[NSError alloc] initWithDomain:kJe2beErrorDomain code:code userInfo:@{@"file": file, @"line": line}];
 }
 
 
 struct Result {
     NSURL * _Nullable fOutput;
-    std::optional<NSInteger> fErrorCode;
+    NSInteger fErrorCode;
+    std::string fFile;
+    int fLineNumber;
 
 private:
-    explicit Result(NSURL * _Nullable output, std::optional<NSInteger> code) : fOutput(output), fErrorCode(code) {}
+    explicit Result(NSURL * _Nullable output, NSInteger code, std::string const& file, int lineNumber) : fOutput(output), fErrorCode(code), fFile(file), fLineNumber(lineNumber) {}
 
 public:
     static Result Ok(NSURL * _Nonnull output) {
-        return Result(output, std::nullopt);
+        return Result(output, 0, {}, 0);
     }
     
-    static Result Error(NSInteger code) {
-        return Result(nil, code);
+    static Result Error(NSInteger code, std::string const& file, int lineNumber) {
+        return Result(nil, code, file, lineNumber);
     }
 };
+
+
+static std::string const sBasename = std::filesystem::path(__FILE__).filename().string();
 
 
 Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDirectory, __weak id<ConverterDelegate> delegate) {
     namespace fs = std::filesystem;
     bool cancelled = false;
-
+    
     fs::path fsTempRoot = PathFromNSURL(tempDirectory);
     
     fs::path fsInput = PathFromNSURL(input);
     fs::path fsTempInput = fsTempRoot / "unzip";
     if (!je2be::Fs::CreateDirectories(fsTempInput)) {
-        return Result::Error(kJe2beErrorCodeIOError);
+        return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
     }
-    
+
     auto unzipProgress = [delegate, converter, &cancelled](uint64_t done, uint64_t total) {
         id<ConverterDelegate> d = delegate;
         if (d) {
@@ -66,15 +73,15 @@ Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDir
     };
     if (!je2be::ZipFile::Unzip(fsInput, fsTempInput, unzipProgress)) {
         if (cancelled) {
-            return Result::Error(kJe2beErrorCodeCancelled);
+            return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         } else {
-            return Result::Error(kJe2beErrorCodeIOError);
+            return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
         }
     }
     
     fs::path fsOutput = fsTempRoot / "output";
     if (!je2be::Fs::CreateDirectories(fsOutput)) {
-        return Result::Error(kJe2beErrorCodeIOError);
+        return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
     }
     
     fs::path fsActualInput = fsTempInput;
@@ -91,7 +98,7 @@ Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDir
         }
     }
     if (ec) {
-        return Result::Error(kJe2beErrorCodeIOError);
+        return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
     }
     
     je2be::tobe::Options options;
@@ -134,13 +141,13 @@ Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDir
     cancelled = progress.fCancelled;
     if (!st) {
         if (cancelled) {
-            return Result::Error(kJe2beErrorCodeCancelled);
+            return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         } else {
-            return Result::Error(kJe2beErrorCodeConverterError);
+            return Result::Error(kJe2beErrorCodeConverterError, sBasename, __LINE__);
         }
     }
     if (!st->fErrors.empty()) {
-        return Result::Error(kJe2beErrorCodeConverterError);
+        return Result::Error(kJe2beErrorCodeConverterError, sBasename, __LINE__);
     }
     
     auto zipProgress = [delegate, converter, &cancelled](int done, int total) {
@@ -162,9 +169,9 @@ Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDir
     NSURL *zipOut = NSURLFromPath(fsZipOut);
     if (!je2be::ZipFile::Zip(fsOutput, fsZipOut, zipProgress)) {
         if (cancelled) {
-            return Result::Error(kJe2beErrorCodeCancelled);
+            return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         } else {
-            return Result::Error(kJe2beErrorCodeIOError);
+            return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
         }
     }
     return Result::Ok(zipOut);
@@ -180,7 +187,7 @@ Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSURL *tempDir
     fs::path fsTempRoot = PathFromNSURL(tempDirectory);
     fs::path fsTempUnzip = fsTempRoot / "unzip";
     if (!je2be::Fs::CreateDirectories(fsTempUnzip)) {
-        return Result::Error(kJe2beErrorCodeIOError);
+        return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
     }
     
     auto unzipProgress = [delegate, converter, &cancelled](uint64_t done, uint64_t total) {
@@ -200,15 +207,15 @@ Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSURL *tempDir
     };
     if (!je2be::ZipFile::Unzip(fsInput, fsTempUnzip, unzipProgress)) {
         if (cancelled) {
-            return Result::Error(kJe2beErrorCodeCancelled);
+            return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         } else {
-            return Result::Error(kJe2beErrorCodeIOError);
+            return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
         }
     }
     
     fs::path fsTempOutput = fsTempRoot / "output";
     if (!je2be::Fs::CreateDirectories(fsTempOutput)) {
-        return Result::Error(kJe2beErrorCodeIOError);
+        return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
     }
     je2be::toje::Options options;
     je2be::toje::Converter c(fsTempUnzip, fsTempOutput, options);
@@ -238,9 +245,9 @@ Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSURL *tempDir
     
     if (!c.run(std::thread::hardware_concurrency(), &progress)) {
         if (progress.fCancelled) {
-            return Result::Error(kJe2beErrorCodeCancelled);
+            return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         } else {
-            return Result::Error(kJe2beErrorCodeConverterError);
+            return Result::Error(kJe2beErrorCodeConverterError, sBasename, __LINE__);
         }
     }
 
@@ -263,9 +270,9 @@ Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSURL *tempDir
     NSURL *zipOut = NSURLFromPath(fsZipOut);
     if (!je2be::ZipFile::Zip(fsTempOutput, fsZipOut, zipProgress)) {
         if (cancelled) {
-            return Result::Error(kJe2beErrorCodeCancelled);
+            return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         } else {
-            return Result::Error(kJe2beErrorCodeIOError);
+            return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
         }
     }
     return Result::Ok(zipOut);
@@ -281,10 +288,10 @@ static void NotifyFinishConversion(std::function<Result(void)> convert, __weak i
         }
         if (result.fOutput) {
             [d converterDidFinishConversion:result.fOutput error:nil];
-        } else if (result.fErrorCode) {
-            [d converterDidFinishConversion:nil error:Error(*result.fErrorCode)];
+        } else if (result.fErrorCode != 0) {
+            [d converterDidFinishConversion:nil error:Error(result.fErrorCode, result.fFile, result.fLineNumber)];
         } else {
-            [d converterDidFinishConversion:nil error:Error(kJe2beErrorCodeUnknown)];
+            [d converterDidFinishConversion:nil error:Error(kJe2beErrorCodeUnknown, sBasename, __LINE__)];
         }
     } catch (std::exception &e) {
         char const* what = e.what();

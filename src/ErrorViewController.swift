@@ -40,9 +40,9 @@ class ErrorViewController: UIViewController {
             label.minimumScaleFactor = 1
             self.stackView.addArrangedSubview(label)
             let size = label.systemLayoutSizeFitting(.init(width: width, height: CGFloat.greatestFiniteMagnitude))
-            height += size.height + indentSize.height
+            height += size.height
         }
         
-        self.preferredContentSize = CGSize(width: width, height: height)
+        self.preferredContentSize = CGSize(width: width, height: height * 1.1)
     }
 }
