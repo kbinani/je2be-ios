@@ -207,6 +207,7 @@ Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDir
     }
     
     je2be::tobe::Options options;
+    options.fTempDirectory = fsTempRoot;
     je2be::tobe::Converter c(*fsActualInput, fsOutput, options);
     
     ToBeProgress progress(1, converter, delegate);
@@ -261,6 +262,7 @@ Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSURL *tempDir
         return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
     }
     je2be::toje::Options options;
+    options.fTempDirectory = fsTempRoot;
     je2be::toje::Converter c(fsTempUnzip, fsTempOutput, options);
     
     ToJeProgress progress(1, converter, delegate);
