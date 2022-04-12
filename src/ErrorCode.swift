@@ -14,9 +14,9 @@ extension NSError {
             messages.append(gettext("Internal error of converter"))
         case kJe2beErrorCodeCxxStdException:
             if let what = self.userInfo["what"] as? String {
-                messages.append(gettext("Uncaught c++ exception") + ": " + what)
+                messages.append(gettext("Uncaught C++ exception") + ": " + what)
             } else {
-                messages.append(gettext("Uncaught c++ exception"))
+                messages.append(gettext("Uncaught C++ exception"))
             }
         case kJe2beErrorCodeIOError:
             messages.append(gettext("IO error"))
@@ -47,7 +47,7 @@ extension NSError {
             return nil
         } else {
             if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
-                messages.append("version: " + version)
+                messages.append("app version: " + version)
             }
             return messages
         }

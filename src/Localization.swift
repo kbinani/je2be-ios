@@ -24,7 +24,7 @@ func gettext(_ s: String) -> String {
         case "Select conversion mode": return "変換モードを選んでください"
         case "The mcworld file is corrupt": return "mcworld ファイルが破損しています"
         case "The zip file is corrupt": return "zip ファイルが破損しています"
-        case "Uncaught c++ exception": return "c++ の例外が発生しました"
+        case "Uncaught C++ exception": return "C++ の例外が発生しました"
         case "Uncaught general exception": return "例外が発生しました"
         case "Unknown error": return "不明なエラー"
         case "Unzip error": return "zip の解凍エラー"

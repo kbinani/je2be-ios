@@ -20,7 +20,7 @@
 "Error" = "エラー";
 "Internal error of converter" = "変換処理の内部エラー";
 "IO error" = "IO エラー";
-"Uncaught c++ exception" = "c++ の例外が発生しました";
+"Uncaught C++ exception" = "C++ の例外が発生しました";
 "Uncaught general exception" = "例外が発生しました";
 "Unknown error" = "不明なエラー";
 "Unzip error" = "zip の解凍エラー";
