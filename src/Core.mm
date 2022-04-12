@@ -305,6 +305,17 @@ static void NotifyFinishConversion(std::function<Result(void)> convert, __weak i
             return;
         }
         [d converterDidFinishConversion:nil error:error];
+    } catch (char const* what) {
+        NSDictionary *info = nil;
+        if (what) {
+            info = @{@"what": [[NSString alloc] initWithUTF8String:what]};
+        }
+        NSError * error = [[NSError alloc] initWithDomain:kJe2beErrorDomain code:kJe2beErrorCodeCxxStdException userInfo:info];
+        id<ConverterDelegate> d = delegate;
+        if (!d) {
+            return;
+        }
+        [d converterDidFinishConversion:nil error:error];
     } catch (...) {
         NSError * error = [[NSError alloc] initWithDomain:kJe2beErrorDomain code:kJe2beErrorCodeGeneralException userInfo:nil];
         id<ConverterDelegate> d = delegate;
