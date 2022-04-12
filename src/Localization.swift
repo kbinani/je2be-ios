@@ -19,6 +19,7 @@ func gettext(_ s: String) -> String {
         case "IO error": return "IO エラー"
         case "Internal error of converter": return "変換処理の内部エラー"
         case "Java to Bedrock": return "Java版 から 統合版に"
+        case "Multiple level.dat found in the zip file": return "複数の level.dat ファイルが zip に含まれています"
         case "No": return "いいえ"
         case "Select": return "ファイルを選ぶ"
         case "Select conversion mode": return "変換モードを選んでください"
@@ -31,6 +32,7 @@ func gettext(_ s: String) -> String {
         case "Xbox360 to Bedrock": return "Xbox360版 から 統合版に"
         case "Xbox360 to Java": return "Xbox360版 から Java版に"
         case "Yes": return "はい"
+        case "level.dat not found in the zip file": return "level.dat ファイルが zip に含まれていません"
         default:
             return s
         }

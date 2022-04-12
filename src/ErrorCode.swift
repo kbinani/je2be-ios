@@ -34,6 +34,10 @@ extension NSError {
         case kJe2beErrorCodeUnzipMcworldError:
             messages.append(gettext("Unzip error"))
             messages.append(gettext("The mcworld file is corrupt"))
+        case kJe2beErrorCodeLevelDatNotFound:
+            messages.append(gettext("level.dat not found in the zip file"))
+        case kJe2beErrorCodeMultipleLevelDatFound:
+            messages.append(gettext("Multiple level.dat found in the zip file"))
         default:
             break
         }

@@ -182,25 +182,32 @@ Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDir
         return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
     }
     
-    fs::path fsActualInput = fsTempInput;
     std::error_code ec;
-    for (auto it : fs::recursive_directory_iterator(fsTempInput, ec)) {
+    auto iterator = fs::recursive_directory_iterator(fsTempInput, ec);
+    if (ec) {
+        return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
+    }
+    std::optional<fs::path> fsActualInput;
+    for (auto it : iterator) {
         auto p = it.path();
         if (!fs::is_regular_file(p)) {
             continue;
         }
         auto fileName = p.filename().string();
-        if (fileName == "level.dat") {
-            fsActualInput = p.parent_path();
-            break;
+        if (fileName != "level.dat") {
+            continue;
         }
+        if (fsActualInput) {
+            return Result::Error(kJe2beErrorCodeMultipleLevelDatFound, sBasename, __LINE__);
+        }
+        fsActualInput = p.parent_path();
     }
-    if (ec) {
-        return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
+    if (!fsActualInput) {
+        return Result::Error(kJe2beErrorCodeLevelDatNotFound, sBasename, __LINE__);
     }
     
     je2be::tobe::Options options;
-    je2be::tobe::Converter c(fsActualInput, fsOutput, options);
+    je2be::tobe::Converter c(*fsActualInput, fsOutput, options);
     
     ToBeProgress progress(1, converter, delegate);
     auto st = c.run(std::thread::hardware_concurrency(), &progress);
