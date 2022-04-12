@@ -157,6 +157,31 @@ struct ToBeProgress : public je2be::tobe::Progress {
 };
 
 
+struct Box360Progress : public je2be::box360::Progress {
+    Box360Progress(int step, id<Converter> converter, id<ConverterDelegate> delegate) : fStep(step), fConverter(converter), fDelegate(delegate), fCancelled(false) {}
+    
+    bool report(double progress, double total) override {
+        id<ConverterDelegate> d = fDelegate;
+        if (!d) {
+            fCancelled = true;
+            return false;
+        }
+        bool ok = [d converterDidUpdateProgress:fConverter step:fStep done:progress total:total];
+        if (ok) {
+            return true;
+        } else {
+            fCancelled = true;
+            return false;
+        }
+    }
+
+    int fStep;
+    id<Converter> fConverter;
+    __weak id<ConverterDelegate> fDelegate;
+    bool fCancelled;
+};
+
+
 Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDirectory, __weak id<ConverterDelegate> delegate) {
     namespace fs = std::filesystem;
     
@@ -288,6 +313,97 @@ Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSURL *tempDir
 }
 
 
+Result UnsafeXbox360ToJava(id<Converter> converter, NSURL* input, NSURL *tempDirectory, __weak id<ConverterDelegate> delegate) {
+    namespace fs = std::filesystem;
+
+    fs::path fsTempRoot = PathFromNSURL(tempDirectory);
+    fs::path fsInput = PathFromNSURL(input);
+    
+    fs::path fsTempOutput = fsTempRoot / "output";
+    if (!je2be::Fs::CreateDirectories(fsTempOutput)) {
+        return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
+    }
+    
+    je2be::box360::Options options;
+    options.fTempDirectory = fsTempRoot;
+    Box360Progress progress(0, converter, delegate);
+    if (!je2be::box360::Converter::Run(fsInput, fsTempOutput, std::thread::hardware_concurrency(), options, &progress)) {
+        return Result::Error(kJe2beErrorCodeConverterError, sBasename, __LINE__);
+    }
+    if (progress.fCancelled) {
+        return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
+    }
+
+    ZipProgress zipProgress(1, converter, delegate);
+    fs::path fsZipOut = fsTempRoot / fsInput.filename().replace_extension(".zip");
+    NSURL *zipOut = NSURLFromPath(fsZipOut);
+    if (!je2be::ZipFile::Zip(fsTempOutput, fsZipOut, zipProgress)) {
+        if (zipProgress.fCancelled) {
+            return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
+        } else {
+            return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
+        }
+    }
+    return Result::Ok(zipOut);
+}
+
+
+Result UnsafeXbox360ToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDirectory, __weak id<ConverterDelegate> delegate) {
+    namespace fs = std::filesystem;
+
+    fs::path fsTempRoot = PathFromNSURL(tempDirectory);
+    fs::path fsInput = PathFromNSURL(input);
+    
+    fs::path fsJavaOutput = fsTempRoot / "java";
+    if (!je2be::Fs::CreateDirectories(fsJavaOutput)) {
+        return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
+    }
+    
+    {
+        je2be::box360::Options options;
+        options.fTempDirectory = fsTempRoot;
+        Box360Progress progress(0, converter, delegate);
+        if (!je2be::box360::Converter::Run(fsInput, fsJavaOutput, std::thread::hardware_concurrency(), options, &progress)) {
+            return Result::Error(kJe2beErrorCodeConverterError, sBasename, __LINE__);
+        }
+        if (progress.fCancelled) {
+            return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
+        }
+    }
+
+    fs::path fsTempOutput = fsTempRoot / "output";
+    if (!je2be::Fs::CreateDirectories(fsTempOutput)) {
+        return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
+    }
+    
+    {
+        je2be::tobe::Options options;
+        options.fTempDirectory = fsTempRoot;
+        je2be::tobe::Converter c(fsJavaOutput, fsTempOutput, options);
+        ToBeProgress progress(1, converter, delegate);
+        if (!c.run(std::thread::hardware_concurrency(), &progress)) {
+            if (progress.fCancelled) {
+                return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
+            } else {
+                return Result::Error(kJe2beErrorCodeConverterError, sBasename, __LINE__);
+            }
+        }
+    }
+    
+    ZipProgress zipProgress(3, converter, delegate);
+    fs::path fsZipOut = fsTempRoot / fsInput.filename().replace_extension(".zip");
+    NSURL *zipOut = NSURLFromPath(fsZipOut);
+    if (!je2be::ZipFile::Zip(fsTempOutput, fsZipOut, zipProgress)) {
+        if (zipProgress.fCancelled) {
+            return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
+        } else {
+            return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
+        }
+    }
+    return Result::Ok(zipOut);
+}
+
+
 static void NotifyFinishConversion(std::function<Result(void)> convert, __weak id<ConverterDelegate> delegate) {
     try {
         auto result = convert();
@@ -348,6 +464,20 @@ void JavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDirectory, 
 void BedrockToJava(id<Converter> converter, NSURL* input, NSURL *tempDirectory, __weak id<ConverterDelegate> delegate) {
     NotifyFinishConversion([converter, input, tempDirectory, delegate]() {
         return UnsafeBedrockToJava(converter, input, tempDirectory, delegate);
+    }, delegate);
+}
+
+
+void Xbox360ToJava(id<Converter> converter, NSURL* input, NSURL *tempDirectory, __weak id<ConverterDelegate> delegate) {
+    NotifyFinishConversion([converter, input, tempDirectory, delegate]() {
+        return UnsafeXbox360ToJava(converter, input, tempDirectory, delegate);
+    }, delegate);
+}
+
+
+void Xbox360ToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDirectory, __weak id<ConverterDelegate> delegate) {
+    NotifyFinishConversion([converter, input, tempDirectory, delegate]() {
+        return UnsafeXbox360ToBedrock(converter, input, tempDirectory, delegate);
     }, delegate);
 }
 

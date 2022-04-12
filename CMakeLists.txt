@@ -27,6 +27,8 @@ set(je2be_ios_files
   localization/ja-JP.lang
   src/ErrorCode.swift
   src/ErrorViewController.swift
+  src/ConvertXbox360ToJava.swift
+  src/ConvertXbox360ToBedrock.swift
 )
 set(je2be_ios_resources
   src/MainViewController.xib

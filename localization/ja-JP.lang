@@ -28,3 +28,4 @@
 "The zip file is corrupt" = "zip ファイルが破損しています";
 "level.dat not found in the zip file" = "level.dat ファイルが zip に含まれていません";
 "Multiple level.dat found in the zip file" = "複数の level.dat ファイルが zip に含まれています";
+"Choose a bin file of Xbox 360 Edition data" = "Xbox360版のデータ, bin ファイルを選択してください";

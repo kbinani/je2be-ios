@@ -56,9 +56,6 @@ class MainViewController: UIViewController {
         self.xbox360ToJavaButton.addTarget(self,
                                            action: #selector(xbox360ToJavaButtonDidTouchUpInside(_:)),
                                            for: .touchUpInside)
-        
-        self.xbox360ToBedrockButton.isHidden = true
-        self.xbox360ToJavaButton.isHidden = true
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -90,11 +87,33 @@ class MainViewController: UIViewController {
     }
     
     @objc func xbox360ToBedrockButtonDidTouchUpInside(_ sender: AnyObject) {
-        
+        disableButtons()
+        let contentTypes: [UTType]
+        if let bin = UTType(filenameExtension: "bin") {
+            contentTypes = [bin]
+        } else {
+            contentTypes = [UTType.data]
+        }
+        let vc = ChooseInputViewController(type: .xbox360ToBedrock,
+                                           message: gettext("Choose a bin file of Xbox 360 Edition data"),
+                                           contentTypes: contentTypes)
+        vc.delegate = self
+        self.present(vc, animated: true)
     }
     
     @objc func xbox360ToJavaButtonDidTouchUpInside(_ sender: AnyObject) {
-        
+        disableButtons()
+        let contentTypes: [UTType]
+        if let bin = UTType(filenameExtension: "bin") {
+            contentTypes = [bin]
+        } else {
+            contentTypes = [UTType.data]
+        }
+        let vc = ChooseInputViewController(type: .xbox360ToJava,
+                                           message: gettext("Choose a bin file of Xbox 360 Edition data"),
+                                           contentTypes: contentTypes)
+        vc.delegate = self
+        self.present(vc, animated: true)
     }
     
     private func disableButtons() {
@@ -186,6 +205,10 @@ extension MainViewController: ChooseInputViewDelegate {
                 converter = ConvertJavaToBedrock()
             case .bedrockToJava:
                 converter = ConvertBedrockToJava()
+            case .xbox360ToJava:
+                converter = ConvertXbox360ToJava()
+            case .xbox360ToBedrock:
+                converter = ConvertXbox360ToBedrock()
             }
             self.presentProgressWith(input: result, converter: converter)
         }

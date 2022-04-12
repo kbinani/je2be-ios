@@ -9,6 +9,7 @@ func gettext(_ s: String) -> String {
         case "Can't access file": return "ファイルにアクセスできません"
         case "Cancel": return "キャンセル"
         case "Cancelled": return "キャンセルされました"
+        case "Choose a bin file of Xbox 360 Edition data": return "Xbox360版のデータ, bin ファイルを選択してください"
         case "Choose a zip file of Java Edition world data": return "Java版のデータをzip圧縮したファイルを選択してください"
         case "Choose an mcworld file": return "mcworld ファイルを選択してください"
         case "Completed": return "完了"
