@@ -22,7 +22,7 @@ func gettext(_ s: String) -> String {
         case "No": return "いいえ"
         case "Select": return "ファイルを選ぶ"
         case "Select conversion mode": return "変換モードを選んでください"
-        case "The mcfile file is corrupt": return "mcfile ファイルが破損しています"
+        case "The mcworld file is corrupt": return "mcworld ファイルが破損しています"
         case "The zip file is corrupt": return "zip ファイルが破損しています"
         case "Uncaught c++ exception": return "c++ の例外が発生しました"
         case "Uncaught general exception": return "例外が発生しました"

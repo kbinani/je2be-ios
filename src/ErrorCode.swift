@@ -31,9 +31,9 @@ extension NSError {
         case kJe2beErrorCodeUnzipZipError:
             messages.append(gettext("Unzip error"))
             messages.append(gettext("The zip file is corrupt"))
-        case kJe2beErrorCodeUnzipMcfileError:
+        case kJe2beErrorCodeUnzipMcworldError:
             messages.append(gettext("Unzip error"))
-            messages.append(gettext("The mcfile file is corrupt"))
+            messages.append(gettext("The mcworld file is corrupt"))
         default:
             break
         }

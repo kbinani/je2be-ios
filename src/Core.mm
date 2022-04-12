@@ -209,7 +209,7 @@ Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSURL *tempDir
         if (cancelled) {
             return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         } else {
-            return Result::Error(kJe2beErrorCodeUnzipMcfileError, sBasename, __LINE__);
+            return Result::Error(kJe2beErrorCodeUnzipMcworldError, sBasename, __LINE__);
         }
     }
     

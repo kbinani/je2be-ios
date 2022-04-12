@@ -28,5 +28,5 @@ enum Je2beErrorCode {
     kJe2beErrorCodeIOError = 4,
     kJe2beErrorCodeConverterError = 5,
     kJe2beErrorCodeUnzipZipError = 6,
-    kJe2beErrorCodeUnzipMcfileError = 7,
+    kJe2beErrorCodeUnzipMcworldError = 7,
 };
