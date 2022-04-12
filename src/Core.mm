@@ -44,9 +44,121 @@ public:
 static std::string const sBasename = std::filesystem::path(__FILE__).filename().string();
 
 
+struct UnzipProgress {
+    UnzipProgress(int step, id<Converter> converter, id<ConverterDelegate> delegate) : fStep(step), fConverter(converter), fDelegate(delegate), fCancelled(false) {}
+    
+    bool operator() (uint64_t done, uint64_t total) {
+        id<ConverterDelegate> d = fDelegate;
+        if (d) {
+            bool ok = [d converterDidUpdateProgress:fConverter step:fStep done:done total:total];
+            if (ok) {
+                return true;
+            } else {
+                fCancelled = true;
+                return false;
+            }
+        } else {
+            fCancelled = true;
+            return false;
+        }
+    }
+
+    int fStep;
+    id<Converter> fConverter;
+    __weak id<ConverterDelegate> fDelegate;
+    bool fCancelled;
+};
+
+
+struct ZipProgress {
+    ZipProgress(int step, id<Converter> converter, id<ConverterDelegate> delegate) : fStep(step), fConverter(converter), fDelegate(delegate), fCancelled(false) {}
+
+    bool operator() (int done, int total) {
+        id<ConverterDelegate> d = fDelegate;
+        if (d) {
+            bool ok = [d converterDidUpdateProgress:fConverter step:fStep done:done total:total];
+            if (ok) {
+                return true;
+            } else {
+                fCancelled = true;
+                return false;
+            }
+        } else {
+            fCancelled = true;
+            return false;
+        }
+    }
+
+    int fStep;
+    id<Converter> fConverter;
+    __weak id<ConverterDelegate> fDelegate;
+    bool fCancelled;
+};
+
+
+struct ToJeProgress : public je2be::toje::Progress {
+    ToJeProgress(int step, id<Converter> converter, __weak id<ConverterDelegate> delegate) : fStep(step), fConverter(converter), fDelegate(delegate), fCancelled(false) {}
+
+    bool report(double progress, double total) override {
+        id<ConverterDelegate> d = fDelegate;
+        if (d) {
+            bool ok = [d converterDidUpdateProgress:fConverter step:1 done:progress total:total];
+            if (ok) {
+                return true;
+            } else {
+                fCancelled = true;
+                return false;
+            }
+        } else {
+            fCancelled = true;
+            return false;
+        }
+    }
+
+    int fStep;
+    id<Converter> fConverter;
+    __weak id<ConverterDelegate> fDelegate;
+    bool fCancelled;
+};
+
+
+struct ToBeProgress : public je2be::tobe::Progress {
+    ToBeProgress(int step, id<Converter> converter, __weak id<ConverterDelegate> delegate) : fStep(step), fConverter(converter), fDelegate(delegate), fCancelled(false) {}
+
+    bool report(Phase phase, double progress, double total) override {
+        int step = fStep;
+        switch (phase) {
+            case Phase::LevelDbCompaction:
+                fStep += 1;
+                break;
+            case Phase::Convert:
+            default:
+                break;
+        }
+        id<ConverterDelegate> d = fDelegate;
+        if (d) {
+            bool ok = [d converterDidUpdateProgress:fConverter step:step done:progress total:total];
+            if (ok) {
+                return true;
+            } else {
+                fCancelled = true;
+                return false;
+            }
+        } else {
+            fCancelled = true;
+            return false;
+        }
+    }
+
+    int fStep;
+    id<Converter> fConverter;
+    __weak id<ConverterDelegate> fDelegate;
+    bool fCancelled;
+};
+
+
 Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDirectory, __weak id<ConverterDelegate> delegate) {
     namespace fs = std::filesystem;
-    bool cancelled = false;
     
     fs::path fsTempRoot = PathFromNSURL(tempDirectory);
     
@@ -56,23 +168,9 @@ Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDir
         return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
     }
 
-    auto unzipProgress = [delegate, converter, &cancelled](uint64_t done, uint64_t total) {
-        id<ConverterDelegate> d = delegate;
-        if (d) {
-            bool ok = [d converterDidUpdateProgress:converter step:0 done:done total:total];
-            if (ok) {
-                return true;
-            } else {
-                cancelled = true;
-                return false;
-            }
-        } else {
-            cancelled = true;
-            return false;
-        }
-    };
+    UnzipProgress unzipProgress(0, converter, delegate);
     if (!je2be::ZipFile::Unzip(fsInput, fsTempInput, unzipProgress)) {
-        if (cancelled) {
+        if (unzipProgress.fCancelled) {
             return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         } else {
             return Result::Error(kJe2beErrorCodeUnzipZipError, sBasename, __LINE__);
@@ -104,43 +202,10 @@ Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDir
     je2be::tobe::Options options;
     je2be::tobe::Converter c(fsActualInput, fsOutput, options);
     
-    struct Progress : public je2be::tobe::Progress {
-        id<Converter> fConverter;
-        __weak id<ConverterDelegate> fDelegate;
-        bool fCancelled;
-        Progress(id<Converter> converter, __weak id<ConverterDelegate> delegate) : fConverter(converter), fDelegate(delegate), fCancelled(false) {
-        }
-        bool report(Phase phase, double progress, double total) override {
-            int step = 1;
-            switch (phase) {
-                case Phase::LevelDbCompaction:
-                    step = 2;
-                    break;
-                case Phase::Convert:
-                default:
-                    step = 1;
-                    break;
-            }
-            id<ConverterDelegate> d = fDelegate;
-            if (d) {
-                bool ok = [d converterDidUpdateProgress:fConverter step:step done:progress total:total];
-                if (ok) {
-                    return true;
-                } else {
-                    fCancelled = true;
-                    return false;
-                }
-            } else {
-                fCancelled = true;
-                return false;
-            }
-        }
-    } progress(converter, delegate);
-    
+    ToBeProgress progress(1, converter, delegate);
     auto st = c.run(std::thread::hardware_concurrency(), &progress);
-    cancelled = progress.fCancelled;
     if (!st) {
-        if (cancelled) {
+        if (progress.fCancelled) {
             return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         } else {
             return Result::Error(kJe2beErrorCodeConverterError, sBasename, __LINE__);
@@ -150,25 +215,11 @@ Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDir
         return Result::Error(kJe2beErrorCodeConverterError, sBasename, __LINE__);
     }
     
-    auto zipProgress = [delegate, converter, &cancelled](int done, int total) {
-        id<ConverterDelegate> d = delegate;
-        if (d) {
-            bool ok = [d converterDidUpdateProgress:converter step:3 done:done total:total];
-            if (ok) {
-                return true;
-            } else {
-                cancelled = true;
-                return false;
-            }
-        } else {
-            cancelled = true;
-            return false;
-        }
-    };
+    ZipProgress zipProgress(3, converter, delegate);
     fs::path fsZipOut = fsTempRoot / fsInput.filename().replace_extension(".mcworld");
     NSURL *zipOut = NSURLFromPath(fsZipOut);
     if (!je2be::ZipFile::Zip(fsOutput, fsZipOut, zipProgress)) {
-        if (cancelled) {
+        if (zipProgress.fCancelled) {
             return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         } else {
             return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
@@ -180,7 +231,6 @@ Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDir
 
 Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSURL *tempDirectory, __weak id<ConverterDelegate> delegate) {
     namespace fs = std::filesystem;
-    bool cancelled = false;
 
     fs::path fsInput = PathFromNSURL(input);
 
@@ -190,23 +240,9 @@ Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSURL *tempDir
         return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
     }
     
-    auto unzipProgress = [delegate, converter, &cancelled](uint64_t done, uint64_t total) {
-        id<ConverterDelegate> d = delegate;
-        if (d) {
-            bool ok = [d converterDidUpdateProgress:converter step:0 done:done total:total];
-            if (ok) {
-                return true;
-            } else {
-                cancelled = true;
-                return false;
-            }
-        } else {
-            cancelled = true;
-            return false;
-        }
-    };
+    UnzipProgress unzipProgress(0, converter, delegate);
     if (!je2be::ZipFile::Unzip(fsInput, fsTempUnzip, unzipProgress)) {
-        if (cancelled) {
+        if (unzipProgress.fCancelled) {
             return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         } else {
             return Result::Error(kJe2beErrorCodeUnzipMcworldError, sBasename, __LINE__);
@@ -220,29 +256,7 @@ Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSURL *tempDir
     je2be::toje::Options options;
     je2be::toje::Converter c(fsTempUnzip, fsTempOutput, options);
     
-    struct Progress : public je2be::toje::Progress {
-        id<Converter> fConverter;
-        __weak id<ConverterDelegate> fDelegate;
-        bool fCancelled;
-        Progress(id<Converter> converter, __weak id<ConverterDelegate> delegate) : fConverter(converter), fDelegate(delegate), fCancelled(false) {
-        }
-        bool report(double progress, double total) override {
-            id<ConverterDelegate> d = fDelegate;
-            if (d) {
-                bool ok = [d converterDidUpdateProgress:fConverter step:1 done:progress total:total];
-                if (ok) {
-                    return true;
-                } else {
-                    fCancelled = true;
-                    return false;
-                }
-            } else {
-                fCancelled = true;
-                return false;
-            }
-        }
-    } progress(converter, delegate);
-    
+    ToJeProgress progress(1, converter, delegate);
     if (!c.run(std::thread::hardware_concurrency(), &progress)) {
         if (progress.fCancelled) {
             return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
@@ -251,25 +265,11 @@ Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSURL *tempDir
         }
     }
 
-    auto zipProgress = [delegate, converter, &cancelled](int done, int total) {
-        id<ConverterDelegate> d = delegate;
-        if (d) {
-            bool ok = [d converterDidUpdateProgress:converter step:2 done:done total:total];
-            if (ok) {
-                return true;
-            } else {
-                cancelled = true;
-                return false;
-            }
-        } else {
-            cancelled = true;
-            return false;
-        }
-    };
+    ZipProgress zipProgress(2, converter, delegate);
     fs::path fsZipOut = fsTempRoot / fsInput.filename().replace_extension(".zip");
     NSURL *zipOut = NSURLFromPath(fsZipOut);
     if (!je2be::ZipFile::Zip(fsTempOutput, fsZipOut, zipProgress)) {
-        if (cancelled) {
+        if (zipProgress.fCancelled) {
             return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         } else {
             return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
