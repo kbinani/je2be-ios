@@ -391,7 +391,7 @@ Result UnsafeXbox360ToBedrock(id<Converter> converter, NSURL* input, NSURL *temp
     }
     
     ZipProgress zipProgress(3, converter, delegate);
-    fs::path fsZipOut = fsTempRoot / fsInput.filename().replace_extension(".zip");
+    fs::path fsZipOut = fsTempRoot / fsInput.filename().replace_extension(".mcworld");
     NSURL *zipOut = NSURLFromPath(fsZipOut);
     if (!je2be::ZipFile::Zip(fsTempOutput, fsZipOut, zipProgress)) {
         if (zipProgress.fCancelled) {
