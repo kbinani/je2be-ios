@@ -50,7 +50,9 @@ struct UnzipProgress {
     bool operator() (uint64_t done, uint64_t total) {
         id<ConverterDelegate> d = fDelegate;
         if (d) {
-            bool ok = [d converterDidUpdateProgress:fConverter step:fStep done:done total:total];
+            NSString *description = [fConverter descriptionForStep:fStep];
+            NSString *unit = [fConverter displayUnitForStep:fStep];
+            bool ok = [d converterDidUpdateProgress:done total:total step:fStep description:description displayUnit:unit];
             if (ok) {
                 return true;
             } else {
@@ -76,7 +78,9 @@ struct ZipProgress {
     bool operator() (int done, int total) {
         id<ConverterDelegate> d = fDelegate;
         if (d) {
-            bool ok = [d converterDidUpdateProgress:fConverter step:fStep done:done total:total];
+            NSString *description = [fConverter descriptionForStep:fStep];
+            NSString *unit = [fConverter displayUnitForStep:fStep];
+            bool ok = [d converterDidUpdateProgress:done total:total step:fStep description:description displayUnit:unit];
             if (ok) {
                 return true;
             } else {
@@ -102,7 +106,9 @@ struct ToJeProgress : public je2be::toje::Progress {
     bool report(double progress, double total) override {
         id<ConverterDelegate> d = fDelegate;
         if (d) {
-            bool ok = [d converterDidUpdateProgress:fConverter step:1 done:progress total:total];
+            NSString *description = [fConverter descriptionForStep:fStep];
+            NSString *unit = [fConverter displayUnitForStep:fStep];
+            bool ok = [d converterDidUpdateProgress:progress total:total step:fStep description:description displayUnit:unit];
             if (ok) {
                 return true;
             } else {
@@ -137,7 +143,9 @@ struct ToBeProgress : public je2be::tobe::Progress {
         }
         id<ConverterDelegate> d = fDelegate;
         if (d) {
-            bool ok = [d converterDidUpdateProgress:fConverter step:step done:progress total:total];
+            NSString *description = [fConverter descriptionForStep:step];
+            NSString *unit = [fConverter displayUnitForStep:step];
+            bool ok = [d converterDidUpdateProgress:progress total:total step:step description:description displayUnit:unit];
             if (ok) {
                 return true;
             } else {
@@ -166,7 +174,9 @@ struct Box360Progress : public je2be::box360::Progress {
             fCancelled = true;
             return false;
         }
-        bool ok = [d converterDidUpdateProgress:fConverter step:fStep done:progress total:total];
+        NSString *description = [fConverter descriptionForStep:fStep];
+        NSString *unit = [fConverter displayUnitForStep:fStep];
+        bool ok = [d converterDidUpdateProgress:progress total:total step:fStep description:description displayUnit:unit];
         if (ok) {
             return true;
         } else {

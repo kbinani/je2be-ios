@@ -3,7 +3,7 @@
 @protocol Converter;
 
 @protocol ConverterDelegate
-- (BOOL)converterDidUpdateProgress:(id<Converter> _Nonnull)converter step:(int)step done:(double)done total:(double)total;
+- (BOOL)converterDidUpdateProgress:(double)progress total:(double)total step:(int)step description:(NSString *_Nullable)description displayUnit:(NSString *_Nullable)unit;
 - (void)converterDidFinishConversion:(NSURL* _Nullable)output error:(NSError * _Nullable) error;
 @end
 
