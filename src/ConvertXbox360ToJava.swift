@@ -19,6 +19,11 @@ class ConvertXbox360ToJava: Converter {
     }
     
     func displayUnit(forStep step: Int32) -> String? {
-        return nil
+        switch step {
+        case 0:
+            return "chunks"
+        default:
+            return nil
+        }
     }
 }
