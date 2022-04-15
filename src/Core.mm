@@ -97,7 +97,7 @@ struct ZipProgress {
 
 
 struct ToJeProgress : public je2be::toje::Progress {
-    ToJeProgress(int step, id<Converter> converter, __weak id<ConverterDelegate> delegate) : fStep(step), fConverter(converter), fDelegate(delegate), fCancelled(false) {}
+    ToJeProgress(int step, id<Converter> converter, id<ConverterDelegate> delegate) : fStep(step), fConverter(converter), fDelegate(delegate), fCancelled(false) {}
 
     bool report(double progress, double total) override {
         id<ConverterDelegate> d = fDelegate;
@@ -123,7 +123,7 @@ struct ToJeProgress : public je2be::toje::Progress {
 
 
 struct ToBeProgress : public je2be::tobe::Progress {
-    ToBeProgress(int step, id<Converter> converter, __weak id<ConverterDelegate> delegate) : fStep(step), fConverter(converter), fDelegate(delegate), fCancelled(false) {}
+    ToBeProgress(int step, id<Converter> converter, id<ConverterDelegate> delegate) : fStep(step), fConverter(converter), fDelegate(delegate), fCancelled(false) {}
 
     bool report(Phase phase, double progress, double total) override {
         int step = fStep;
@@ -182,7 +182,7 @@ struct Box360Progress : public je2be::box360::Progress {
 };
 
 
-Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDirectory, __weak id<ConverterDelegate> delegate) {
+Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDirectory, id<ConverterDelegate> delegate) {
     namespace fs = std::filesystem;
     
     fs::path fsTempRoot = PathFromNSURL(tempDirectory);
@@ -262,7 +262,7 @@ Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDir
 }
 
 
-Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSURL *tempDirectory, __weak id<ConverterDelegate> delegate) {
+Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSURL *tempDirectory, id<ConverterDelegate> delegate) {
     namespace fs = std::filesystem;
 
     fs::path fsInput = PathFromNSURL(input);
@@ -313,7 +313,7 @@ Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSURL *tempDir
 }
 
 
-Result UnsafeXbox360ToJava(id<Converter> converter, NSURL* input, NSURL *tempDirectory, __weak id<ConverterDelegate> delegate) {
+Result UnsafeXbox360ToJava(id<Converter> converter, NSURL* input, NSURL *tempDirectory, id<ConverterDelegate> delegate) {
     namespace fs = std::filesystem;
 
     fs::path fsTempRoot = PathFromNSURL(tempDirectory);
@@ -348,7 +348,7 @@ Result UnsafeXbox360ToJava(id<Converter> converter, NSURL* input, NSURL *tempDir
 }
 
 
-Result UnsafeXbox360ToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDirectory, __weak id<ConverterDelegate> delegate) {
+Result UnsafeXbox360ToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDirectory, id<ConverterDelegate> delegate) {
     namespace fs = std::filesystem;
 
     fs::path fsTempRoot = PathFromNSURL(tempDirectory);
@@ -404,7 +404,7 @@ Result UnsafeXbox360ToBedrock(id<Converter> converter, NSURL* input, NSURL *temp
 }
 
 
-static void NotifyFinishConversion(std::function<Result(void)> convert, __weak id<ConverterDelegate> delegate) {
+static void NotifyFinishConversion(std::function<Result(void)> convert, id<ConverterDelegate> delegate) {
     try {
         auto result = convert();
         id<ConverterDelegate> d = delegate;
@@ -454,28 +454,28 @@ static void NotifyFinishConversion(std::function<Result(void)> convert, __weak i
 
 extern "C" {
 
-void JavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDirectory, __weak id<ConverterDelegate> delegate) {
+void JavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDirectory, id<ConverterDelegate> delegate) {
     NotifyFinishConversion([converter, input, tempDirectory, delegate]() {
         return UnsafeJavaToBedrock(converter, input, tempDirectory, delegate);
     }, delegate);
 }
 
 
-void BedrockToJava(id<Converter> converter, NSURL* input, NSURL *tempDirectory, __weak id<ConverterDelegate> delegate) {
+void BedrockToJava(id<Converter> converter, NSURL* input, NSURL *tempDirectory, id<ConverterDelegate> delegate) {
     NotifyFinishConversion([converter, input, tempDirectory, delegate]() {
         return UnsafeBedrockToJava(converter, input, tempDirectory, delegate);
     }, delegate);
 }
 
 
-void Xbox360ToJava(id<Converter> converter, NSURL* input, NSURL *tempDirectory, __weak id<ConverterDelegate> delegate) {
+void Xbox360ToJava(id<Converter> converter, NSURL* input, NSURL *tempDirectory, id<ConverterDelegate> delegate) {
     NotifyFinishConversion([converter, input, tempDirectory, delegate]() {
         return UnsafeXbox360ToJava(converter, input, tempDirectory, delegate);
     }, delegate);
 }
 
 
-void Xbox360ToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDirectory, __weak id<ConverterDelegate> delegate) {
+void Xbox360ToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDirectory, id<ConverterDelegate> delegate) {
     NotifyFinishConversion([converter, input, tempDirectory, delegate]() {
         return UnsafeXbox360ToBedrock(converter, input, tempDirectory, delegate);
     }, delegate);

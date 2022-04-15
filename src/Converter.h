@@ -9,7 +9,7 @@
 
 
 @protocol Converter
-- (void)startConvertingFile:(NSURL* _Nonnull)input usingTempDirectory:(NSURL* _Nonnull)tempDirectory delegate:(__weak id<ConverterDelegate> _Nullable)delegate;
+- (void)startConvertingFile:(NSURL* _Nonnull)input usingTempDirectory:(NSURL* _Nonnull)tempDirectory delegate:(id<ConverterDelegate> _Nullable)delegate;
 - (int)numProgressSteps;
 - (NSString* _Nullable)descriptionForStep:(int)step;
 - (NSString* _Nullable)displayUnitForStep:(int)step;
