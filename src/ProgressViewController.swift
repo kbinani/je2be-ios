@@ -180,6 +180,9 @@ extension ProgressViewController: ConverterDelegate {
                 } else {
                     self.stepDescriptionLabel.text = gettext("Error")
                 }
+                if code == kJe2beErrorCodeConverterError {
+                    Bugsnag.notifyError(error)
+                }
             } else if let output = output {
                 self.output = output
                 self.cancelButton.isHidden = true
