@@ -38,6 +38,10 @@ public:
     static Result Error(NSInteger code, std::string const& file, int lineNumber) {
         return Result(nil, code, file, lineNumber);
     }
+    
+    static Result Error(je2be::Status::Where error) {
+      return Result(nil, kJe2beErrorCodeConverterError, error.fFile, error.fLine);
+    }
 };
 
 
@@ -337,11 +341,13 @@ Result UnsafeXbox360ToJava(id<Converter> converter, NSURL* input, NSURL *tempDir
     je2be::box360::Options options;
     options.fTempDirectory = fsTempRoot;
     Box360Progress progress(0, converter, delegate);
-    if (!je2be::box360::Converter::Run(fsInput, fsTempOutput, std::thread::hardware_concurrency(), options, &progress)) {
+    je2be::Status st;
+    st = je2be::box360::Converter::Run(fsInput, fsTempOutput, std::thread::hardware_concurrency(), options, &progress);
+    if (!st.ok()) {
         if (progress.fCancelled) {
             return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         } else {
-            return Result::Error(kJe2beErrorCodeConverterError, sBasename, __LINE__);
+            return Result::Error(*st.error());
         }
     }
 
@@ -374,7 +380,8 @@ Result UnsafeXbox360ToBedrock(id<Converter> converter, NSURL* input, NSURL *temp
         je2be::box360::Options options;
         options.fTempDirectory = fsTempRoot;
         Box360Progress progress(0, converter, delegate);
-        if (!je2be::box360::Converter::Run(fsInput, fsJavaOutput, std::thread::hardware_concurrency(), options, &progress)) {
+        je2be::Status st = je2be::box360::Converter::Run(fsInput, fsJavaOutput, std::thread::hardware_concurrency(), options, &progress);
+        if (!st.ok()) {
             if (progress.fCancelled) {
                 return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
             } else {

@@ -27,7 +27,7 @@ class ConvertXbox360ToBedrock: Converter {
     func displayUnit(forStep step: Int32) -> String? {
         switch step {
         case 0:
-            return "chunks"
+            return nil
         case 1:
             return "chunks"
         case 2:
