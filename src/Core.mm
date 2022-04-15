@@ -338,10 +338,11 @@ Result UnsafeXbox360ToJava(id<Converter> converter, NSURL* input, NSURL *tempDir
     options.fTempDirectory = fsTempRoot;
     Box360Progress progress(0, converter, delegate);
     if (!je2be::box360::Converter::Run(fsInput, fsTempOutput, std::thread::hardware_concurrency(), options, &progress)) {
-        return Result::Error(kJe2beErrorCodeConverterError, sBasename, __LINE__);
-    }
-    if (progress.fCancelled) {
-        return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
+        if (progress.fCancelled) {
+            return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
+        } else {
+            return Result::Error(kJe2beErrorCodeConverterError, sBasename, __LINE__);
+        }
     }
 
     ZipProgress zipProgress(1, converter, delegate);
@@ -374,10 +375,11 @@ Result UnsafeXbox360ToBedrock(id<Converter> converter, NSURL* input, NSURL *temp
         options.fTempDirectory = fsTempRoot;
         Box360Progress progress(0, converter, delegate);
         if (!je2be::box360::Converter::Run(fsInput, fsJavaOutput, std::thread::hardware_concurrency(), options, &progress)) {
-            return Result::Error(kJe2beErrorCodeConverterError, sBasename, __LINE__);
-        }
-        if (progress.fCancelled) {
-            return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
+            if (progress.fCancelled) {
+                return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
+            } else {
+                return Result::Error(kJe2beErrorCodeConverterError, sBasename, __LINE__);
+            }
         }
     }
 
