@@ -256,12 +256,11 @@ Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDir
     
     ToBeProgress progress(1, converter, delegate);
     auto st = c.run(std::thread::hardware_concurrency(), &progress);
+    if (progress.fCancelled) {
+        return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
+    }
     if (!st) {
-        if (progress.fCancelled) {
-            return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
-        } else {
-            return Result::Error(kJe2beErrorCodeConverterError, sBasename, __LINE__);
-        }
+        return Result::Error(kJe2beErrorCodeConverterError, sBasename, __LINE__);
     } else if (!st->fErrors.empty()) {
         return Result::Error(st->fErrors[0].fWhere);
     }
@@ -411,12 +410,11 @@ Result UnsafeXbox360ToBedrock(id<Converter> converter, NSURL* input, NSURL *temp
         je2be::tobe::Converter c(fsJavaOutput, fsTempOutput, options);
         ToBeProgress progress(1, converter, delegate);
         auto st = c.run(std::thread::hardware_concurrency(), &progress);
+        if (progress.fCancelled) {
+            return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
+        }
         if (!st) {
-            if (progress.fCancelled) {
-                return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
-            } else {
-                return Result::Error(kJe2beErrorCodeConverterError, sBasename, __LINE__);
-            }
+            return Result::Error(kJe2beErrorCodeConverterError, sBasename, __LINE__);
         } else if (!st->fErrors.empty()) {
             return Result::Error(st->fErrors[0].fWhere);
         }
