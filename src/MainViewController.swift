@@ -194,7 +194,7 @@ class MainViewController: UIViewController {
 }
 
 extension MainViewController: ChooseInputViewDelegate {
-    func chooseInputViewDidChoosen(sender: ChooseInputViewController, type: ConversionType, result: SecurityScopedResource) {
+    func chooseInputViewDidChoosen(sender: ChooseInputViewController, type: ConversionType, result: SecurityScopedResource, playerUuid: UUID?) {
         sender.dismiss(animated: true) { [weak self] in
             guard let self = self else {
                 return
@@ -204,9 +204,9 @@ extension MainViewController: ChooseInputViewDelegate {
             case .javaToBedrock:
                 converter = ConvertJavaToBedrock()
             case .bedrockToJava:
-                converter = ConvertBedrockToJava()
+                converter = ConvertBedrockToJava(playerUuid: playerUuid)
             case .xbox360ToJava:
-                converter = ConvertXbox360ToJava()
+                converter = ConvertXbox360ToJava(playerUuid: playerUuid)
             case .xbox360ToBedrock:
                 converter = ConvertXbox360ToBedrock()
             }

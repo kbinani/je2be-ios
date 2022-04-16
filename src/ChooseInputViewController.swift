@@ -2,7 +2,7 @@ import UIKit
 import UniformTypeIdentifiers
 
 protocol ChooseInputViewDelegate: AnyObject {
-    func chooseInputViewDidChoosen(sender: ChooseInputViewController, type: ConversionType, result: SecurityScopedResource)
+    func chooseInputViewDidChoosen(sender: ChooseInputViewController, type: ConversionType, result: SecurityScopedResource, playerUuid: UUID?)
     func chooseInputViewDidCancel()
 }
 
@@ -89,6 +89,7 @@ class ChooseInputViewController: UIViewController {
             self.label.attributedText = .init(string: "2. " + self.message + ":", attributes: attributes)
         case .javaToBedrock, .xbox360ToBedrock:
             self.javaPlayerUuidPanel.isHidden = true
+            self.javaPlayerUuidSwitch.isOn = false
 
             self.label.attributedText = .init(string: self.message + ":", attributes: attributes)
         }
@@ -154,7 +155,13 @@ extension ChooseInputViewController: UIDocumentPickerDelegate {
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
         if let result = SecurityScopedResource(url: url) {
             self.documentPicked = true
-            self.delegate?.chooseInputViewDidChoosen(sender: self, type: self.type, result: result)
+            let playerUuid: UUID?
+            if self.javaPlayerUuidSwitch.isOn, let uuid = Self.javaPlayerUuidFromUserDefaults {
+                playerUuid = uuid
+            } else {
+                playerUuid = nil
+            }
+            self.delegate?.chooseInputViewDidChoosen(sender: self, type: self.type, result: result, playerUuid: playerUuid)
         } else {
             let vc = UIAlertController(title: gettext("Error"), message: gettext("Can't access file"), preferredStyle: .alert)
             vc.addAction(.init(title: "OK", style: .default))

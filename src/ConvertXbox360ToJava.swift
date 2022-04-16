@@ -1,8 +1,14 @@
 
 class ConvertXbox360ToJava: Converter {
 
+    let playerUuid: UUID?
+    
+    init(playerUuid: UUID?) {
+        self.playerUuid = playerUuid
+    }
+    
     func startConvertingFile(_ input: URL, usingTempDirectory tempDirectory: URL, delegate: ConverterDelegate?) {
-        Xbox360ToJava(self, input, tempDirectory, delegate);
+        Xbox360ToJava(self, input, playerUuid?.uuidString, tempDirectory, delegate);
     }
     
     func numProgressSteps() -> Int32 {

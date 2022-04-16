@@ -14,6 +14,11 @@ static NSURL *_Nonnull NSURLFromPath(std::filesystem::path const& path) {
 }
 
 
+static std::string StringFromNSString(NSString *_Nonnull s) {
+    std::string str([s UTF8String]);
+    return str;
+}
+
 static NSError * _Nonnull Error(NSInteger code, std::string const& fileName, int lineNumber) {
     NSString * file = [NSString stringWithUTF8String:fileName.c_str()];
     NSNumber * line = [[NSNumber alloc] initWithInt:lineNumber];
@@ -276,7 +281,7 @@ Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDir
 }
 
 
-Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSURL *tempDirectory, id<ConverterDelegate> delegate) {
+Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSString* playerUuidString, NSURL *tempDirectory, id<ConverterDelegate> delegate) {
     namespace fs = std::filesystem;
 
     fs::path fsInput = PathFromNSURL(input);
@@ -302,6 +307,9 @@ Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSURL *tempDir
     }
     je2be::toje::Options options;
     options.fTempDirectory = fsTempRoot;
+    if (playerUuidString) {
+        options.fLocalPlayer = je2be::Uuid::FromString(StringFromNSString(playerUuidString));
+    }
     je2be::toje::Converter c(fsTempUnzip, fsTempOutput, options);
     
     ToJeProgress progress(1, converter, delegate);
@@ -327,7 +335,7 @@ Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSURL *tempDir
 }
 
 
-Result UnsafeXbox360ToJava(id<Converter> converter, NSURL* input, NSURL *tempDirectory, id<ConverterDelegate> delegate) {
+Result UnsafeXbox360ToJava(id<Converter> converter, NSURL* input, NSString *playerUuidString, NSURL *tempDirectory, id<ConverterDelegate> delegate) {
     namespace fs = std::filesystem;
 
     fs::path fsTempRoot = PathFromNSURL(tempDirectory);
@@ -340,6 +348,9 @@ Result UnsafeXbox360ToJava(id<Converter> converter, NSURL* input, NSURL *tempDir
     
     je2be::box360::Options options;
     options.fTempDirectory = fsTempRoot;
+    if (playerUuidString) {
+        options.fLocalPlayer = je2be::Uuid::FromString(StringFromNSString(playerUuidString));
+    }
     Box360Progress progress(0, converter, delegate);
     je2be::Status st;
     st = je2be::box360::Converter::Run(fsInput, fsTempOutput, std::thread::hardware_concurrency(), options, &progress);
@@ -480,16 +491,16 @@ void JavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDirectory, 
 }
 
 
-void BedrockToJava(id<Converter> converter, NSURL* input, NSURL *tempDirectory, id<ConverterDelegate> delegate) {
-    NotifyFinishConversion([converter, input, tempDirectory, delegate]() {
-        return UnsafeBedrockToJava(converter, input, tempDirectory, delegate);
+void BedrockToJava(id<Converter> converter, NSURL* input, NSString *playerUuidString, NSURL *tempDirectory, id<ConverterDelegate> delegate) {
+    NotifyFinishConversion([converter, input, playerUuidString, tempDirectory, delegate]() {
+        return UnsafeBedrockToJava(converter, input, playerUuidString, tempDirectory, delegate);
     }, delegate);
 }
 
 
-void Xbox360ToJava(id<Converter> converter, NSURL* input, NSURL *tempDirectory, id<ConverterDelegate> delegate) {
-    NotifyFinishConversion([converter, input, tempDirectory, delegate]() {
-        return UnsafeXbox360ToJava(converter, input, tempDirectory, delegate);
+void Xbox360ToJava(id<Converter> converter, NSURL* input, NSString *playerUuidString, NSURL *tempDirectory, id<ConverterDelegate> delegate) {
+    NotifyFinishConversion([converter, input, playerUuidString, tempDirectory, delegate]() {
+        return UnsafeXbox360ToJava(converter, input, playerUuidString, tempDirectory, delegate);
     }, delegate);
 }
 
