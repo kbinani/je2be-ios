@@ -24,7 +24,7 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.label.text = gettext("Select conversion mode")
+        self.label.text = gettext("Select conversion mode") + ":"
         
         self.menuButton.setTitle("", for: .normal)
         self.menuButton.addTarget(self, action: #selector(menuButtonDidTouchUpInside(_:)), for: .touchUpInside)
