@@ -34,7 +34,7 @@ func gettext(_ s: String) -> String {
         case "Uncaught general exception": return "例外が発生しました"
         case "Unknown error": return "不明なエラー"
         case "Unzip error": return "zip の解凍エラー"
-        case "Use the UUID as your player UUID for the conversion": return "このUUIDをプレイヤーUUIDとして変換時に使用する"
+        case "Use the UUID for conversion": return "このUUIDを変換に使用する"
         case "Xbox360 to Bedrock": return "Xbox360版 から 統合版に"
         case "Xbox360 to Java": return "Xbox360版 から Java版に"
         case "Yes": return "はい"

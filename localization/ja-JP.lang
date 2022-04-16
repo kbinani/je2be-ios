@@ -29,7 +29,7 @@
 "The zip file is corrupt" = "zip ファイルが破損しています";
 "level.dat not found in the zip file" = "level.dat ファイルが zip に含まれていません";
 "Multiple level.dat found in the zip file" = "複数の level.dat ファイルが zip に含まれています";
-"Use the UUID as your player UUID for the conversion" = "このUUIDをプレイヤーUUIDとして変換時に使用する";
+"Use the UUID for conversion" = "このUUIDを変換に使用する";
 "Configure player UUID" = "プレイヤーUUIDの設定";
 "Player UUID is not set. Open the Settings app to configure" = "プレイヤーUUIDが設定されていません。設定アプリで設定してください";
 "Invalid UUID format" = "UUIDのフォーマットが不正です";

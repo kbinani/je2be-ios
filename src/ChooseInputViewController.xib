@@ -32,11 +32,17 @@
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="VSG-zX-pUy">
                             <rect key="frame" x="0.0" y="0.0" width="467.5" height="128"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b7k-I2-24z">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b7k-I2-24z">
                                     <rect key="frame" x="209" y="0.0" width="49.5" height="23"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
                                     <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
+                                    <variation key="heightClass=compact">
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                    </variation>
+                                    <variation key="widthClass=compact">
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                    </variation>
                                 </label>
                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="uDB-rl-AyI">
                                     <rect key="frame" x="0.0" y="38" width="467.5" height="44"/>
@@ -46,12 +52,24 @@
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
+                                            <variation key="heightClass=compact">
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            </variation>
+                                            <variation key="widthClass=compact">
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            </variation>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00000000-0000-0000-0000-000000000000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1ag-NE-Wg8">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00000000-0000-0000-0000-000000000000" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsLetterSpacingToFitWidth="YES" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1ag-NE-Wg8">
                                             <rect key="frame" x="51.5" y="12" width="359.5" height="20.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
+                                            <variation key="heightClass=compact">
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            </variation>
+                                            <variation key="widthClass=compact">
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            </variation>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lcI-BC-EMK">
                                             <rect key="frame" x="421" y="6.5" width="46.5" height="31"/>
@@ -68,11 +86,17 @@
                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="jda-m7-srC">
                                     <rect key="frame" x="183.5" y="97" width="100.5" height="31"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RBo-XE-O8n">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RBo-XE-O8n">
                                             <rect key="frame" x="0.0" y="0.0" width="41.5" height="31"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
+                                            <variation key="heightClass=compact">
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            </variation>
+                                            <variation key="widthClass=compact">
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            </variation>
                                         </label>
                                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A77-2J-3lW">
                                             <rect key="frame" x="51.5" y="0.0" width="51" height="31"/>
@@ -84,11 +108,17 @@
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="nJV-ng-IzI">
                             <rect key="frame" x="113.5" y="228" width="240" height="97"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xSe-rS-OHs">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xSe-rS-OHs">
                                     <rect key="frame" x="95.5" y="0.0" width="49.5" height="23"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
                                     <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
+                                    <variation key="heightClass=compact">
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                    </variation>
+                                    <variation key="widthClass=compact">
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                    </variation>
                                 </label>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3kV-OQ-l7X">
                                     <rect key="frame" x="0.0" y="53" width="240" height="44"/>
@@ -108,7 +138,7 @@
             <color key="backgroundColor" red="0.1960784314" green="0.24313725489999999" blue="0.2666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="5Eh-Wt-4Ld" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="80" id="4di-6o-0xr"/>
-                <constraint firstItem="5Eh-Wt-4Ld" firstAttribute="width" relation="lessThanOrEqual" secondItem="vUN-kp-3ea" secondAttribute="width" priority="999" id="A2X-li-OhD"/>
+                <constraint firstItem="5Eh-Wt-4Ld" firstAttribute="width" relation="lessThanOrEqual" secondItem="vUN-kp-3ea" secondAttribute="width" multiplier="0.9" priority="999" id="A2X-li-OhD"/>
                 <constraint firstItem="5Eh-Wt-4Ld" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="gOt-gJ-C2l"/>
             </constraints>
             <point key="canvasLocation" x="139" y="128"/>
