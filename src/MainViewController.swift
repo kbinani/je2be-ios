@@ -65,7 +65,7 @@ class MainViewController: UIViewController {
     @objc func javaToBedrockButtonDidTouchUpInside(_ sender: AnyObject) {
         disableButtons()
         let vc = ChooseInputViewController(type: .javaToBedrock,
-                                           message: gettext("Choose a zip file of Java Edition world data"),
+                                           message: gettext("Choose a zip file of Java Edition world data to start conversion"),
                                            contentTypes: [UTType.zip])
         vc.delegate = self
         self.present(vc, animated: true, completion: nil)
@@ -80,7 +80,7 @@ class MainViewController: UIViewController {
             contentTypes = [UTType.data]
         }
         let vc = ChooseInputViewController(type: .bedrockToJava,
-                                           message: gettext("Choose an mcworld file"),
+                                           message: gettext("Choose an mcworld file to start conversion"),
                                            contentTypes: contentTypes)
         vc.delegate = self
         self.present(vc, animated: true, completion: nil)
@@ -95,7 +95,7 @@ class MainViewController: UIViewController {
             contentTypes = [UTType.data]
         }
         let vc = ChooseInputViewController(type: .xbox360ToBedrock,
-                                           message: gettext("Choose a bin file of Xbox 360 Edition data"),
+                                           message: gettext("Choose a bin file of Xbox 360 Edition data to start conversion"),
                                            contentTypes: contentTypes)
         vc.delegate = self
         self.present(vc, animated: true)
@@ -110,7 +110,7 @@ class MainViewController: UIViewController {
             contentTypes = [UTType.data]
         }
         let vc = ChooseInputViewController(type: .xbox360ToJava,
-                                           message: gettext("Choose a bin file of Xbox 360 Edition data"),
+                                           message: gettext("Choose a bin file of Xbox 360 Edition data to start conversion"),
                                            contentTypes: contentTypes)
         vc.delegate = self
         self.present(vc, animated: true)
