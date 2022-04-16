@@ -1,0 +1,4 @@
+"__trans_descriptionJavaPlayerUuid" = "上記の入力欄にはJava版のプレイヤーUUIDを設定します。この設定が空の場合、変換後のデータにおいてエンダーチェストのアイテムや手懐けた動物などが他人の所有物という扱いになってしまいます。変換後のデータでMinecraftをプレイするにあたり、これらをご自身が所有するものとして扱いたい場合、ご自身のJava版のプレイヤーUUIDを調べてこの欄に設定してください。ご自身のプレイヤーUUIDは https://ja.namemc.com/ などで調べることができます。プレイヤーUUIDは例えば 9a55acb9-267e-418d-8921-faab1fb5fefc のようなフォーマットの文字列です。";
+"__trans_javaPlayerUuid" = "Java版プレイヤーUUID";
+"__trans_openSourceLicenses" = "オープンソースライセンス";
+"__trans_version" = "バージョン";

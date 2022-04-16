@@ -5,12 +5,36 @@
 	<key>PreferenceSpecifiers</key>
 	<array>
 		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string></string>
+			<key>FooterText</key>
+			<string>__trans_descriptionJavaPlayerUuid</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<string></string>
+			<key>Key</key>
+			<string>javaPlayerUuid</string>
+			<key>Title</key>
+			<string>__trans_javaPlayerUuid</string>
+			<key>Type</key>
+			<string>PSTextFieldSpecifier</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string></string>
+		</dict>
+		<dict>
 			<key>DefaultValue</key>
 			<string>0.2.0</string>
 			<key>Key</key>
 			<string>version</string>
 			<key>Title</key>
-			<string>Version</string>
+			<string>__trans_version</string>
 			<key>Type</key>
 			<string>PSTitleValueSpecifier</string>
 		</dict>
@@ -18,7 +42,7 @@
 			<key>File</key>
 			<string>OpenSourceLicenses</string>
 			<key>Title</key>
-			<string>Open Source Licenses</string>
+			<string>__trans_openSourceLicenses</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>

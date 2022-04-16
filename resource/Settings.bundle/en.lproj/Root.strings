@@ -1,1 +1,4 @@
-/* A single strings file, whose title is specified in your preferences schema. The strings files provide the localized content to display to the user for each of your preferences. */
+"__trans_descriptionJavaPlayerUuid" = "In the input field above, set the player UUID for the Java version. If this setting is empty, items in the enderchest and animals you have tamed will be treated as the property of someone else in the converted data. If you want to play Minecraft with the converted data and treat them as your own, find out your Java player UUID and set it in this field. You can find your player UUID at https://namemc.com/. The player UUID is a string in the format 9a55acb9-267e-418d-8921-faab1fb5fefc for example.";
+"__trans_javaPlayerUuid" =  "Player UUID for Java";
+"__trans_openSourceLicenses" = "Open Source Licenses";
+"__trans_version" = "Version";
