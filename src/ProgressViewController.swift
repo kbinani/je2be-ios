@@ -109,6 +109,7 @@ class ProgressViewController: UIViewController {
         }
         let vc = UIActivityViewController(activityItems: [output as Any], applicationActivities: nil)
         vc.modalPresentationStyle = .popover
+        vc.popoverPresentationController?.delegate = self
         vc.popoverPresentationController?.sourceView = self.exportButton
         self.present(vc, animated: true, completion: nil)
     }
@@ -127,6 +128,7 @@ class ProgressViewController: UIViewController {
     private func presentErrorView(messages: [String]) {
         let vc = ErrorViewController(messages: messages)
         vc.modalPresentationStyle = .popover
+        vc.popoverPresentationController?.delegate = self
         vc.popoverPresentationController?.sourceView = self.errorInfoButton
         self.present(vc, animated: true)
     }
@@ -193,6 +195,7 @@ extension ProgressViewController: ConverterDelegate {
 
                 let vc = UIActivityViewController(activityItems: [output as Any], applicationActivities: nil)
                 vc.modalPresentationStyle = .popover
+                vc.popoverPresentationController?.delegate = self
                 vc.popoverPresentationController?.sourceView = self.exportButton
                 self.present(vc, animated: true, completion: nil)
             } else {
@@ -203,5 +206,12 @@ extension ProgressViewController: ConverterDelegate {
                 self.stepDescriptionLabel.text = gettext("Failed")
             }
         }
+    }
+}
+
+
+extension ProgressViewController: UIPopoverPresentationControllerDelegate {
+    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        return .none
     }
 }

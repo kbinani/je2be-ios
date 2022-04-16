@@ -106,6 +106,7 @@ class ChooseInputViewController: UIViewController {
         if let messages = self.javaPlayerUuidWarningMessages {
             let vc = ErrorViewController(messages: messages)
             vc.modalPresentationStyle = .popover
+            vc.popoverPresentationController?.delegate = self
             vc.popoverPresentationController?.sourceView = self.javaPlayerUuidWarningButton
             vc.popoverPresentationController?.permittedArrowDirections = [.up]
             self.present(vc, animated: true)
@@ -131,6 +132,7 @@ class ChooseInputViewController: UIViewController {
         }
         let vc = ErrorViewController(messages: messages)
         vc.modalPresentationStyle = .popover
+        vc.popoverPresentationController?.delegate = self
         vc.popoverPresentationController?.sourceView = self.javaPlayerUuidWarningButton
         vc.popoverPresentationController?.permittedArrowDirections = [.up]
         self.present(vc, animated: true)
@@ -151,6 +153,7 @@ class ChooseInputViewController: UIViewController {
     }
 }
 
+
 extension ChooseInputViewController: UIDocumentPickerDelegate {
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
         if let result = SecurityScopedResource(url: url) {
@@ -167,5 +170,12 @@ extension ChooseInputViewController: UIDocumentPickerDelegate {
             vc.addAction(.init(title: "OK", style: .default))
             self.present(vc, animated: true)
         }
+    }
+}
+
+
+extension ChooseInputViewController: UIPopoverPresentationControllerDelegate {
+    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        return .none
     }
 }
