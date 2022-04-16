@@ -5,16 +5,16 @@
 	<key>PreferenceSpecifiers</key>
 	<array>
 		<dict>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-			<key>Title</key>
-			<string></string>
 			<key>FooterText</key>
 			<string>__trans_descriptionJavaPlayerUuid</string>
+			<key>Title</key>
+			<string/>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
 		</dict>
 		<dict>
 			<key>DefaultValue</key>
-			<string></string>
+			<string/>
 			<key>Key</key>
 			<string>javaPlayerUuid</string>
 			<key>Title</key>
@@ -23,14 +23,14 @@
 			<string>PSTextFieldSpecifier</string>
 		</dict>
 		<dict>
+			<key>Title</key>
+			<string/>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
-			<key>Title</key>
-			<string></string>
 		</dict>
 		<dict>
 			<key>DefaultValue</key>
-			<string>0.2.0</string>
+			<string>1.0.0</string>
 			<key>Key</key>
 			<string>version</string>
 			<key>Title</key>
