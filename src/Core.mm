@@ -305,11 +305,11 @@ Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSURL *tempDir
     je2be::toje::Converter c(fsTempUnzip, fsTempOutput, options);
     
     ToJeProgress progress(1, converter, delegate);
-    if (!c.run(std::thread::hardware_concurrency(), &progress)) {
+    if (auto st = c.run(std::thread::hardware_concurrency(), &progress); !st.ok()) {
         if (progress.fCancelled) {
             return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         } else {
-            return Result::Error(kJe2beErrorCodeConverterError, sBasename, __LINE__);
+            return Result::Error(*st.error());
         }
     }
 
