@@ -79,27 +79,18 @@ class ChooseInputViewController: UIViewController {
     }
     
     private func subscribeUserDefaults() {
-        self.javaPlayerUuidUserDefaultsObservation = UserDefaults.standard.observe(\.javaPlayerUuid, options: [.new, .old]) { [weak self] (defaults, change) in
+        self.javaPlayerUuidUserDefaultsObservation = UserDefaults.standard.observe(\.javaPlayerUuid, options: [.new]) { [weak self] (defaults, change) in
             guard let self = self else {
-                return
-            }
-            let newValue: String?
-            if let n = change.newValue {
-                newValue = n
-            } else {
-                newValue = nil
-            }
-            let oldValue: String?
-            if let o = change.oldValue {
-                oldValue = o
-            } else {
-                oldValue = nil
-            }
-            guard newValue != oldValue else {
                 return
             }
             switch self.type {
             case .xbox360ToJava, .bedrockToJava:
+                let newValue: String?
+                if let nullableNewValue = change.newValue, let nonnullNewValue = nullableNewValue, nonnullNewValue.isEmpty {
+                    newValue = nonnullNewValue
+                } else {
+                    newValue = nil
+                }
                 self.updateJavaPlayerUuidString(newValue)
             case .xbox360ToBedrock, .javaToBedrock:
                 break
