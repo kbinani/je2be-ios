@@ -142,6 +142,9 @@ class ChooseInputViewController: UIViewController {
                 gettext("It is also possible to start conversion without setting the UUID"),
             ]
             self.javaPlayerUuidWarningMessages = messages
+            if !isBeingPresented {
+                presentJavaPlayerUuidWarningPopover()
+            }
         } else {
             self.javaPlayerUuid.text = "00000000-0000-0000-0000-000000000000"
             self.javaPlayerUuid.isEnabled = false
@@ -154,6 +157,9 @@ class ChooseInputViewController: UIViewController {
                 gettext("It is also possible to start conversion without setting the UUID"),
             ]
             self.javaPlayerUuidWarningMessages = messages
+            if !isBeingPresented {
+                presentJavaPlayerUuidWarningPopover()
+            }
         }
     }
     
