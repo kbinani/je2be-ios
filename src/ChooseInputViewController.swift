@@ -257,25 +257,3 @@ extension ChooseInputViewController: UIPopoverPresentationControllerDelegate {
         return .none
     }
 }
-
-
-extension UUID {
-    static func fromUUIDString(_ s: String) -> UUID? {
-        if let u = UUID(uuidString: s) {
-            return u
-        }
-        let r = s.replacingOccurrences(of: "-", with: "")
-        guard r.count == 32 else {
-            return nil
-        }
-        let elements: [String] = [
-            String(r[r.startIndex ..< r.index(r.startIndex, offsetBy: 8)]),
-            String(r[r.index(r.startIndex, offsetBy: 8) ..< r.index(r.startIndex, offsetBy: 8 + 4)]),
-            String(r[r.index(r.startIndex, offsetBy: 8 + 4) ..< r.index(r.startIndex, offsetBy: 8 + 4 + 4)]),
-            String(r[r.index(r.startIndex, offsetBy: 8 + 4 + 4) ..< r.index(r.startIndex, offsetBy: 8 + 4 + 4 + 4)]),
-            String(r[r.index(r.startIndex, offsetBy: 8 + 4 + 4 + 4) ..< r.endIndex]),
-        ]
-        let n = elements.joined(separator: "-")
-        return UUID(uuidString: n)
-    }
-}

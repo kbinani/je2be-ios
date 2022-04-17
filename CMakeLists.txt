@@ -30,6 +30,8 @@ set(je2be_ios_files
   src/ConvertXbox360ToJava.swift
   src/ConvertXbox360ToBedrock.swift
   src/UserDefaults.swift
+  src/UUID.swift
+  src/String.swift
 )
 set(je2be_ios_resources
   src/MainViewController.xib
