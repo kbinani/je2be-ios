@@ -28,16 +28,23 @@ class ChooseInputViewController: UIViewController {
     private let contentTypes: [UTType]
     private var javaPlayerUuidWarningMessages: [String]?
     private weak var javaPlayerUuidWarningPopover: UIViewController?
+    private var javaPlayerUuidUserDefaultsObservation: NSKeyValueObservation?
     
     init(type: ConversionType, message: String, contentTypes: [UTType]) {
         self.type = type
         self.message = message
         self.contentTypes = contentTypes
         super.init(nibName: "ChooseInputViewController", bundle: nil)
+        
+        subscribeUserDefaults()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        unsubscribeUserDefaults()
     }
     
     override func viewDidLoad() {
@@ -69,45 +76,45 @@ class ChooseInputViewController: UIViewController {
         self.button.addTarget(self, action: #selector(buttonDidTouchUpInside(_:)), for: .touchUpInside)
         
         self.javaPlayerUuidWarningButton.addTarget(self, action: #selector(javaPlayerUuidWarningButtonDidTouchUpInside(_:)), for: .touchUpInside)
-        
-        subscribeUserDefaults()
     }
     
     private func subscribeUserDefaults() {
-        UserDefaults.standard.addObserver(self,
-                                          forKeyPath: UserDefaultsKey.javaPlayerUuid,
-                                          options: [.new, .old],
-                                          context: &sObserverContextUserDefaultsJavaPlayerUuid)
-    }
-    
-    private func unsubscribeUserDefaults() {
-        UserDefaults.standard.removeObserver(self, forKeyPath: UserDefaultsKey.javaPlayerUuid, context: &sObserverContextUserDefaultsJavaPlayerUuid)
-    }
-    
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        switch context {
-        case &sObserverContextUserDefaultsJavaPlayerUuid:
-            guard let newValue = change?[NSKeyValueChangeKey.newKey] as? String else {
+        self.javaPlayerUuidUserDefaultsObservation = UserDefaults.standard.observe(\.javaPlayerUuid, options: [.new, .old]) { [weak self] (defaults, change) in
+            guard let self = self else {
                 return
             }
-            guard let oldValue = change?[NSKeyValueChangeKey.oldKey] as? String else {
-                return
+            let newValue: String?
+            if let n = change.newValue {
+                newValue = n
+            } else {
+                newValue = nil
+            }
+            let oldValue: String?
+            if let o = change.oldValue {
+                oldValue = o
+            } else {
+                oldValue = nil
             }
             guard newValue != oldValue else {
                 return
             }
             switch self.type {
             case .xbox360ToJava, .bedrockToJava:
-                updateJavaPlayerUuidString(newValue)
+                self.updateJavaPlayerUuidString(newValue)
             case .xbox360ToBedrock, .javaToBedrock:
                 break
             }
-        default:
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
     }
     
+    private func unsubscribeUserDefaults() {
+        self.javaPlayerUuidUserDefaultsObservation?.invalidate()
+    }
+    
     private func updateJavaPlayerUuidString(_ javaPlayerUuidString: String?) {
+        guard isViewLoaded else {
+            return
+        }
         let uuid: UUID?
         if let string = javaPlayerUuidString {
             uuid = UUID(uuidString: string)
@@ -213,7 +220,7 @@ class ChooseInputViewController: UIViewController {
     }
     
     static var javaPlayerUuidStringFromUserDefaults: String? {
-        guard let uuidString = UserDefaults.standard.string(forKey: UserDefaultsKey.javaPlayerUuid), !uuidString.isEmpty else {
+        guard let uuidString = UserDefaults.standard.javaPlayerUuid, !uuidString.isEmpty else {
             return nil
         }
         return uuidString

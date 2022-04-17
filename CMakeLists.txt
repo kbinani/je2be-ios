@@ -29,7 +29,7 @@ set(je2be_ios_files
   src/ErrorViewController.swift
   src/ConvertXbox360ToJava.swift
   src/ConvertXbox360ToBedrock.swift
-  src/UserDefaultsKey.swift
+  src/UserDefaults.swift
 )
 set(je2be_ios_resources
   src/MainViewController.xib
