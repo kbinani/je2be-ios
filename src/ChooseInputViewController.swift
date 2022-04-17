@@ -117,7 +117,7 @@ class ChooseInputViewController: UIViewController {
         }
         let uuid: UUID?
         if let string = javaPlayerUuidString {
-            uuid = UUID(uuidString: string)
+            uuid = UUID.fromUUIDString(string)
         } else {
             uuid = nil
         }
@@ -231,7 +231,7 @@ extension ChooseInputViewController: UIDocumentPickerDelegate {
         if let result = SecurityScopedResource(url: url) {
             self.documentPicked = true
             let playerUuid: UUID?
-            if self.javaPlayerUuidSwitch.isOn, let uuidString = Self.javaPlayerUuidStringFromUserDefaults, let uuid = UUID(uuidString: uuidString) {
+            if self.javaPlayerUuidSwitch.isOn, let uuidString = Self.javaPlayerUuidStringFromUserDefaults, let uuid = UUID.fromUUIDString(uuidString) {
                 playerUuid = uuid
             } else {
                 playerUuid = nil
@@ -249,5 +249,27 @@ extension ChooseInputViewController: UIDocumentPickerDelegate {
 extension ChooseInputViewController: UIPopoverPresentationControllerDelegate {
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         return .none
+    }
+}
+
+
+extension UUID {
+    static func fromUUIDString(_ s: String) -> UUID? {
+        if let u = UUID(uuidString: s) {
+            return u
+        }
+        let r = s.replacingOccurrences(of: "-", with: "")
+        guard r.count == 32 else {
+            return nil
+        }
+        let elements: [String] = [
+            String(r[r.startIndex ..< r.index(r.startIndex, offsetBy: 8)]),
+            String(r[r.index(r.startIndex, offsetBy: 8) ..< r.index(r.startIndex, offsetBy: 8 + 4)]),
+            String(r[r.index(r.startIndex, offsetBy: 8 + 4) ..< r.index(r.startIndex, offsetBy: 8 + 4 + 4)]),
+            String(r[r.index(r.startIndex, offsetBy: 8 + 4 + 4) ..< r.index(r.startIndex, offsetBy: 8 + 4 + 4 + 4)]),
+            String(r[r.index(r.startIndex, offsetBy: 8 + 4 + 4 + 4) ..< r.endIndex]),
+        ]
+        let n = elements.joined(separator: "-")
+        return UUID(uuidString: n)
     }
 }
