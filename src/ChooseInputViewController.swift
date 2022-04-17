@@ -53,7 +53,7 @@ class ChooseInputViewController: UIViewController {
         switch self.type {
         case .bedrockToJava, .xbox360ToJava:
             self.javaPlayerUuidMessageLabel.attributedText = Self.titleAttributes(header: "1. ",
-                                                                                  body: gettext("Configure player UUID") + ":",
+                                                                                  body: gettext("Configure player UUID (Optional)") + ":",
                                                                                   font: self.label.font!)
             self.javaPlayerUuidLabel.text = "UUID:"
             self.javaPlayerUuidSwitchLabel.text = gettext("Use the UUID for conversion")

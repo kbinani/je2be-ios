@@ -13,7 +13,7 @@ func gettext(_ s: String) -> String {
         case "Choose a zip file of Java Edition world data to start conversion": return "Java版のデータをzip圧縮したファイルを選択"
         case "Choose an mcworld file to start conversion": return "mcworld ファイルを選択"
         case "Completed": return "完了"
-        case "Configure player UUID": return "プレイヤーUUIDの設定"
+        case "Configure player UUID (Optional)": return "プレイヤーUUIDの設定 (省略可)"
         case "Do you really want to cancel?": return "本当に処理を中断しますか?"
         case "Error": return "エラー"
         case "Export": return "書き出し"
