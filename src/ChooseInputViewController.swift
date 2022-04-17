@@ -40,15 +40,11 @@ class ChooseInputViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let attributes: [NSAttributedString.Key: Any] = [
-            .font: self.label.font!,
-            .underlineColor: UIColor.white,
-            .underlineStyle: NSUnderlineStyle.single.rawValue,
-        ]
-                
         switch self.type {
         case .bedrockToJava, .xbox360ToJava:
-            self.javaPlayerUuidMessageLabel.attributedText = .init(string: "1. " + gettext("Configure player UUID") + ":", attributes: attributes)
+            self.javaPlayerUuidMessageLabel.attributedText = Self.titleAttributes(header: "1. ",
+                                                                                  body: gettext("Configure player UUID") + ":",
+                                                                                  font: self.label.font!)
             self.javaPlayerUuidLabel.text = "UUID:"
             self.javaPlayerUuidSwitchLabel.text = gettext("Use the UUID for conversion")
             if let javaPlayerUuid = Self.javaPlayerUuidFromUserDefaults {
@@ -85,12 +81,16 @@ class ChooseInputViewController: UIViewController {
             }
             self.javaPlayerUuidPanel.isHidden = false
 
-            self.label.attributedText = .init(string: "2. " + self.message + ":", attributes: attributes)
+            self.label.attributedText = Self.titleAttributes(header: "2. ",
+                                                             body: self.message + ":",
+                                                             font: self.label.font!)
         case .javaToBedrock, .xbox360ToBedrock:
             self.javaPlayerUuidPanel.isHidden = true
             self.javaPlayerUuidSwitch.isOn = false
 
-            self.label.attributedText = .init(string: self.message + ":", attributes: attributes)
+            self.label.attributedText = Self.titleAttributes(header: nil,
+                                                             body: self.message + ":",
+                                                             font: self.label.font!)
         }
 
         self.button.setTitle(gettext("Select"), for: .normal)
@@ -99,6 +99,27 @@ class ChooseInputViewController: UIViewController {
         self.javaPlayerUuidWarningButton.addTarget(self, action: #selector(javaPlayerUuidWarningButtonDidTouchUpInside(_:)), for: .touchUpInside)
     }
 
+    private static func titleAttributes(header: String?, body: String, font: UIFont) -> NSAttributedString {
+        var attributes: [NSAttributedString.Key: Any] = [
+            .font: font,
+            .underlineColor: UIColor.white,
+            .underlineStyle: NSUnderlineStyle.single.rawValue,
+        ]
+        let string: String
+        if let header = header {
+            string = header + body
+            
+            let style = NSMutableParagraphStyle()
+            style.setParagraphStyle(NSParagraphStyle.default)
+            let indentSize = (header as NSString).size(withAttributes: attributes)
+            style.headIndent = indentSize.width
+            attributes[.paragraphStyle] = style
+        } else {
+            string = body
+        }
+        return .init(string: string, attributes: attributes)
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
