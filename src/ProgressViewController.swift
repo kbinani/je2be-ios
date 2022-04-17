@@ -111,6 +111,7 @@ class ProgressViewController: UIViewController {
         vc.modalPresentationStyle = .popover
         vc.popoverPresentationController?.delegate = self
         vc.popoverPresentationController?.sourceView = self.exportButton
+        vc.popoverPresentationController?.backgroundColor = .white
         self.present(vc, animated: true, completion: nil)
     }
     
@@ -130,6 +131,7 @@ class ProgressViewController: UIViewController {
         vc.modalPresentationStyle = .popover
         vc.popoverPresentationController?.delegate = self
         vc.popoverPresentationController?.sourceView = self.errorInfoButton
+        vc.popoverPresentationController?.backgroundColor = .white
         self.present(vc, animated: true)
     }
 }
@@ -197,6 +199,7 @@ extension ProgressViewController: ConverterDelegate {
                 vc.modalPresentationStyle = .popover
                 vc.popoverPresentationController?.delegate = self
                 vc.popoverPresentationController?.sourceView = self.exportButton
+                vc.popoverPresentationController?.backgroundColor = .white
                 self.present(vc, animated: true, completion: nil)
             } else {
                 self.cancelButton.isHidden = true

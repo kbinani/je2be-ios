@@ -108,6 +108,7 @@ class ChooseInputViewController: UIViewController {
             vc.modalPresentationStyle = .popover
             vc.popoverPresentationController?.delegate = self
             vc.popoverPresentationController?.sourceView = self.javaPlayerUuidWarningButton
+            vc.popoverPresentationController?.backgroundColor = .white
             vc.popoverPresentationController?.permittedArrowDirections = [.up]
             self.present(vc, animated: true)
         }
@@ -134,6 +135,7 @@ class ChooseInputViewController: UIViewController {
         vc.modalPresentationStyle = .popover
         vc.popoverPresentationController?.delegate = self
         vc.popoverPresentationController?.sourceView = self.javaPlayerUuidWarningButton
+        vc.popoverPresentationController?.backgroundColor = .white
         vc.popoverPresentationController?.permittedArrowDirections = [.up]
         self.present(vc, animated: true)
     }
