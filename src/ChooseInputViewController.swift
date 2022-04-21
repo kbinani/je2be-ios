@@ -86,7 +86,7 @@ class ChooseInputViewController: UIViewController {
             switch self.type {
             case .xbox360ToJava, .bedrockToJava:
                 let newValue: String?
-                if let nullableNewValue = change.newValue, let nonnullNewValue = nullableNewValue, nonnullNewValue.isEmpty {
+                if let nullableNewValue = change.newValue, let nonnullNewValue = nullableNewValue, !nonnullNewValue.isEmpty {
                     newValue = nonnullNewValue
                 } else {
                     newValue = nil
