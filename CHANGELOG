@@ -1,0 +1,6 @@
+Version 1.2.0 (TBD0)
+- Fixed a problem that could cause entities to disappear when converting. [b2j]
+- Improved conversion accuracy of glow lichen. [j2b, b2j]
+
+Version 1.1.0 (22 Apr 2022)
+- Fixed a problem that caused certain blocks to disappear when converting Bedrock Edition 1.18.30 maps.
