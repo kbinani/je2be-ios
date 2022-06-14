@@ -259,10 +259,8 @@ Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDir
     if (progress.fCancelled) {
         return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
     }
-    if (!st) {
-        return Result::Error(kJe2beErrorCodeConverterError, sBasename, __LINE__);
-    } else if (!st->fErrors.empty()) {
-        return Result::Error(st->fErrors[0].fWhere);
+    if (st.error()) {
+        return Result::Error(st.error()->fWhere);
     }
     
     ZipProgress zipProgress(3, converter, delegate);
@@ -311,12 +309,11 @@ Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSString* play
     je2be::toje::Converter c(fsTempUnzip, fsTempOutput, options);
     
     ToJeProgress progress(1, converter, delegate);
-    if (auto st = c.run(std::thread::hardware_concurrency(), &progress); !st.ok()) {
-        if (progress.fCancelled) {
-            return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
-        } else {
-            return Result::Error(*st.error());
-        }
+    auto st = c.run(std::thread::hardware_concurrency(), &progress);
+    if (progress.fCancelled) {
+        return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
+    } else if (st.error()) {
+        return Result::Error(st.error()->fWhere);
     }
 
     ZipProgress zipProgress(2, converter, delegate);
@@ -350,14 +347,11 @@ Result UnsafeXbox360ToJava(id<Converter> converter, NSURL* input, NSString *play
         options.fLocalPlayer = je2be::Uuid::FromString(StringFromNSString(playerUuidString));
     }
     Box360Progress progress(0, converter, delegate);
-    je2be::Status st;
-    st = je2be::box360::Converter::Run(fsInput, fsTempOutput, std::thread::hardware_concurrency(), options, &progress);
-    if (!st.ok()) {
-        if (progress.fCancelled) {
-            return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
-        } else {
-            return Result::Error(*st.error());
-        }
+    je2be::Status st = je2be::box360::Converter::Run(fsInput, fsTempOutput, std::thread::hardware_concurrency(), options, &progress);
+    if (progress.fCancelled) {
+        return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
+    } else if (st.error()) {
+        return Result::Error(st.error()->fWhere);
     }
 
     ZipProgress zipProgress(1, converter, delegate);
@@ -390,12 +384,10 @@ Result UnsafeXbox360ToBedrock(id<Converter> converter, NSURL* input, NSURL *temp
         options.fTempDirectory = fsTempRoot;
         Box360Progress progress(0, converter, delegate);
         je2be::Status st = je2be::box360::Converter::Run(fsInput, fsJavaOutput, std::thread::hardware_concurrency(), options, &progress);
-        if (!st.ok()) {
-            if (progress.fCancelled) {
-                return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
-            } else {
-                return Result::Error(*st.error());
-            }
+        if (progress.fCancelled) {
+            return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
+        } else if (st.error()) {
+            return Result::Error(st.error()->fWhere);
         }
     }
 
@@ -413,10 +405,8 @@ Result UnsafeXbox360ToBedrock(id<Converter> converter, NSURL* input, NSURL *temp
         if (progress.fCancelled) {
             return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         }
-        if (!st) {
-            return Result::Error(kJe2beErrorCodeConverterError, sBasename, __LINE__);
-        } else if (!st->fErrors.empty()) {
-            return Result::Error(st->fErrors[0].fWhere);
+        if (st.error()) {
+            return Result::Error(st.error()->fWhere);
         }
     }
     
