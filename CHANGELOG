@@ -1,4 +1,9 @@
-Version 1.4.0 (TBD)
+Version 1.5.0 (TBD)
+- Horses' jump strength and movement speed property, and horse armor are now converted.
+- Fixed the problem that when two or more leads were connected to one place, the other leads were disconnected except for one lead after conversion. [b2j]
+- Improved the conversion accuracy of poi files. [b2j, x2j]
+
+Version 1.4.0 (28 Jun 2022)
 - Fixed an issue where the player's save position was not converted correctly. [x2j, x2b]
 
 Version 1.3.0 (15 Jun 2022)
