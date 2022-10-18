@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(je2be-ios LANGUAGES C CXX Swift VERSION 1.6.0)
+project(je2be-ios LANGUAGES C CXX Swift VERSION 1.7.0)
 
 set(je2be_iphoneos_deployment_target "15.0")
 set(je2be_product_bundle_identifier "com.github.kbinani.je2be-ios")
