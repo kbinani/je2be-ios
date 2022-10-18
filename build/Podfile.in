@@ -64,7 +64,7 @@ def add_licenses(installer)
     "LevelDB" => "../deps/je2be/deps/leveldb/LICENSE",
     "xxhash" => "../deps/je2be/deps/xxhash/LICENSE",
     "JSON for Modern C++" => "../deps/je2be/deps/json/LICENSE.MIT",
-    "zlib-ng" => "../deps/je2be/deps/libminecraft-file/deps/zlib-ng/LICENSE.md",
+    "zlib" => "../deps/je2be/deps/libminecraft-file/deps/zlib/LICENSE",
     "minizip-ng" => "../deps/je2be/deps/minizip-ng/LICENSE",
     "ios-cmake" => "../deps/ios-cmake/LICENSE.md",
   }
