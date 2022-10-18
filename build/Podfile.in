@@ -128,6 +128,7 @@ post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |configuration|
       configuration.build_settings["IPHONEOS_DEPLOYMENT_TARGET"] = "${je2be_iphoneos_deployment_target}"
+      configuration.build_settings["ENABLE_BITCODE"] = "NO"
     end
   end
 end
