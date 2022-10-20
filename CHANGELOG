@@ -1,4 +1,7 @@
-Version 1.7.0 (TBD)
+Version 1.7.1 (TBD)
+- (This version does not include any feature update)
+
+Version 1.7.0 (19 Oct 2022)
 - Fixed a possible crash when converting MOBs. [j2b, x2b]
 
 Version 1.6.0 (23 Aug 2022)
