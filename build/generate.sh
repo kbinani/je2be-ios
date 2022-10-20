@@ -2,7 +2,7 @@
 
 set -ue
 
-CMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM=(put your team id here)
+CMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM=XM695N4A7T
 
 cd "$(dirname "$0")"
 
