@@ -11,6 +11,7 @@ project 'je2be-ios'
 
 target 'je2be-ios' do
   pod 'Bugsnag'
+  plugin 'cocoapods-bugsnag'
 end
 
 def add_license(name, body)

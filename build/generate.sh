@@ -18,6 +18,7 @@ cmake .. -G Xcode \
 	-DMZ_LIBCOMP=OFF \
 	-DLEVELDB_SNAPPY=OFF
 
+bundle install
 bundle exec pod install
 
 )
