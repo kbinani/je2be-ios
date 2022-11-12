@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(je2be-ios LANGUAGES C CXX Swift VERSION 1.8.0)
 
-set(je2be_iphoneos_deployment_target "16.1")
+set(je2be_iphoneos_deployment_target "15.0")
 set(je2be_product_bundle_identifier "com.github.kbinani.je2be-ios")
 set(je2be_bugsnag_api_key "44c5703205a25aab4b0673ce6d281bfb")
 
@@ -60,7 +60,6 @@ set_target_properties(je2be-ios PROPERTIES
   XCODE_ATTRIBUTE_SWIFT_VERSION "5.0"
   XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)"
   XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++20"
-  XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "${je2be_iphoneos_deployment_target}"
   XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2"
   XCODE_ATTRIBUTE_ENABLE_BITCODE "NO"
   XCODE_ATTRIBUTE_SWIFT_PRECOMPILE_BRIDGING_HEADER "NO"
