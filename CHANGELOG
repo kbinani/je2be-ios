@@ -1,4 +1,7 @@
-Version 1.8.0 (TBD)
+Version 1.9.0 (TBD)
+- Improved conversion accuracy of loot tables. [j2b, b2j, x2b]
+
+Version 1.8.0 (9 Nov 2022)
 - Fixed a possible hang-up when converting command block. [j2b, b2j, x2j, x2b]
 
 Version 1.7.1 (21 Oct 2022)
