@@ -1,9 +1,12 @@
 cmake_minimum_required(VERSION 3.16)
 project(je2be-ios LANGUAGES C CXX Swift VERSION 1.12.0)
 
-set(je2be_iphoneos_deployment_target "15.0")
 set(je2be_product_bundle_identifier "com.github.kbinani.je2be-ios")
 set(je2be_bugsnag_api_key "44c5703205a25aab4b0673ce6d281bfb")
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_subdirectory(deps/je2be EXCLUDE_FROM_ALL)
 
@@ -54,7 +57,6 @@ set_target_properties(je2be-ios PROPERTIES
   MACOSX_BUNDLE_LONG_VERSION_STRING "${CMAKE_PROJECT_VERSION}"
   MACOSX_BUNDLE_COPYRIGHT "Copyright © kbinani"
   XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "${je2be_product_bundle_identifier}"
-  XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "${je2be_iphoneos_deployment_target}"
   XCODE_ATTRIBUTE_SWIFT_OBJC_BRIDGING_HEADER "src/BridgingHeader.h"
   XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon"
   XCODE_ATTRIBUTE_SWIFT_VERSION "5.0"
@@ -69,14 +71,15 @@ add_custom_command(TARGET je2be-ios PRE_BUILD COMMAND bash ../script/pre-build.s
 
 set_source_files_properties(resource/assets.xcassets PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
-set_target_properties(leveldb PROPERTIES
-  XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "${je2be_iphoneos_deployment_target}"
-  XCODE_ATTRIBUTE_ENABLE_BITCODE "NO"
+set_target_properties(minizip PROPERTIES
+  ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
 )
 
-set_target_properties(minizip PROPERTIES
-  XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "${je2be_iphoneos_deployment_target}"
-  XCODE_ATTRIBUTE_ENABLE_BITCODE "NO"
+set_target_properties(libdeflate_static PROPERTIES
+  ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+)
+
+set_target_properties(je2be PROPERTIES
   ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
 )
 

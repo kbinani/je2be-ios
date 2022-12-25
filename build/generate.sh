@@ -16,7 +16,8 @@ cmake .. -G Xcode \
 	-DHAVE_TCMALLOC=OFF \
 	-DHAVE_CLANG_THREAD_SAFETY=OFF \
 	-DMZ_LIBCOMP=OFF \
-	-DLEVELDB_SNAPPY=OFF
+	-DLEVELDB_SNAPPY=OFF \
+	-DDEPLOYMENT_TARGET=15.0
 
 bundle install
 bundle exec pod install
