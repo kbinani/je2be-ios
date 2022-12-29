@@ -108,6 +108,7 @@ def update_info_plist
   o["CFBundleDisplayName"] = "je2be"
   o["UIStatusBarStyle"] = "UIStatusBarStyleLightContent"
   o["UIViewControllerBasedStatusBarAppearance"] = true
+  o["LSMinimumSystemVersion"] = "13.0"
 
   o["bugsnag"] = {
     "apiKey" => "${je2be_bugsnag_api_key}"
