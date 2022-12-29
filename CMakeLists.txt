@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(je2be-ios LANGUAGES C CXX Swift VERSION 1.12.0)
+project(je2be-ios LANGUAGES C CXX Swift VERSION 1.13.0)
 
 set(je2be_product_bundle_identifier "com.github.kbinani.je2be-ios")
 set(je2be_bugsnag_api_key "44c5703205a25aab4b0673ce6d281bfb")
