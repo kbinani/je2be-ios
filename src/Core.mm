@@ -2,6 +2,7 @@
 #import "Converter.h"
 #include <je2be.hpp>
 
+#include <thread>
 
 static std::filesystem::path PathFromNSURL(NSURL * _Nonnull url) {
     return std::filesystem::path([[url path] cStringUsingEncoding:NSUTF8StringEncoding]);
@@ -252,10 +253,10 @@ Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDir
     
     je2be::tobe::Options options;
     options.fTempDirectory = fsTempRoot;
-    je2be::tobe::Converter c(*fsActualInput, fsOutput, options);
+    
     
     ToBeProgress progress(1, converter, delegate);
-    auto st = c.run(std::thread::hardware_concurrency(), &progress);
+    auto st = je2be::tobe::Converter::Run(*fsActualInput, fsOutput, options, std::thread::hardware_concurrency(), &progress);
     if (progress.fCancelled) {
         return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
     }
@@ -304,12 +305,14 @@ Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSString* play
     je2be::toje::Options options;
     options.fTempDirectory = fsTempRoot;
     if (playerUuidString) {
-        options.fLocalPlayer = je2be::Uuid::FromString(StringFromNSString(playerUuidString));
+        auto uuid = je2be::Uuid::FromString(StringFromNSString(playerUuidString));
+        if (uuid) {
+            options.fLocalPlayer = std::make_shared<je2be::Uuid>(*uuid);
+        }
     }
-    je2be::toje::Converter c(fsTempUnzip, fsTempOutput, options);
     
     ToJeProgress progress(1, converter, delegate);
-    auto st = c.run(std::thread::hardware_concurrency(), &progress);
+    auto st = je2be::toje::Converter::Run(fsTempUnzip, fsTempOutput, options, std::thread::hardware_concurrency(), &progress);
     if (progress.fCancelled) {
         return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
     } else if (st.error()) {
@@ -399,9 +402,8 @@ Result UnsafeXbox360ToBedrock(id<Converter> converter, NSURL* input, NSURL *temp
     {
         je2be::tobe::Options options;
         options.fTempDirectory = fsTempRoot;
-        je2be::tobe::Converter c(fsJavaOutput, fsTempOutput, options);
         ToBeProgress progress(1, converter, delegate);
-        auto st = c.run(std::thread::hardware_concurrency(), &progress);
+        auto st = je2be::tobe::Converter::Run(fsJavaOutput, fsTempOutput, options, std::thread::hardware_concurrency(), &progress);
         if (progress.fCancelled) {
             return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         }
