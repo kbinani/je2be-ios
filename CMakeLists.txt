@@ -73,7 +73,7 @@ add_custom_command(TARGET je2be-ios PRE_BUILD COMMAND bash ../script/pre-build.s
 
 set_source_files_properties(resource/assets.xcassets PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
-foreach(target IN ITEMS leveldb minizip libdeflate_static je2be mimalloc-static)
+foreach(target IN ITEMS leveldb minizip libdeflate_static je2be)
   set_target_properties(${target} PROPERTIES
     XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "${je2be_iphoneos_deployment_target}"
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
