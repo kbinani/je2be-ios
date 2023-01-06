@@ -4,7 +4,7 @@
 
 @protocol ConverterDelegate
 - (BOOL)converterDidUpdateProgress:(double)progress
-                             total:(double)total
+                             total:(uint64_t)total
                               step:(int)step
                        description:(NSString *_Nullable)description
                        displayUnit:(NSString *_Nullable)unit;

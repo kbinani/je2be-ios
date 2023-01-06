@@ -62,7 +62,7 @@ struct UnzipProgress {
         if (d) {
             NSString *description = [fConverter descriptionForStep:fStep];
             NSString *unit = [fConverter displayUnitForStep:fStep];
-            bool ok = [d converterDidUpdateProgress:done total:total step:fStep description:description displayUnit:unit];
+            bool ok = [d converterDidUpdateProgress:done / (double)total total:total step:fStep description:description displayUnit:unit];
             if (ok) {
                 return true;
             } else {
@@ -90,7 +90,7 @@ struct ZipProgress {
         if (d) {
             NSString *description = [fConverter descriptionForStep:fStep];
             NSString *unit = [fConverter displayUnitForStep:fStep];
-            bool ok = [d converterDidUpdateProgress:done total:total step:fStep description:description displayUnit:unit];
+            bool ok = [d converterDidUpdateProgress:done / (double)total total:total step:fStep description:description displayUnit:unit];
             if (ok) {
                 return true;
             } else {
@@ -113,12 +113,12 @@ struct ZipProgress {
 struct ToJeProgress : public je2be::toje::Progress {
     ToJeProgress(int step, id<Converter> converter, id<ConverterDelegate> delegate) : fStep(step), fConverter(converter), fDelegate(delegate), fCancelled(false) {}
 
-    bool report(double progress, double total) override {
+    bool report(double progress, uint64_t numConvertedChunks) override {
         id<ConverterDelegate> d = fDelegate;
         if (d) {
             NSString *description = [fConverter descriptionForStep:fStep];
             NSString *unit = [fConverter displayUnitForStep:fStep];
-            bool ok = [d converterDidUpdateProgress:progress total:total step:fStep description:description displayUnit:unit];
+            bool ok = [d converterDidUpdateProgress:progress total:numConvertedChunks step:fStep description:description displayUnit:unit];
             if (ok) {
                 return true;
             } else {
@@ -141,21 +141,33 @@ struct ToJeProgress : public je2be::toje::Progress {
 struct ToBeProgress : public je2be::tobe::Progress {
     ToBeProgress(int step, id<Converter> converter, id<ConverterDelegate> delegate) : fStep(step), fConverter(converter), fDelegate(delegate), fCancelled(false) {}
 
-    bool report(Phase phase, double progress, double total) override {
+    bool reportConvert(double progress, uint64_t numConvertedChunks) override {
         int step = fStep;
-        switch (phase) {
-            case Phase::LevelDbCompaction:
-                fStep += 1;
-                break;
-            case Phase::Convert:
-            default:
-                break;
-        }
         id<ConverterDelegate> d = fDelegate;
         if (d) {
             NSString *description = [fConverter descriptionForStep:step];
             NSString *unit = [fConverter displayUnitForStep:step];
-            bool ok = [d converterDidUpdateProgress:progress total:total step:step description:description displayUnit:unit];
+            bool ok = [d converterDidUpdateProgress:progress total:numConvertedChunks step:step description:description displayUnit:unit];
+            if (ok) {
+                return true;
+            } else {
+                fCancelled = true;
+                return false;
+            }
+        } else {
+            fCancelled = true;
+            return false;
+        }
+    }
+    
+    bool reportCompaction(double progress) override {
+        fStep += 1;
+        int step = fStep;
+        id<ConverterDelegate> d = fDelegate;
+        if (d) {
+            NSString *description = [fConverter descriptionForStep:step];
+            NSString *unit = [fConverter displayUnitForStep:step];
+            bool ok = [d converterDidUpdateProgress:progress total:0 step:step description:description displayUnit:unit];
             if (ok) {
                 return true;
             } else {
