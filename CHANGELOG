@@ -1,4 +1,7 @@
-Version 1.13.0 (TBD)
+Version 1.14.0 (TBD)
+- Conversion processing speed has been improved.
+
+Version 1.13.0 (29 Dec 2022)
 - Fixed an issue where player equipments were not being converted. [b2j]
 
 Version 1.12.0 (26 Dec 2022)

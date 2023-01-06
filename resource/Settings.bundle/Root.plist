@@ -30,7 +30,7 @@
 		</dict>
 		<dict>
 			<key>DefaultValue</key>
-			<string>1.13.0</string>
+			<string>1.14.0</string>
 			<key>Key</key>
 			<string>version</string>
 			<key>Title</key>
