@@ -138,7 +138,7 @@ class ProgressViewController: UIViewController {
 
 
 extension ProgressViewController: ConverterDelegate {
-    func converterDidUpdateProgress(_ progress: Double, total: UInt64, step: Int32, description: String?, displayUnit unit: String?) -> Bool {
+    func converterDidUpdateProgress(_ progress: Double, count: UInt64, step: Int32, description: String?, displayUnit unit: String?) -> Bool {
         DispatchQueue.main.async { [weak self] in
             guard let self = self, 0 <= step, step < self.progressSteps.count else {
                 return
@@ -151,7 +151,7 @@ extension ProgressViewController: ConverterDelegate {
             let percentage = String(format: "%.1f", progress * 100.0)
             if let description = description {
                 if let displayUnit = unit {
-                    self.progressSteps[s].title = "\(description): \(total) \(displayUnit), \(percentage)% done"
+                    self.progressSteps[s].title = "\(description): \(count) \(displayUnit), \(percentage)% done"
                 } else {
                     self.progressSteps[s].title = "\(description): \(percentage)% done"
                 }

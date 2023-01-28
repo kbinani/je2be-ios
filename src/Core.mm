@@ -62,7 +62,7 @@ struct UnzipProgress {
         if (d) {
             NSString *description = [fConverter descriptionForStep:fStep];
             NSString *unit = [fConverter displayUnitForStep:fStep];
-            bool ok = [d converterDidUpdateProgress:done / (double)total total:total step:fStep description:description displayUnit:unit];
+            bool ok = [d converterDidUpdateProgress:done / (double)total count:done step:fStep description:description displayUnit:unit];
             if (ok) {
                 return true;
             } else {
@@ -90,7 +90,7 @@ struct ZipProgress {
         if (d) {
             NSString *description = [fConverter descriptionForStep:fStep];
             NSString *unit = [fConverter displayUnitForStep:fStep];
-            bool ok = [d converterDidUpdateProgress:done / (double)total total:total step:fStep description:description displayUnit:unit];
+            bool ok = [d converterDidUpdateProgress:done / (double)total count:done step:fStep description:description displayUnit:unit];
             if (ok) {
                 return true;
             } else {
@@ -127,7 +127,7 @@ private:
         if (d) {
             NSString *description = [fConverter descriptionForStep:step];
             NSString *unit = [fConverter displayUnitForStep:step];
-            bool ok = [d converterDidUpdateProgress:progress total:chunks step:step description:description displayUnit:unit];
+            bool ok = [d converterDidUpdateProgress:progress count:chunks step:step description:description displayUnit:unit];
             if (ok) {
                 return true;
             } else {
@@ -165,7 +165,7 @@ private:
         if (d) {
             NSString *description = [fConverter descriptionForStep:step];
             NSString *unit = [fConverter displayUnitForStep:step];
-            bool ok = [d converterDidUpdateProgress:progress total:chunks step:step description:description displayUnit:unit];
+            bool ok = [d converterDidUpdateProgress:progress count:chunks step:step description:description displayUnit:unit];
             if (ok) {
                 return true;
             } else {
@@ -197,7 +197,7 @@ struct Box360Progress : public je2be::box360::Progress {
         }
         NSString *description = [fConverter descriptionForStep:fStep];
         NSString *unit = [fConverter displayUnitForStep:fStep];
-        bool ok = [d converterDidUpdateProgress:progress total:0 step:fStep description:description displayUnit:unit];
+        bool ok = [d converterDidUpdateProgress:progress count:0 step:fStep description:description displayUnit:unit];
         if (ok) {
             return true;
         } else {
