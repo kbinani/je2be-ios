@@ -73,7 +73,6 @@ def add_licenses(installer)
     "je2be" => "../deps/je2be/LICENSE",
     "libminecraft-file" => "../deps/je2be/deps/libminecraft-file/LICENSE",
     "libdeflate" => "../deps/je2be/deps/libminecraft-file/deps/libdeflate/COPYING",
-    "thread-pool" => "../deps/je2be/deps/thread-pool/LICENSE.txt",
   }
   repos.each do |name, repo|
     if repo.start_with?("https://")
