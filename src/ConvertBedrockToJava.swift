@@ -12,7 +12,7 @@ class ConvertBedrockToJava: Converter {
     }
     
     func numProgressSteps() -> Int32 {
-        return 3
+        return 4
     }
     
     func description(forStep step: Int32) -> String? {
@@ -22,6 +22,8 @@ class ConvertBedrockToJava: Converter {
         case 1:
             return "Convert"
         case 2:
+            return "Post process";
+        case 3:
             return "Zip"
         default:
             return nil
@@ -35,6 +37,8 @@ class ConvertBedrockToJava: Converter {
         case 1:
             return "chunks"
         case 2:
+            return "chunks";
+        case 3:
             return "files"
         default:
             return nil

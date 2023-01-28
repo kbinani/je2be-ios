@@ -103,7 +103,7 @@ struct ZipProgress {
         }
     }
 
-    int fStep;
+    int const fStep;
     id<Converter> fConverter;
     __weak id<ConverterDelegate> fDelegate;
     bool fCancelled;
@@ -113,12 +113,21 @@ struct ZipProgress {
 struct ToJeProgress : public je2be::toje::Progress {
     ToJeProgress(int step, id<Converter> converter, id<ConverterDelegate> delegate) : fStep(step), fConverter(converter), fDelegate(delegate), fCancelled(false) {}
 
-    bool report(double progress, uint64_t numConvertedChunks) override {
+    bool reportConvert(double progress, uint64_t numConvertedChunks) override {
+        return report(fStep, progress, numConvertedChunks);
+    }
+    
+    bool reportTerraform(double progress, uint64_t numConvertedChunks) override {
+        return report(fStep + 1, progress, numConvertedChunks);
+    }
+
+private:
+    bool report(int step, double progress, uint64_t chunks) {
         id<ConverterDelegate> d = fDelegate;
         if (d) {
-            NSString *description = [fConverter descriptionForStep:fStep];
-            NSString *unit = [fConverter displayUnitForStep:fStep];
-            bool ok = [d converterDidUpdateProgress:progress total:numConvertedChunks step:fStep description:description displayUnit:unit];
+            NSString *description = [fConverter descriptionForStep:step];
+            NSString *unit = [fConverter displayUnitForStep:step];
+            bool ok = [d converterDidUpdateProgress:progress total:chunks step:step description:description displayUnit:unit];
             if (ok) {
                 return true;
             } else {
@@ -131,7 +140,8 @@ struct ToJeProgress : public je2be::toje::Progress {
         }
     }
 
-    int fStep;
+public:
+    int const fStep;
     id<Converter> fConverter;
     __weak id<ConverterDelegate> fDelegate;
     bool fCancelled;
@@ -142,32 +152,20 @@ struct ToBeProgress : public je2be::tobe::Progress {
     ToBeProgress(int step, id<Converter> converter, id<ConverterDelegate> delegate) : fStep(step), fConverter(converter), fDelegate(delegate), fCancelled(false) {}
 
     bool reportConvert(double progress, uint64_t numConvertedChunks) override {
-        int step = fStep;
-        id<ConverterDelegate> d = fDelegate;
-        if (d) {
-            NSString *description = [fConverter descriptionForStep:step];
-            NSString *unit = [fConverter displayUnitForStep:step];
-            bool ok = [d converterDidUpdateProgress:progress total:numConvertedChunks step:step description:description displayUnit:unit];
-            if (ok) {
-                return true;
-            } else {
-                fCancelled = true;
-                return false;
-            }
-        } else {
-            fCancelled = true;
-            return false;
-        }
+        return report(fStep, progress, numConvertedChunks);
     }
     
     bool reportCompaction(double progress) override {
-        fStep += 1;
-        int step = fStep;
+        return report(fStep + 1, progress, 0);
+    }
+
+private:
+    bool report(int step, double progress, uint64_t chunks) {
         id<ConverterDelegate> d = fDelegate;
         if (d) {
             NSString *description = [fConverter descriptionForStep:step];
             NSString *unit = [fConverter displayUnitForStep:step];
-            bool ok = [d converterDidUpdateProgress:progress total:0 step:step description:description displayUnit:unit];
+            bool ok = [d converterDidUpdateProgress:progress total:chunks step:step description:description displayUnit:unit];
             if (ok) {
                 return true;
             } else {
@@ -180,7 +178,8 @@ struct ToBeProgress : public je2be::tobe::Progress {
         }
     }
 
-    int fStep;
+public:
+    int const fStep;
     id<Converter> fConverter;
     __weak id<ConverterDelegate> fDelegate;
     bool fCancelled;
@@ -190,7 +189,7 @@ struct ToBeProgress : public je2be::tobe::Progress {
 struct Box360Progress : public je2be::box360::Progress {
     Box360Progress(int step, id<Converter> converter, id<ConverterDelegate> delegate) : fStep(step), fConverter(converter), fDelegate(delegate), fCancelled(false) {}
     
-    bool report(double progress, double total) override {
+    bool report(double progress) override {
         id<ConverterDelegate> d = fDelegate;
         if (!d) {
             fCancelled = true;
@@ -198,7 +197,7 @@ struct Box360Progress : public je2be::box360::Progress {
         }
         NSString *description = [fConverter descriptionForStep:fStep];
         NSString *unit = [fConverter displayUnitForStep:fStep];
-        bool ok = [d converterDidUpdateProgress:progress total:total step:fStep description:description displayUnit:unit];
+        bool ok = [d converterDidUpdateProgress:progress total:0 step:fStep description:description displayUnit:unit];
         if (ok) {
             return true;
         } else {
@@ -331,7 +330,7 @@ Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSString* play
         return Result::Error(st.error()->fWhere);
     }
 
-    ZipProgress zipProgress(2, converter, delegate);
+    ZipProgress zipProgress(3, converter, delegate);
     fs::path fsZipOut = fsTempRoot / fsInput.filename().replace_extension(".zip");
     NSURL *zipOut = NSURLFromPath(fsZipOut);
     if (!je2be::ZipFile::Zip(fsTempOutput, fsZipOut, zipProgress)) {
