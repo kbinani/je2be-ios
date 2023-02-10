@@ -62,17 +62,17 @@ def add_licenses(installer)
   end
 
   repos = {
-    "LevelDB" => "../deps/je2be/deps/leveldb/LICENSE",
-    "xxhash" => "../deps/je2be/deps/xxhash/LICENSE",
-    "JSON for Modern C++" => "../deps/je2be/deps/json/LICENSE.MIT",
-    "zlib" => "../deps/je2be/deps/libminecraft-file/deps/zlib/LICENSE",
-    "minizip-ng" => "../deps/je2be/deps/minizip-ng/LICENSE",
+    "LevelDB" => "../deps/je2be-core/deps/leveldb/LICENSE",
+    "xxhash" => "../deps/je2be-core/deps/xxhash/LICENSE",
+    "JSON for Modern C++" => "../deps/je2be-core/deps/json/LICENSE.MIT",
+    "zlib" => "../deps/je2be-core/deps/libminecraft-file/deps/zlib/LICENSE",
+    "minizip-ng" => "../deps/je2be-core/deps/minizip-ng/LICENSE",
     "ios-cmake" => "../deps/ios-cmake/LICENSE.md",
     "Velocity" => "https://raw.githubusercontent.com/Gualdimar/Velocity/master/COPYING",
     "libmspack" => "https://raw.githubusercontent.com/kyz/libmspack/master/libmspack/COPYING.LIB",
-    "je2be" => "../deps/je2be/LICENSE",
-    "libminecraft-file" => "../deps/je2be/deps/libminecraft-file/LICENSE",
-    "libdeflate" => "../deps/je2be/deps/libminecraft-file/deps/libdeflate/COPYING",
+    "je2be-core" => "../deps/je2be-core/LICENSE",
+    "libminecraft-file" => "../deps/je2be-core/deps/libminecraft-file/LICENSE",
+    "libdeflate" => "../deps/je2be-core/deps/libminecraft-file/deps/libdeflate/COPYING",
   }
   repos.each do |name, repo|
     if repo.start_with?("https://")

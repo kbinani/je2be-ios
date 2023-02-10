@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_subdirectory(deps/je2be EXCLUDE_FROM_ALL)
+add_subdirectory(deps/je2be-core EXCLUDE_FROM_ALL)
 
 set(je2be_ios_files
   src/AppDelegate.swift
