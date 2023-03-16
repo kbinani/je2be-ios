@@ -20,22 +20,34 @@ static std::string StringFromNSString(NSString *_Nonnull s) {
     return str;
 }
 
+static NSError * _Nonnull Error(NSInteger code, je2be::Status::ErrorData const& error) {
+    NSMutableArray *trace = [[NSMutableArray alloc] init];
+    for (int i = (int)error.fTrace.size() - 1; i >= 0; i--) {
+        auto const& t = error.fTrace[i];
+        NSString *file = [NSString stringWithUTF8String:t.fFile.c_str()];
+        NSNumber *line = [[NSNumber alloc] initWithInt:t.fLine];
+        [trace addObject:@{@"file": file, @"line": line}];
+    }
+    NSString *what = [NSString stringWithUTF8String:error.fWhat.c_str()];
+    return [[NSError alloc] initWithDomain:kJe2beErrorDomain code:code userInfo:@{@"what": what, @"trace": trace}];
+}
+
 static NSError * _Nonnull Error(NSInteger code, std::string const& fileName, int lineNumber) {
     NSString * file = [NSString stringWithUTF8String:fileName.c_str()];
     NSNumber * line = [[NSNumber alloc] initWithInt:lineNumber];
     return [[NSError alloc] initWithDomain:kJe2beErrorDomain code:code userInfo:@{@"file": file, @"line": line}];
 }
 
-
 struct Result {
     NSURL * _Nullable fOutput;
     NSInteger fErrorCode;
-    std::string fFile;
-    int fLineNumber;
+    std::optional<je2be::Status::ErrorData> fError;
 
 private:
-    explicit Result(NSURL * _Nullable output, NSInteger code, std::string const& file, int lineNumber) : fOutput(output), fErrorCode(code), fFile(file), fLineNumber(lineNumber) {}
+    Result(NSURL * _Nullable output, NSInteger code, std::string const& file, int lineNumber) : fOutput(output), fErrorCode(code), fError(je2be::Status::ErrorData(je2be::Status::Where(file.c_str(), lineNumber))) {}
 
+    Result(NSInteger code, je2be::Status::ErrorData error) : fOutput(nil), fErrorCode(code), fError(error) {}
+    
 public:
     static Result Ok(NSURL * _Nonnull output) {
         return Result(output, 0, {}, 0);
@@ -45,8 +57,8 @@ public:
         return Result(nil, code, file, lineNumber);
     }
     
-    static Result Error(je2be::Status::Where error) {
-      return Result(nil, kJe2beErrorCodeConverterError, error.fFile, error.fLine);
+    static Result Error(NSInteger code, je2be::Status::ErrorData error) {
+      return Result(code, error);
     }
 };
 
@@ -113,12 +125,12 @@ struct ZipProgress {
 struct ToJeProgress : public je2be::toje::Progress {
     ToJeProgress(int step, id<Converter> converter, id<ConverterDelegate> delegate) : fStep(step), fConverter(converter), fDelegate(delegate), fCancelled(false) {}
 
-    bool reportConvert(double progress, uint64_t numConvertedChunks) override {
-        return report(fStep, progress, numConvertedChunks);
+    bool reportConvert(je2be::Rational<je2be::u64> const& progress, uint64_t numConvertedChunks) override {
+        return report(fStep, progress.toD(), numConvertedChunks);
     }
     
-    bool reportTerraform(double progress, uint64_t numConvertedChunks) override {
-        return report(fStep + 1, progress, numConvertedChunks);
+    bool reportTerraform(je2be::Rational<je2be::u64> const& progress, uint64_t numConvertedChunks) override {
+        return report(fStep + 1, progress.toD(), numConvertedChunks);
     }
 
 private:
@@ -151,12 +163,16 @@ public:
 struct ToBeProgress : public je2be::tobe::Progress {
     ToBeProgress(int step, id<Converter> converter, id<ConverterDelegate> delegate) : fStep(step), fConverter(converter), fDelegate(delegate), fCancelled(false) {}
 
-    bool reportConvert(double progress, uint64_t numConvertedChunks) override {
-        return report(fStep, progress, numConvertedChunks);
+    bool reportConvert(je2be::Rational<je2be::u64> const& progress, uint64_t numConvertedChunks) override {
+        return report(fStep, progress.toD(), numConvertedChunks);
     }
     
-    bool reportCompaction(double progress) override {
-        return report(fStep + 1, progress, 0);
+    bool reportEntityPostProcess(je2be::Rational<je2be::u64> const& progress) override {
+        return report(fStep + 1, progress.toD(), 0);
+    }
+    
+    bool reportCompaction(je2be::Rational<je2be::u64> const& progress) override {
+        return report(fStep + 2, progress.toD(), 0);
     }
 
 private:
@@ -189,7 +205,7 @@ public:
 struct Box360Progress : public je2be::box360::Progress {
     Box360Progress(int step, id<Converter> converter, id<ConverterDelegate> delegate) : fStep(step), fConverter(converter), fDelegate(delegate), fCancelled(false) {}
     
-    bool report(double progress) override {
+    bool report(je2be::Rational<je2be::u64> const&  progress) override {
         id<ConverterDelegate> d = fDelegate;
         if (!d) {
             fCancelled = true;
@@ -197,7 +213,7 @@ struct Box360Progress : public je2be::box360::Progress {
         }
         NSString *description = [fConverter descriptionForStep:fStep];
         NSString *unit = [fConverter displayUnitForStep:fStep];
-        bool ok = [d converterDidUpdateProgress:progress count:0 step:fStep description:description displayUnit:unit];
+        bool ok = [d converterDidUpdateProgress:progress.toD() count:0 step:fStep description:description displayUnit:unit];
         if (ok) {
             return true;
         } else {
@@ -223,9 +239,9 @@ Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDir
     if (!je2be::Fs::CreateDirectories(fsTempInput)) {
         return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
     }
-
+    
     UnzipProgress unzipProgress(0, converter, delegate);
-    if (!je2be::ZipFile::Unzip(fsInput, fsTempInput, unzipProgress)) {
+    if (auto st = je2be::ZipFile::Unzip(fsInput, fsTempInput, unzipProgress); !st.ok()) {
         if (unzipProgress.fCancelled) {
             return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         } else {
@@ -272,13 +288,17 @@ Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDir
         return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
     }
     if (st.error()) {
-        return Result::Error(st.error()->fWhere);
+        return Result::Error(kJe2beErrorCodeConverterError, *st.error());
     }
     
     ZipProgress zipProgress(3, converter, delegate);
     fs::path fsZipOut = fsTempRoot / fsInput.filename().replace_extension(".mcworld");
     NSURL *zipOut = NSURLFromPath(fsZipOut);
-    if (!je2be::ZipFile::Zip(fsOutput, fsZipOut, zipProgress)) {
+    auto zipResult = je2be::ZipFile::Zip(fsOutput, fsZipOut, zipProgress);
+    if (zipResult.fZip64Used) {
+        return Result::Error(kJe2beErrorCodeMcworldTooLarge, sBasename, __LINE__);
+    }
+    if (!zipResult.fStatus.ok()) {
         if (zipProgress.fCancelled) {
             return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         } else {
@@ -301,7 +321,7 @@ Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSString* play
     }
     
     UnzipProgress unzipProgress(0, converter, delegate);
-    if (!je2be::ZipFile::Unzip(fsInput, fsTempUnzip, unzipProgress)) {
+    if (auto st = je2be::ZipFile::Unzip(fsInput, fsTempUnzip, unzipProgress); !st.ok()) {
         if (unzipProgress.fCancelled) {
             return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         } else {
@@ -327,17 +347,17 @@ Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSString* play
     if (progress.fCancelled) {
         return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
     } else if (st.error()) {
-        return Result::Error(st.error()->fWhere);
+        return Result::Error(kJe2beErrorCodeConverterError, *st.error());
     }
 
     ZipProgress zipProgress(3, converter, delegate);
     fs::path fsZipOut = fsTempRoot / fsInput.filename().replace_extension(".zip");
     NSURL *zipOut = NSURLFromPath(fsZipOut);
-    if (!je2be::ZipFile::Zip(fsTempOutput, fsZipOut, zipProgress)) {
+    if (auto st = je2be::ZipFile::Zip(fsTempOutput, fsZipOut, zipProgress); !st.fStatus.ok()) {
         if (zipProgress.fCancelled) {
             return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         } else {
-            return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
+            return Result::Error(kJe2beErrorCodeConverterError, *st.fStatus.error());
         }
     }
     return Result::Ok(zipOut);
@@ -365,17 +385,17 @@ Result UnsafeXbox360ToJava(id<Converter> converter, NSURL* input, NSString *play
     if (progress.fCancelled) {
         return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
     } else if (st.error()) {
-        return Result::Error(st.error()->fWhere);
+        return Result::Error(kJe2beErrorCodeConverterError, *st.error());
     }
 
     ZipProgress zipProgress(1, converter, delegate);
     fs::path fsZipOut = fsTempRoot / fsInput.filename().replace_extension(".zip");
     NSURL *zipOut = NSURLFromPath(fsZipOut);
-    if (!je2be::ZipFile::Zip(fsTempOutput, fsZipOut, zipProgress)) {
+    if (auto st = je2be::ZipFile::Zip(fsTempOutput, fsZipOut, zipProgress); !st.fStatus.ok()) {
         if (zipProgress.fCancelled) {
             return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         } else {
-            return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
+            return Result::Error(kJe2beErrorCodeConverterError, *st.fStatus.error());
         }
     }
     return Result::Ok(zipOut);
@@ -401,7 +421,7 @@ Result UnsafeXbox360ToBedrock(id<Converter> converter, NSURL* input, NSURL *temp
         if (progress.fCancelled) {
             return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         } else if (st.error()) {
-            return Result::Error(st.error()->fWhere);
+            return Result::Error(kJe2beErrorCodeConverterError, *st.error());
         }
     }
 
@@ -419,18 +439,22 @@ Result UnsafeXbox360ToBedrock(id<Converter> converter, NSURL* input, NSURL *temp
             return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         }
         if (st.error()) {
-            return Result::Error(st.error()->fWhere);
+            return Result::Error(kJe2beErrorCodeConverterError, *st.error());
         }
     }
     
     ZipProgress zipProgress(3, converter, delegate);
     fs::path fsZipOut = fsTempRoot / fsInput.filename().replace_extension(".mcworld");
     NSURL *zipOut = NSURLFromPath(fsZipOut);
-    if (!je2be::ZipFile::Zip(fsTempOutput, fsZipOut, zipProgress)) {
+    auto zipResult = je2be::ZipFile::Zip(fsTempOutput, fsZipOut, zipProgress);
+    if (zipResult.fZip64Used) {
+        return Result::Error(kJe2beErrorCodeMcworldTooLarge, sBasename, __LINE__);
+    }
+    if (!zipResult.fStatus.ok()) {
         if (zipProgress.fCancelled) {
             return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         } else {
-            return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
+            return Result::Error(kJe2beErrorCodeConverterError, *zipResult.fStatus.error());
         }
     }
     return Result::Ok(zipOut);
@@ -446,8 +470,10 @@ static void NotifyFinishConversion(std::function<Result(void)> convert, id<Conve
         }
         if (result.fOutput) {
             [d converterDidFinishConversion:result.fOutput error:nil];
+        } else if (result.fError) {
+            [d converterDidFinishConversion:nil error:Error(result.fErrorCode, *result.fError)];
         } else if (result.fErrorCode != 0) {
-            [d converterDidFinishConversion:nil error:Error(result.fErrorCode, result.fFile, result.fLineNumber)];
+            [d converterDidFinishConversion:nil error:Error(result.fErrorCode, sBasename, __LINE__)];
         } else {
             [d converterDidFinishConversion:nil error:Error(kJe2beErrorCodeUnknown, sBasename, __LINE__)];
         }

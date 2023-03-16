@@ -35,4 +35,5 @@ enum Je2beErrorCode {
     kJe2beErrorCodeUnzipMcworldError = 7,
     kJe2beErrorCodeLevelDatNotFound = 8,
     kJe2beErrorCodeMultipleLevelDatFound = 9,
+    kJe2beErrorCodeMcworldTooLarge = 10,
 };

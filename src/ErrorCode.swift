@@ -1,6 +1,6 @@
 
 extension NSError {
-
+    
     var je2beLocalizedMessages: [String]? {
         guard self.domain == kJe2beErrorDomain else {
             return nil
@@ -38,14 +38,32 @@ extension NSError {
             messages.append(gettext("level.dat not found in the zip file"))
         case kJe2beErrorCodeMultipleLevelDatFound:
             messages.append(gettext("Multiple level.dat found in the zip file"))
+        case kJe2beErrorCodeMcworldTooLarge:
+            messages.append(gettext("The size of the mcworld file has exceeded 4 GB"))
         default:
             break
         }
-        if let file = self.userInfo["file"] as? String {
-            messages.append("file: " + file)
+        if let trace = self.userInfo["trace"] as? [Any] {
+            messages.append("trace: ")
+            trace.forEach { value in
+                guard let info = value as? [String: Any] else {
+                    return
+                }
+                guard let file = info["file"] as? String, let line = info["line"] as? Int else {
+                    return
+                }
+                messages.append("  file: \(file) at \(line)")
+            }
+        } else {
+            if let file = self.userInfo["file"] as? String {
+                messages.append("file: " + file)
+            }
+            if let line = self.userInfo["line"] as? Int {
+                messages.append("line: \(line)")
+            }
         }
-        if let line = self.userInfo["line"] as? Int {
-            messages.append("line: \(line)")
+        if let what = self.userInfo["what"] as? String, !what.isEmpty {
+            messages.append("what: \(what)")
         }
         if messages.isEmpty {
             return nil

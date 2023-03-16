@@ -6,7 +6,7 @@ class ConvertXbox360ToBedrock: Converter {
     }
     
     func numProgressSteps() -> Int32 {
-        return 4
+        return 5
     }
     
     func description(forStep step: Int32) -> String? {
@@ -16,8 +16,10 @@ class ConvertXbox360ToBedrock: Converter {
         case 1:
             return "Convert"
         case 2:
-            return "LevelDB Compaction"
+            return "Post Process"
         case 3:
+            return "LevelDB Compaction"
+        case 4:
             return "Zip"
         default:
             return nil
@@ -33,6 +35,8 @@ class ConvertXbox360ToBedrock: Converter {
         case 2:
             return nil
         case 3:
+            return nil
+        case 4:
             return "files"
         default:
             return nil

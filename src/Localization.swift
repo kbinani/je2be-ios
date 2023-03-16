@@ -29,6 +29,7 @@ func gettext(_ s: String) -> String {
         case "Select": return "ファイルを選んで変換開始"
         case "Select conversion mode": return "変換モードを選択"
         case "The mcworld file is corrupt": return "mcworld ファイルが破損しています"
+        case "The size of the mcworld file has exceeded 4 GB": return "mcworld ファイルのサイズが 4GB を超えました"
         case "The zip file is corrupt": return "zip ファイルが破損しています"
         case "Uncaught C++ exception": return "C++ の例外が発生しました"
         case "Uncaught general exception": return "例外が発生しました"

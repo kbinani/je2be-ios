@@ -34,3 +34,4 @@
 "Player UUID is not set. Open the Settings app to configure" = "プレイヤーUUIDが設定されていません。設定アプリで設定してください";
 "Invalid UUID format" = "UUIDのフォーマットが不正です";
 "It is also possible to start conversion without setting the UUID" = "UUIDを設定せずこのまま変換を始めることも可能です";
+"The size of the mcworld file has exceeded 4 GB" = "mcworld ファイルのサイズが 4GB を超えました";
