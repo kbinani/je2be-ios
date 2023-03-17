@@ -1,4 +1,10 @@
-Version 1.16.0 (TBD)
+Version 1.17.0 (TBD)
+- Supported Java Edition 1.19.4 and Bedrock Edition 1.19.70. [j2b, b2j]
+- The conversion accuracy of data in the legacy Java Edition has been improved. [j2b]
+- Changed behavior to abort export if the resulting mcworld file exceeds 4GB. [j2b]
+- Fixed an issue where items "nether brick" and "nether bricks block" were being converted inversely each other. [j2b, x2b]
+
+Version 1.16.0 (11 Feb 2023)
 - Improved the ability to convert data from older formats of the Xbox 360 edition. [x2j, x2b]
 
 Version 1.15.0 (29 Jan 2023)
