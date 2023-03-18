@@ -20,7 +20,7 @@
 @end
 
 
-NSString * _Nonnull const kJe2beErrorDomain = @"com.github.kbinani.je2be-ios";
+#define kJe2beErrorDomain @"com.github.kbinani.je2be-ios"
 
 
 enum Je2beErrorCode {
