@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.26.3)
 project(je2be-ios LANGUAGES C CXX Swift VERSION 1.17.0)
 
 set(je2be_iphoneos_deployment_target "15.0")

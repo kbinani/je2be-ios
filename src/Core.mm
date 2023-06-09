@@ -15,8 +15,8 @@ static NSURL *_Nonnull NSURLFromPath(std::filesystem::path const& path) {
 }
 
 
-static std::string StringFromNSString(NSString *_Nonnull s) {
-    std::string str([s UTF8String]);
+static std::u8string StringFromNSString(NSString *_Nonnull s) {
+    std::u8string str((char8_t const*)[s UTF8String]);
     return str;
 }
 
