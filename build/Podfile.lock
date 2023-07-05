@@ -1,16 +1,3 @@
-PODS:
-  - Bugsnag (6.24.0)
-
-DEPENDENCIES:
-  - Bugsnag
-
-SPEC REPOS:
-  trunk:
-    - Bugsnag
-
-SPEC CHECKSUMS:
-  Bugsnag: 98bd0c1e20e5350a030d9d9b445373faaf8c7b21
-
-PODFILE CHECKSUM: 321beb14a0a5ea256dfc9e9acca918740b835e74
+PODFILE CHECKSUM: fb8c6f9f05b865faae558f8ea9ce3ab4d42450bd
 
 COCOAPODS: 1.12.0

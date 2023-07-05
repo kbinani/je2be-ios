@@ -10,8 +10,6 @@ workspace 'je2be-ios'
 project 'je2be-ios'
 
 target 'je2be-ios' do
-  pod 'Bugsnag'
-  plugin 'cocoapods-bugsnag'
 end
 
 def add_license(name, body)
@@ -109,10 +107,6 @@ def update_info_plist
   o["UIViewControllerBasedStatusBarAppearance"] = true
   o["LSMinimumSystemVersion"] = "13.0"
   o["ITSAppUsesNonExemptEncryption"] = false
-
-  o["bugsnag"] = {
-    "apiKey" => "${je2be_bugsnag_api_key}"
-  }
 
   File.write(file, o.to_plist)
 end
