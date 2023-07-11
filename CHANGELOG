@@ -1,8 +1,11 @@
-Version 1.19.1 (TBD)
+Version 1.19.2 (TBD)
+- Fixed a possible app crash when converting block entities. [j2b]
+
+Version 1.19.1 (7 Jul 2023)
 - Fixed game crash due to conversion errors of suspicious_sand, suspicious_gravel. [j2b]
 - Fixed an issue where converted piglin brute behaved differently than it should. [j2b]
 
-Version 1.19.0 (5 Jun 2023)
+Version 1.19.0 (5 Jul 2023)
 - Fixed an issue where some loot table conversions were incorrect. [j2b]
 - Fixed an issue where converted piglins behaved differently than the original. [j2b]
 
