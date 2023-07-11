@@ -4,3 +4,7 @@
 /fastlane/Fastfile
 /fastlane/README.md
 /fastlane/report.xml
+*.o
+*.swiftdeps
+*.d
+*.dia
