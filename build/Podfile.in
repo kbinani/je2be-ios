@@ -60,17 +60,16 @@ def add_licenses(installer)
   end
 
   repos = {
-    "LevelDB" => "../deps/je2be-core/deps/leveldb/LICENSE",
-    "xxhash" => "../deps/je2be-core/deps/xxhash/LICENSE",
-    "JSON for Modern C++" => "../deps/je2be-core/deps/json/LICENSE.MIT",
-    "zlib" => "../deps/je2be-core/deps/libminecraft-file/deps/zlib/LICENSE",
-    "minizip-ng" => "../deps/je2be-core/deps/minizip-ng/LICENSE",
+    "LevelDB" => "./_deps/leveldb-src/LICENSE",
+    "xxhash" => "./_deps/xxhash-src/LICENSE",
+    "JSON for Modern C++" => "./_deps/nlohmann_json-src/LICENSE.MIT",
+    "minizip-ng" => "./_deps/minizip-src/LICENSE",
     "ios-cmake" => "../deps/ios-cmake/LICENSE.md",
     "Velocity" => "https://raw.githubusercontent.com/Gualdimar/Velocity/master/COPYING",
     "libmspack" => "https://raw.githubusercontent.com/kyz/libmspack/master/libmspack/COPYING.LIB",
     "je2be-core" => "../deps/je2be-core/LICENSE",
-    "libminecraft-file" => "../deps/je2be-core/deps/libminecraft-file/LICENSE",
-    "libdeflate" => "../deps/je2be-core/deps/libminecraft-file/deps/libdeflate/COPYING",
+    "libminecraft-file" => "./_deps/libminecraft-file-src/LICENSE",
+    "libdeflate" => "./_deps/libdeflate-src/COPYING",
   }
   repos.each do |name, repo|
     if repo.start_with?("https://")
