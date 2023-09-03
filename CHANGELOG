@@ -1,4 +1,7 @@
-Version 1.21.0 (TBD)
+Version 1.22.0 (TBD)
+・Improved the conversion accuracy of blocks and block entities when converting to the Bedrock version. [j2b, x2b]
+
+Version 1.21.0 (22 Aug 2023)
 ・It is now possible to convert old data of the Bedrock version less than 1.4. [b2j]
 
 Version 1.20.0 (12 Aug 2023)
