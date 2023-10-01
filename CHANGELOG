@@ -1,4 +1,9 @@
-Version 1.22.0 (TBD)
+Version 1.23.0 (TBD)
+・Added support for Minecraft version 1.20.2.
+・Improved the accuracy of item conversion when converting to Bedrock. [j2b, x2b]
+・Fixed an issue where some map items could not be converted and would disappear when converting from Bedrock to Java. [b2j]
+
+Version 1.22.0 (4 Sep 2023)
 ・Improved the conversion accuracy of blocks and block entities when converting to the Bedrock version. [j2b, x2b]
 
 Version 1.21.0 (22 Aug 2023)

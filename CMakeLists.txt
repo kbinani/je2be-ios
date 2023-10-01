@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.26.3)
-project(je2be-ios LANGUAGES C CXX Swift VERSION 1.22.0)
+enable_language(OBJCXX)
+project(je2be-ios LANGUAGES C CXX Swift VERSION 1.23.0)
 
-set(je2be_iphoneos_deployment_target "15.0")
 set(je2be_product_bundle_identifier "com.github.kbinani.je2be-ios")
 
 set(CMAKE_CXX_STANDARD 20)
@@ -57,7 +57,6 @@ set_target_properties(je2be-ios PROPERTIES
   MACOSX_BUNDLE_LONG_VERSION_STRING "${CMAKE_PROJECT_VERSION}"
   MACOSX_BUNDLE_COPYRIGHT "Copyright © kbinani"
   XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "${je2be_product_bundle_identifier}"
-  XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "${je2be_iphoneos_deployment_target}"
   XCODE_ATTRIBUTE_SWIFT_OBJC_BRIDGING_HEADER "src/BridgingHeader.h"
   XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon"
   XCODE_ATTRIBUTE_SWIFT_VERSION "5.0"
@@ -75,7 +74,6 @@ set_source_files_properties(resource/assets.xcassets PROPERTIES MACOSX_PACKAGE_L
 
 foreach(target IN ITEMS leveldb minizip libdeflate_static je2be)
   set_target_properties(${target} PROPERTIES
-    XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "${je2be_iphoneos_deployment_target}"
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
   )
 endforeach()
