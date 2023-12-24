@@ -1,4 +1,8 @@
-Version 1.23.1 (TBD)
+Version 1.24.0 (TBD)
+・Minecraft 1.20.4 is now supported.
+・The resulting data version of conversions was changed from 1.19 to 1.16 when converting Xbox 360 data. [x2j, x2b]
+
+Version 1.23.1 (4 Oct 2023)
 ・Fixed an issue that could cause a crash while converting to Bedrock. [j2b, x2b]
 
 Version 1.23.0 (3 Oct 2023)
