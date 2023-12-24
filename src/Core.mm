@@ -291,7 +291,7 @@ Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDir
         return Result::Error(kJe2beErrorCodeConverterError, *st.error());
     }
     
-    ZipProgress zipProgress(3, converter, delegate);
+    ZipProgress zipProgress(4, converter, delegate);
     fs::path fsZipOut = fsTempRoot / fsInput.filename().replace_extension(".mcworld");
     NSURL *zipOut = NSURLFromPath(fsZipOut);
     auto zipResult = je2be::ZipFile::Zip(fsOutput, fsZipOut, zipProgress);
@@ -443,7 +443,7 @@ Result UnsafeXbox360ToBedrock(id<Converter> converter, NSURL* input, NSURL *temp
         }
     }
     
-    ZipProgress zipProgress(3, converter, delegate);
+    ZipProgress zipProgress(4, converter, delegate);
     fs::path fsZipOut = fsTempRoot / fsInput.filename().replace_extension(".mcworld");
     NSURL *zipOut = NSURLFromPath(fsZipOut);
     auto zipResult = je2be::ZipFile::Zip(fsTempOutput, fsZipOut, zipProgress);

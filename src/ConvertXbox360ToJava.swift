@@ -12,13 +12,15 @@ class ConvertXbox360ToJava: Converter {
     }
     
     func numProgressSteps() -> Int32 {
-        return 1
+        return 2
     }
     
     func description(forStep step: Int32) -> String? {
         switch step {
         case 0:
             return "Convert"
+        case 1:
+            return "Zip"
         default:
             return nil
         }
@@ -27,6 +29,8 @@ class ConvertXbox360ToJava: Converter {
     func displayUnit(forStep step: Int32) -> String? {
         switch step {
         case 0:
+            return nil
+        case 1:
             return nil
         default:
             return nil
