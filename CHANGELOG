@@ -1,4 +1,10 @@
-Version 1.24.1 (TBD)
+Version 1.25.0 (TBD)
+・Fixed a problem where the minecarts would sometimes be buried in the ground when reading the converted data. [b2j]
+・Fixed a problem in which incorrect biomes could be included in the resulting data. [b2j]
+・Fixed a problem in which an unnecessary "entities" directory was created when converting data from the Xbox360 version. [x2j]
+・Improved entity conversion accuracy. [x2j]
+
+Version 1.24.1 (29 Dec 2023)
 ・Fixed a problem where bees in a beehive/bee_next were not being converted correctly. [b2j]
 ・Fixed a problem where entities would not load correctly when the resulting conversion data was read by the Paper server. [b2j, x2j]
 
