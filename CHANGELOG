@@ -1,4 +1,7 @@
-Version 1.25.0 (TBD)
+Version 2.0.0 (TBD)
+・Added the ability to convert game data of the PS3 edition.
+
+Version 1.25.0 (1 Jan 2024)
 ・Fixed a problem where the minecarts would sometimes be buried in the ground when reading the converted data. [b2j]
 ・Fixed a problem in which incorrect biomes could be included in the resulting data. [b2j]
 ・Fixed a problem in which an unnecessary "entities" directory was created when converting data from the Xbox360 version. [x2j]

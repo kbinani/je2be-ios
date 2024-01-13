@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.26.3)
 enable_language(OBJCXX)
-project(je2be-ios LANGUAGES C CXX Swift VERSION 1.25.0)
+project(je2be-ios LANGUAGES C CXX Swift VERSION 2.0.0)
 
 set(je2be_product_bundle_identifier "com.github.kbinani.je2be-ios")
 
