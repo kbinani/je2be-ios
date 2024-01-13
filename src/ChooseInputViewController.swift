@@ -51,7 +51,7 @@ class ChooseInputViewController: UIViewController {
         super.viewDidLoad()
         
         switch self.type {
-        case .bedrockToJava, .xbox360ToJava:
+        case .bedrockToJava, .xbox360ToJava, .ps3ToJava:
             self.javaPlayerUuidMessageLabel.attributedText = Self.titleAttributes(header: "1. ",
                                                                                   body: gettext("Configure player UUID (Optional)") + ":",
                                                                                   font: self.label.font!)
@@ -63,7 +63,7 @@ class ChooseInputViewController: UIViewController {
             self.label.attributedText = Self.titleAttributes(header: "2. ",
                                                              body: self.message + ":",
                                                              font: self.label.font!)
-        case .javaToBedrock, .xbox360ToBedrock:
+        case .javaToBedrock, .xbox360ToBedrock, .ps3ToBedrock:
             self.javaPlayerUuidPanel.isHidden = true
             self.javaPlayerUuidSwitch.isOn = false
             
@@ -84,7 +84,7 @@ class ChooseInputViewController: UIViewController {
                 return
             }
             switch self.type {
-            case .xbox360ToJava, .bedrockToJava:
+            case .xbox360ToJava, .bedrockToJava, .ps3ToJava:
                 let newValue: String?
                 if let nullableNewValue = change.newValue, let nonnullNewValue = nullableNewValue, !nonnullNewValue.isEmpty {
                     newValue = nonnullNewValue
@@ -92,7 +92,7 @@ class ChooseInputViewController: UIViewController {
                     newValue = nil
                 }
                 self.updateJavaPlayerUuidString(newValue)
-            case .xbox360ToBedrock, .javaToBedrock:
+            case .xbox360ToBedrock, .javaToBedrock, .ps3ToBedrock:
                 break
             }
         }

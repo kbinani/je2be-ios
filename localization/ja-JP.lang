@@ -35,3 +35,6 @@
 "Invalid UUID format" = "UUIDのフォーマットが不正です";
 "It is also possible to start conversion without setting the UUID" = "UUIDを設定せずこのまま変換を始めることも可能です";
 "The size of the mcworld file has exceeded 4 GB" = "mcworld ファイルのサイズが 4GB を超えました";
+"Choose a GAMEDATA file of PS3 Edition data to start conversion" = "PS3版のGAMEDATAファイルを選択";
+"PS3 to Java" = "PS3版 から Java版に";
+"PS3 to Bedrock" = "PS3版 から 統合版に";

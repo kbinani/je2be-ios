@@ -8,6 +8,8 @@ class MainViewController: UIViewController {
     @IBOutlet weak var bedrockToJavaButton: UIButton!
     @IBOutlet weak var xbox360ToBedrockButton: UIButton!
     @IBOutlet weak var xbox360ToJavaButton: UIButton!
+    @IBOutlet weak var ps3ToBedrockButton: UIButton!
+    @IBOutlet weak var ps3ToJavaButton: UIButton!
     @IBOutlet weak var drawer: UIView!
     @IBOutlet weak var drawerTouchDetector: UIView!
     @IBOutlet weak var menuButton: UIButton!
@@ -56,6 +58,16 @@ class MainViewController: UIViewController {
         self.xbox360ToJavaButton.addTarget(self,
                                            action: #selector(xbox360ToJavaButtonDidTouchUpInside(_:)),
                                            for: .touchUpInside)
+
+        self.ps3ToJavaButton.setTitle(gettext("PS3 to Java"), for: .normal)
+        self.ps3ToJavaButton.addTarget(self,
+                                           action: #selector(ps3ToJavaButtonDidTouchUpInside(_:)),
+                                           for: .touchUpInside)
+
+        self.ps3ToBedrockButton.setTitle(gettext("PS3 to Bedrock"), for: .normal)
+        self.ps3ToBedrockButton.addTarget(self,
+                                              action: #selector(ps3ToBedrockButtonDidTouchUpInside(_:)),
+                                              for: .touchUpInside)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -115,12 +127,34 @@ class MainViewController: UIViewController {
         vc.delegate = self
         self.present(vc, animated: true)
     }
+
+    @objc func ps3ToBedrockButtonDidTouchUpInside(_ sender: AnyObject) {
+        disableButtons()
+        let contentTypes: [UTType] = [.data]
+        let vc = ChooseInputViewController(type: .ps3ToBedrock,
+                                           message: gettext("Choose a GAMEDATA file of PS3 Edition data to start conversion"),
+                                           contentTypes: contentTypes)
+        vc.delegate = self
+        self.present(vc, animated: true)
+    }
     
+    @objc func ps3ToJavaButtonDidTouchUpInside(_ sender: AnyObject) {
+        disableButtons()
+        let contentTypes: [UTType] = [.data]
+        let vc = ChooseInputViewController(type: .ps3ToJava,
+                                           message: gettext("Choose a GAMEDATA file of PS3 Edition data to start conversion"),
+                                           contentTypes: contentTypes)
+        vc.delegate = self
+        self.present(vc, animated: true)
+    }
+
     private func disableButtons() {
         self.javaToBedrockButton.isEnabled = false
         self.bedrockToJavaButton.isEnabled = false
         self.xbox360ToJavaButton.isEnabled = false
         self.xbox360ToBedrockButton.isEnabled = false
+        self.ps3ToJavaButton.isEnabled = false
+        self.ps3ToBedrockButton.isEnabled = false
     }
     
     private func enableButtons() {
@@ -128,6 +162,8 @@ class MainViewController: UIViewController {
         self.bedrockToJavaButton.isEnabled = true
         self.xbox360ToJavaButton.isEnabled = true
         self.xbox360ToBedrockButton.isEnabled = true
+        self.ps3ToJavaButton.isEnabled = true
+        self.ps3ToBedrockButton.isEnabled = true
     }
     
     @IBAction func drawerTouchDetectorDidTap(_ sender: Any) {
@@ -209,6 +245,10 @@ extension MainViewController: ChooseInputViewDelegate {
                 converter = ConvertXbox360ToJava(playerUuid: playerUuid)
             case .xbox360ToBedrock:
                 converter = ConvertXbox360ToBedrock()
+            case .ps3ToJava:
+                converter = ConvertPS3ToJava(playerUuid: playerUuid)
+            case .ps3ToBedrock:
+                converter = ConvertPS3ToBedrock()
             }
             self.presentProgressWith(input: result, converter: converter)
         }

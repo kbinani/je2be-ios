@@ -35,6 +35,8 @@ set(je2be_ios_files
   src/UserDefaults.swift
   src/UUID.swift
   src/String.swift
+  src/ConvertPS3ToJava.swift
+  src/ConvertPS3ToBedrock.swift
 )
 set(je2be_ios_resources
   src/MainViewController.xib

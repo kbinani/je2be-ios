@@ -22,6 +22,15 @@ void Xbox360ToJava(id<Converter> _Nonnull converter,
                    NSString *_Nullable playerUuidString,
                    NSURL* _Nonnull tempDirectory,
                    __weak id<ConverterDelegate> _Nullable delegate);
+void PS3ToBedrock(id<Converter> _Nonnull converter,
+                      NSURL* _Nonnull input,
+                      NSURL* _Nonnull tempDirectory,
+                      __weak id<ConverterDelegate> _Nullable delegate);
+void PS3ToJava(id<Converter> _Nonnull converter,
+                   NSURL* _Nonnull input,
+                   NSString *_Nullable playerUuidString,
+                   NSURL* _Nonnull tempDirectory,
+                   __weak id<ConverterDelegate> _Nullable delegate);
 
 #if defined(__cplusplus)
 } // extern "C"

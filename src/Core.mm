@@ -122,7 +122,7 @@ struct ZipProgress {
 };
 
 
-struct ToJeProgress : public je2be::toje::Progress {
+struct ToJeProgress : public je2be::bedrock::Progress {
     ToJeProgress(int step, id<Converter> converter, id<ConverterDelegate> delegate) : fStep(step), fConverter(converter), fDelegate(delegate), fCancelled(false) {}
 
     bool reportConvert(je2be::Rational<je2be::u64> const& progress, uint64_t numConvertedChunks) override {
@@ -160,7 +160,7 @@ public:
 };
 
 
-struct ToBeProgress : public je2be::tobe::Progress {
+struct ToBeProgress : public je2be::java::Progress {
     ToBeProgress(int step, id<Converter> converter, id<ConverterDelegate> delegate) : fStep(step), fConverter(converter), fDelegate(delegate), fCancelled(false) {}
 
     bool reportConvert(je2be::Rational<je2be::u64> const& progress, uint64_t numConvertedChunks) override {
@@ -202,8 +202,8 @@ public:
 };
 
 
-struct Box360Progress : public je2be::box360::Progress {
-    Box360Progress(int step, id<Converter> converter, id<ConverterDelegate> delegate) : fStep(step), fConverter(converter), fDelegate(delegate), fCancelled(false) {}
+struct LCEProgress : public je2be::lce::Progress {
+    LCEProgress(int step, id<Converter> converter, id<ConverterDelegate> delegate) : fStep(step), fConverter(converter), fDelegate(delegate), fCancelled(false) {}
     
     bool report(je2be::Rational<je2be::u64> const&  progress) override {
         id<ConverterDelegate> d = fDelegate;
@@ -278,12 +278,12 @@ Result UnsafeJavaToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDir
         return Result::Error(kJe2beErrorCodeLevelDatNotFound, sBasename, __LINE__);
     }
     
-    je2be::tobe::Options options;
+    je2be::java::Options options;
     options.fTempDirectory = fsTempRoot;
     
     
     ToBeProgress progress(1, converter, delegate);
-    auto st = je2be::tobe::Converter::Run(*fsActualInput, fsOutput, options, std::thread::hardware_concurrency(), &progress);
+    auto st = je2be::java::Converter::Run(*fsActualInput, fsOutput, options, std::thread::hardware_concurrency(), &progress);
     if (progress.fCancelled) {
         return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
     }
@@ -333,7 +333,7 @@ Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSString* play
     if (!je2be::Fs::CreateDirectories(fsTempOutput)) {
         return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
     }
-    je2be::toje::Options options;
+    je2be::bedrock::Options options;
     options.fTempDirectory = fsTempRoot;
     if (playerUuidString) {
         auto uuid = je2be::Uuid::FromString(StringFromNSString(playerUuidString));
@@ -343,7 +343,7 @@ Result UnsafeBedrockToJava(id<Converter> converter, NSURL* input, NSString* play
     }
     
     ToJeProgress progress(1, converter, delegate);
-    auto st = je2be::toje::Converter::Run(fsTempUnzip, fsTempOutput, options, std::thread::hardware_concurrency(), &progress);
+    auto st = je2be::bedrock::Converter::Run(fsTempUnzip, fsTempOutput, options, std::thread::hardware_concurrency(), &progress);
     if (progress.fCancelled) {
         return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
     } else if (st.error()) {
@@ -375,13 +375,13 @@ Result UnsafeXbox360ToJava(id<Converter> converter, NSURL* input, NSString *play
         return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
     }
     
-    je2be::box360::Options options;
+    je2be::lce::Options options;
     options.fTempDirectory = fsTempRoot;
     if (playerUuidString) {
         options.fLocalPlayer = je2be::Uuid::FromString(StringFromNSString(playerUuidString));
     }
-    Box360Progress progress(0, converter, delegate);
-    je2be::Status st = je2be::box360::Converter::Run(fsInput, fsTempOutput, std::thread::hardware_concurrency(), options, &progress);
+    LCEProgress progress(0, converter, delegate);
+    je2be::Status st = je2be::xbox360::Converter::Run(fsInput, fsTempOutput, std::thread::hardware_concurrency(), options, &progress);
     if (progress.fCancelled) {
         return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
     } else if (st.error()) {
@@ -414,10 +414,10 @@ Result UnsafeXbox360ToBedrock(id<Converter> converter, NSURL* input, NSURL *temp
     }
     
     {
-        je2be::box360::Options options;
+        je2be::lce::Options options;
         options.fTempDirectory = fsTempRoot;
-        Box360Progress progress(0, converter, delegate);
-        je2be::Status st = je2be::box360::Converter::Run(fsInput, fsJavaOutput, std::thread::hardware_concurrency(), options, &progress);
+        LCEProgress progress(0, converter, delegate);
+        je2be::Status st = je2be::xbox360::Converter::Run(fsInput, fsJavaOutput, std::thread::hardware_concurrency(), options, &progress);
         if (progress.fCancelled) {
             return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         } else if (st.error()) {
@@ -431,10 +431,131 @@ Result UnsafeXbox360ToBedrock(id<Converter> converter, NSURL* input, NSURL *temp
     }
     
     {
-        je2be::tobe::Options options;
+        je2be::java::Options options;
         options.fTempDirectory = fsTempRoot;
         ToBeProgress progress(1, converter, delegate);
-        auto st = je2be::tobe::Converter::Run(fsJavaOutput, fsTempOutput, options, std::thread::hardware_concurrency(), &progress);
+        auto st = je2be::java::Converter::Run(fsJavaOutput, fsTempOutput, options, std::thread::hardware_concurrency(), &progress);
+        if (progress.fCancelled) {
+            return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
+        }
+        if (st.error()) {
+            return Result::Error(kJe2beErrorCodeConverterError, *st.error());
+        }
+    }
+    
+    ZipProgress zipProgress(4, converter, delegate);
+    fs::path fsZipOut = fsTempRoot / fsInput.filename().replace_extension(".mcworld");
+    NSURL *zipOut = NSURLFromPath(fsZipOut);
+    auto zipResult = je2be::ZipFile::Zip(fsTempOutput, fsZipOut, zipProgress);
+    if (zipResult.fZip64Used) {
+        return Result::Error(kJe2beErrorCodeMcworldTooLarge, sBasename, __LINE__);
+    }
+    if (!zipResult.fStatus.ok()) {
+        if (zipProgress.fCancelled) {
+            return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
+        } else {
+            return Result::Error(kJe2beErrorCodeConverterError, *zipResult.fStatus.error());
+        }
+    }
+    return Result::Ok(zipOut);
+}
+
+
+Result UnsafePS3ToJava(id<Converter> converter, NSURL* input, NSString *playerUuidString, NSURL *tempDirectory, id<ConverterDelegate> delegate) {
+    namespace fs = std::filesystem;
+
+    fs::path fsTempRoot = PathFromNSURL(tempDirectory);
+    fs::path fsInput = PathFromNSURL(input);
+    
+    fs::path fsTempInput = fsTempRoot / "input";
+    if (!je2be::Fs::CreateDirectories(fsTempInput)) {
+        return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
+    }
+    {
+        NSError *error = nil;
+        [[NSFileManager defaultManager] copyItemAtURL:input toURL:NSURLFromPath(fsTempInput / "GAMEDATA") error:&error];
+        if (error != nil) {
+            return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
+        }
+    }
+
+    fs::path fsTempOutput = fsTempRoot / "output";
+    if (!je2be::Fs::CreateDirectories(fsTempOutput)) {
+        return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
+    }
+    
+    je2be::lce::Options options;
+    options.fTempDirectory = fsTempRoot;
+    if (playerUuidString) {
+        options.fLocalPlayer = je2be::Uuid::FromString(StringFromNSString(playerUuidString));
+    }
+    LCEProgress progress(0, converter, delegate);
+    je2be::Status st = je2be::ps3::Converter::Run(fsTempInput, fsTempOutput, std::thread::hardware_concurrency(), options, &progress);
+    if (progress.fCancelled) {
+        return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
+    } else if (st.error()) {
+        return Result::Error(kJe2beErrorCodeConverterError, *st.error());
+    }
+
+    ZipProgress zipProgress(1, converter, delegate);
+    fs::path fsZipOut = fsTempRoot / fsInput.filename().replace_extension(".zip");
+    NSURL *zipOut = NSURLFromPath(fsZipOut);
+    if (auto st = je2be::ZipFile::Zip(fsTempOutput, fsZipOut, zipProgress); !st.fStatus.ok()) {
+        if (zipProgress.fCancelled) {
+            return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
+        } else {
+            return Result::Error(kJe2beErrorCodeConverterError, *st.fStatus.error());
+        }
+    }
+    return Result::Ok(zipOut);
+}
+
+
+Result UnsafePS3ToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDirectory, id<ConverterDelegate> delegate) {
+    namespace fs = std::filesystem;
+
+    fs::path fsTempRoot = PathFromNSURL(tempDirectory);
+    fs::path fsInput = PathFromNSURL(input);
+    
+    fs::path fsTempInput = fsTempRoot / "input";
+    if (!je2be::Fs::CreateDirectories(fsTempInput)) {
+        return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
+    }
+    {
+        NSError *error = nil;
+        [[NSFileManager defaultManager] copyItemAtURL:input toURL:NSURLFromPath(fsTempInput / "GAMEDATA") error:&error];
+        if (error != nil) {
+            return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
+        }
+    }
+
+    fs::path fsJavaOutput = fsTempRoot / "java";
+    if (!je2be::Fs::CreateDirectories(fsJavaOutput)) {
+        return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
+    }
+    
+    {
+        je2be::lce::Options options;
+        options.fTempDirectory = fsTempRoot;
+        LCEProgress progress(0, converter, delegate);
+        je2be::Status st = je2be::ps3::Converter::Run(fsTempInput, fsJavaOutput, std::thread::hardware_concurrency(), options, &progress);
+        if (progress.fCancelled) {
+            return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
+        } else if (st.error()) {
+            return Result::Error(kJe2beErrorCodeConverterError, *st.error());
+        }
+    }
+
+    fs::path fsTempOutput = fsTempRoot / "output";
+    if (!je2be::Fs::CreateDirectories(fsTempOutput)) {
+        return Result::Error(kJe2beErrorCodeIOError, sBasename, __LINE__);
+    }
+    
+    {
+        je2be::java::Options options;
+        options.fTempDirectory = fsTempRoot;
+        ToBeProgress progress(1, converter, delegate);
+        auto st = je2be::java::Converter::Run(fsJavaOutput, fsTempOutput, options, std::thread::hardware_concurrency(), &progress);
         if (progress.fCancelled) {
             return Result::Error(kJe2beErrorCodeCancelled, sBasename, __LINE__);
         }
@@ -537,6 +658,19 @@ void Xbox360ToJava(id<Converter> converter, NSURL* input, NSString *playerUuidSt
 void Xbox360ToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDirectory, id<ConverterDelegate> delegate) {
     NotifyFinishConversion([converter, input, tempDirectory, delegate]() {
         return UnsafeXbox360ToBedrock(converter, input, tempDirectory, delegate);
+    }, delegate);
+}
+
+void PS3ToJava(id<Converter> converter, NSURL* input, NSString *playerUuidString, NSURL *tempDirectory, id<ConverterDelegate> delegate) {
+    NotifyFinishConversion([converter, input, playerUuidString, tempDirectory, delegate]() {
+        return UnsafePS3ToJava(converter, input, playerUuidString, tempDirectory, delegate);
+    }, delegate);
+}
+
+
+void PS3ToBedrock(id<Converter> converter, NSURL* input, NSURL *tempDirectory, id<ConverterDelegate> delegate) {
+    NotifyFinishConversion([converter, input, tempDirectory, delegate]() {
+        return UnsafePS3ToBedrock(converter, input, tempDirectory, delegate);
     }, delegate);
 }
 
