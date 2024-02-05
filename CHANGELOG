@@ -1,4 +1,8 @@
-Version 2.0.0 (TBD)
+Version 2.1.0 (TBD)
+・Fixed a problem in which the progress bar display could decrease during processing. [x2j, x2b, p2j, p2b]
+・Improved memory utilization. [x2j, x2b, p2j, p2b, b2j]
+
+Version 2.0.0 (13 Jan 2024)
 ・Added the ability to convert game data of the PS3 edition.
 
 Version 1.25.0 (1 Jan 2024)
