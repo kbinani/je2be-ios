@@ -70,6 +70,8 @@ def add_licenses(installer)
     "je2be-core" => "../deps/je2be-core/LICENSE",
     "libminecraft-file" => "./_deps/libminecraft-file-src/LICENSE",
     "libdeflate" => "./_deps/libdeflate-src/COPYING",
+    "sparse" => "./_deps/sparse-src/LICENSE.md",
+    "lz4" => "./_deps/lz4-src/lib/LICENSE",
   }
   repos.each do |name, repo|
     if repo.start_with?("https://")
