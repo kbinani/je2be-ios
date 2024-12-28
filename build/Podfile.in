@@ -72,8 +72,8 @@ def add_licenses(installer)
     "libdeflate" => "./_deps/libdeflate-src/COPYING",
     "sparse" => "./_deps/sparse-src/LICENSE.md",
     "lz4" => "./_deps/lz4-src/lib/LICENSE",
-    "icu" => "./_deps/icu-src/icu/LICENSE",
-    "icu-cmake" => "./_deps/icu-src/LICENSE",
+    "icu" => "./_deps/icu-src/LICENSE",
+    "icu-cpm" => "./_deps/icu-cpm-src/LICENSE",
   }
   repos.each do |name, repo|
     if repo.start_with?("https://")
