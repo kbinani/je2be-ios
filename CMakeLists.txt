@@ -37,6 +37,8 @@ set(je2be_ios_files
   src/String.swift
   src/ConvertPS3ToJava.swift
   src/ConvertPS3ToBedrock.swift
+  src/SceneDelegate.swift
+  resource/Info.template.plist
 )
 set(je2be_ios_resources
   src/MainViewController.xib
@@ -52,12 +54,11 @@ add_executable(je2be-ios MACOSX_BUNDLE ${je2be_ios_files} ${je2be_ios_resources}
 set_target_properties(je2be-ios PROPERTIES
   BUNDLE True
   RESOURCE "${je2be_ios_resources}"
+  MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/resource/Info.template.plist"
   MACOSX_BUNDLE_GUI_IDENTIFIER "${je2be_product_bundle_identifier}"
-  MACOSX_BUNDLE_BUNDLE_NAME je2be-ios
   MACOSX_BUNDLE_BUNDLE_VERSION "${CMAKE_PROJECT_VERSION}"
   MACOSX_BUNDLE_SHORT_VERSION_STRING "${CMAKE_PROJECT_VERSION}"
   MACOSX_BUNDLE_LONG_VERSION_STRING "${CMAKE_PROJECT_VERSION}"
-  MACOSX_BUNDLE_COPYRIGHT "Copyright © kbinani"
   XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "${je2be_product_bundle_identifier}"
   XCODE_ATTRIBUTE_SWIFT_OBJC_BRIDGING_HEADER "src/BridgingHeader.h"
   XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon"
