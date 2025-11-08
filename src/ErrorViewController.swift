@@ -74,7 +74,7 @@ class ErrorView: UIView {
         let attributes: [NSAttributedString.Key: Any] = [
             .font: font,
             .paragraphStyle: style,
-            .foregroundColor: UIColor.black,
+            .foregroundColor: UIColor.white,
         ]
         let lines = messages.map { message in
             return bullet + " " + message
