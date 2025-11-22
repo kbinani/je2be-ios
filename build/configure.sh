@@ -25,6 +25,6 @@ cmake .. -G Xcode \
 	-DLEVELDB_SNAPPY=OFF
 
 bundle install
-bundle exec pod install
+bundle exec ruby post_cmake.rb
 
 )

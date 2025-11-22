@@ -86,4 +86,4 @@ endforeach()
 list(APPEND all_files ${je2be_ios_files} ${je2be_ios_resources})
 source_group(TREE ${CMAKE_CURRENT_LIST_DIR} FILES ${all_files})
 
-configure_file(build/Podfile.in Podfile)
+configure_file(build/post_cmake.rb.in post_cmake.rb)

@@ -4,14 +4,6 @@ require 'plist'
 require 'fileutils'
 require 'open-uri'
 
-platform :ios, '${je2be_iphoneos_deployment_target}'
-
-workspace 'je2be-ios'
-project 'je2be-ios'
-
-target 'je2be-ios' do
-end
-
 def add_license(name, body)
   d = {
     File: "OpenSourceLicenses/#{name}",
@@ -42,7 +34,7 @@ def add_license_from_url(name, url, prefix = "")
   end
 end
 
-def add_licenses(installer)
+def add_licenses
   system("git clean -xdf", :chdir => "../resource/Settings.bundle")
   FileUtils.mkdir_p("../resource/Settings.bundle/OpenSourceLicenses")
 
@@ -52,12 +44,6 @@ def add_licenses(installer)
       Type: "PSGroupSpecifier"
     },
   ]
-
-  pods = installer.pods_project.targets.filter { |t| !t.name.start_with?("Pods-") }
-  pods.each do |pod|
-    name = pod.name
-    specifiers.append(add_license_from_file(name, "Pods/#{name}/LICENSE.txt"))
-  end
 
   repos = {
     "LevelDB" => "./_deps/leveldb-src/LICENSE",
@@ -125,15 +111,10 @@ def update_settings_bundle
   File.write(file, o.to_plist)
 end
 
-post_install do |installer|
-  add_licenses(installer)
+def main
+  add_licenses()
   update_info_plist()
   update_settings_bundle()
-  installer.pods_project.targets.each do |target|
-    target.build_configurations.each do |configuration|
-      configuration.build_settings["IPHONEOS_DEPLOYMENT_TARGET"] = "${je2be_iphoneos_deployment_target}"
-      configuration.build_settings["ENABLE_BITCODE"] = "NO"
-      configuration.build_settings["ONLY_ACTIVE_ARCH"] = "NO"
-    end
-  end
 end
+
+main()
