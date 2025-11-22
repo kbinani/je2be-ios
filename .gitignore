@@ -1,6 +1,7 @@
 /build
 /resource/Settings.bundle/OpenSourceLicenses
 /resource/Settings.bundle/OpenSourceLicenses.plist
+/resource/Info.template.plist
 /fastlane/Fastfile
 /fastlane/README.md
 /fastlane/report.xml

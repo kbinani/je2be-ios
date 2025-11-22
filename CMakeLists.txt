@@ -8,6 +8,9 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+configure_file(resource/Info.template.plist.in ${CMAKE_CURRENT_SOURCE_DIR}/resource/Info.template.plist)
+configure_file(build/post_cmake.rb.in ${CMAKE_CURRENT_BINARY_DIR}/post_cmake.rb)
+
 add_subdirectory(deps/je2be-core EXCLUDE_FROM_ALL)
 
 set(je2be_ios_files
@@ -38,7 +41,7 @@ set(je2be_ios_files
   src/ConvertPS3ToJava.swift
   src/ConvertPS3ToBedrock.swift
   src/SceneDelegate.swift
-  resource/Info.template.plist
+  resource/Info.template.plist.in
 )
 set(je2be_ios_resources
   src/MainViewController.xib
@@ -84,5 +87,3 @@ endforeach()
 
 list(APPEND all_files ${je2be_ios_files} ${je2be_ios_resources})
 source_group(TREE ${CMAKE_CURRENT_LIST_DIR} FILES ${all_files})
-
-configure_file(build/post_cmake.rb.in post_cmake.rb)
